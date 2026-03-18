@@ -11,6 +11,7 @@ import { filterGames } from "./utils/filterGames";
 import { calculateFilteredAverages } from "./utils/calculateFilteredAverages";
 import "./App.css";
 import ThresholdFilter from "./components/ThresholdFilter";
+import ActiveFilters from "./components/ActiveFilters";
 
 function App() {
   const [mode, setMode] = useState("player");
@@ -24,9 +25,14 @@ function App() {
   const [locationFilter, setLocationFilter] = useState("all");
   const [resultFilter, setResultFilter] = useState("all");
   const [opponentFilter, setOpponentFilter] = useState("");
+
+  // current threshold input controls
   const [thresholdStat, setThresholdStat] = useState("points");
   const [thresholdOperator, setThresholdOperator] = useState(">=");
   const [thresholdValue, setThresholdValue] = useState("");
+
+  // applied threshold filters
+  const [thresholdFilters, setThresholdFilters] = useState([]);
 
   async function handleSearch() {
     try {
@@ -48,32 +54,64 @@ function App() {
     }
   }
 
+  function handleAddThresholdFilter() {
+    if (thresholdValue === "") return;
+
+    const newFilter = {
+      stat: thresholdStat,
+      operator: thresholdOperator,
+      value: Number(thresholdValue),
+    };
+
+    setThresholdFilters((prev) => {
+      const alreadyExists = prev.some(
+        (filter) =>
+          filter.stat === newFilter.stat &&
+          filter.operator === newFilter.operator &&
+          filter.value === newFilter.value,
+      );
+
+      if (alreadyExists) return prev;
+
+      return [...prev, newFilter];
+    });
+
+    setThresholdValue("");
+  }
+
+  function handleRemoveThresholdFilter(indexToRemove) {
+    setThresholdFilters((prev) =>
+      prev.filter((_, index) => index !== indexToRemove),
+    );
+  }
+
   const filteredGames = useMemo(() => {
     if (!data?.games) return [];
+
     return filterGames(
       data.games,
       locationFilter,
       resultFilter,
       opponentFilter,
-      thresholdStat,
-      thresholdOperator,
-      thresholdValue,
+      thresholdFilters,
     );
-  }, [
-    data,
-    locationFilter,
-    resultFilter,
-    opponentFilter,
-    thresholdStat,
-    thresholdOperator,
-    thresholdValue,
-  ]);
+  }, [data, locationFilter, resultFilter, opponentFilter, thresholdFilters]);
 
   const filteredAverages = useMemo(() => {
     return calculateFilteredAverages(filteredGames);
   }, [filteredGames]);
 
   const title = mode === "player" ? data?.player : data?.teamName;
+
+  function clearFilters() {
+    setLocationFilter("all");
+    setResultFilter("all");
+    setOpponentFilter("");
+    setThresholdStat("points");
+    setThresholdOperator(">=");
+    setThresholdValue("");
+    setThresholdFilters([]);
+  }
 
   return (
     <div className="app-shell">
@@ -124,6 +162,7 @@ function App() {
             setResultFilter={setResultFilter}
             opponentFilter={opponentFilter}
             setOpponentFilter={setOpponentFilter}
+            clearFilters={clearFilters}
           />
 
           <ThresholdFilter
@@ -133,6 +172,15 @@ function App() {
             setThresholdOperator={setThresholdOperator}
             thresholdValue={thresholdValue}
             setThresholdValue={setThresholdValue}
+            onAddFilter={handleAddThresholdFilter}
+          />
+
+          <ActiveFilters
+            locationFilter={locationFilter}
+            resultFilter={resultFilter}
+            opponentFilter={opponentFilter}
+            thresholdFilters={thresholdFilters}
+            onRemoveThresholdFilter={handleRemoveThresholdFilter}
           />
 
           <SummaryCards averages={filteredAverages} />

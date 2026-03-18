@@ -5,14 +5,24 @@ function ThresholdFilter({
   setThresholdOperator,
   thresholdValue,
   setThresholdValue,
+  onAddFilter,
 }) {
+  function handleThresholdWheel(e) {
+    e.preventDefault();
+
+    const current = Number(thresholdValue || 0);
+    const nextValue = e.deltaY < 0 ? current + 1 : current - 1;
+
+    setThresholdValue(String(Math.max(0, nextValue)));
+  }
+
   return (
     <section className="panel-card">
       <h3 className="panel-title">Stat Threshold</h3>
 
-      <div className="filters-row">
+      <div className="threshold-controls">
         <select
-          className="search-select"
+          className="threshold-control threshold-select"
           value={thresholdStat}
           onChange={(e) => setThresholdStat(e.target.value)}
         >
@@ -22,28 +32,46 @@ function ThresholdFilter({
           <option value="steals">Steals</option>
           <option value="blocks">Blocks</option>
           <option value="turnovers">Turnovers</option>
-          <option value="threesMade">3PM</option>
-          <option value="fieldGoalsMade">FGM</option>
-          <option value="freeThrowsMade">FTM</option>
+          <option value="fgm">FGM</option>
+          <option value="fga">FGA</option>
+          <option value="threePm">3PM</option>
+          <option value="threePa">3PA</option>
         </select>
 
         <select
-          className="search-select"
+          className="threshold-control threshold-operator"
           value={thresholdOperator}
           onChange={(e) => setThresholdOperator(e.target.value)}
         >
-          <option value=">=">&gt;=</option>
-          <option value="<=">&lt;=</option>
-          <option value="=">=</option>
+          <option value=">=">{">="}</option>
+          <option value="<=">{"<="}</option>
+          <option value=">">{">"}</option>
+          <option value="<">{"<"}</option>
+          <option value="=">{"="}</option>
         </select>
 
-        <input
-          className="search-number"
-          type="number"
-          value={thresholdValue}
-          onChange={(e) => setThresholdValue(e.target.value)}
-          placeholder="Value"
-        />
+        <div onWheel={handleThresholdWheel}>
+          <input
+            className="threshold-control threshold-input"
+            type="text"
+            inputMode="numeric"
+            value={thresholdValue}
+            onChange={(e) =>
+              setThresholdValue(e.target.value.replace(/[^\d]/g, ""))
+            }
+            onWheelCapture={handleThresholdWheel}
+            onWheel={handleThresholdWheel}
+            placeholder="Value"
+          />
+        </div>
+
+        <button
+          type="button"
+          className="threshold-add-button"
+          onClick={onAddFilter}
+        >
+          Add Filter
+        </button>
       </div>
     </section>
   );

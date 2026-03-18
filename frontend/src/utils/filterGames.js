@@ -1,55 +1,51 @@
+function compareValue(gameValue, operator, filterValue) {
+  switch (operator) {
+    case ">":
+      return gameValue > filterValue;
+    case ">=":
+      return gameValue >= filterValue;
+    case "<":
+      return gameValue < filterValue;
+    case "<=":
+      return gameValue <= filterValue;
+    case "=":
+      return gameValue === filterValue;
+    default:
+      return true;
+  }
+}
+
 export function filterGames(
   games,
   locationFilter,
   resultFilter,
   opponentFilter,
-  thresholdStat,
-  thresholdOperator,
-  thresholdValue,
+  thresholdFilters,
 ) {
   return games.filter((game) => {
-    const matchup = game.matchup || "";
-    const result = game.result || "";
-
-    const isHome = matchup.includes("vs.");
-    const isAway = matchup.includes("@");
-
     const matchesLocation =
-      locationFilter === "all" ||
-      (locationFilter === "home" && isHome) ||
-      (locationFilter === "away" && isAway);
+      locationFilter === "all" || game.location === locationFilter;
 
     const matchesResult =
       resultFilter === "all" ||
-      (resultFilter === "wins" && result === "W") ||
-      (resultFilter === "losses" && result === "L");
-
-    const normalizedOpponentFilter = opponentFilter.trim().toLowerCase();
+      game.result?.toLowerCase() === resultFilter.toLowerCase();
 
     const matchesOpponent =
-      !normalizedOpponentFilter ||
-      matchup.toLowerCase().includes(normalizedOpponentFilter);
+      !opponentFilter.trim() ||
+      game.opponent?.toLowerCase().includes(opponentFilter.toLowerCase());
 
-    const numericThreshold = Number(thresholdValue);
-    const hasThreshold =
-      thresholdValue !== "" && !Number.isNaN(numericThreshold);
+    const matchesThresholds =
+      thresholdFilters.length === 0 ||
+      thresholdFilters.every((filter) => {
+        const gameValue = Number(game[filter.stat]);
 
-    let matchesThreshold = true;
+        if (Number.isNaN(gameValue)) return false;
 
-    if (hasThreshold) {
-      const statValue = Number(game[thresholdStat]) || 0;
-
-      if (thresholdOperator === ">=") {
-        matchesThreshold = statValue >= numericThreshold;
-      } else if (thresholdOperator === "<=") {
-        matchesThreshold = statValue <= numericThreshold;
-      } else {
-        matchesThreshold = statValue === numericThreshold;
-      }
-    }
+        return compareValue(gameValue, filter.operator, filter.value);
+      });
 
     return (
-      matchesLocation && matchesResult && matchesOpponent && matchesThreshold
+      matchesLocation && matchesResult && matchesOpponent && matchesThresholds
     );
   });
 }

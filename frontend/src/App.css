@@ -266,3 +266,165 @@ select {
     font-size: 1.5rem;
   }
 }
+
+.filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(64, 116, 194, 0.18);
+  border: 1px solid rgba(120, 170, 255, 0.28);
+  color: #dbe9ff;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.filter-pill-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #f3f7ff;
+  cursor: pointer;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  transition:
+    background 0.18s ease,
+    transform 0.15s ease,
+    opacity 0.18s ease;
+}
+
+.filter-pill-remove:hover {
+  background: rgba(255, 255, 255, 0.24);
+  transform: scale(1.08);
+}
+
+.filter-pill-remove:active {
+  transform: scale(0.96);
+}
+.secondary-button {
+  background: #1f2937;
+  color: #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.secondary-button:hover {
+  background: #273449;
+  transform: translateY(-1px);
+}
+
+.threshold-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.threshold-control {
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(120, 150, 255, 0.16);
+  background: rgba(8, 18, 46, 0.92);
+  color: #f3f7ff;
+  padding: 0 14px;
+  font-size: 15px;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.threshold-control:focus {
+  border-color: rgba(74, 144, 255, 0.7);
+  box-shadow: 0 0 0 3px rgba(74, 144, 255, 0.16);
+}
+
+.threshold-select {
+  min-width: 160px;
+}
+
+.threshold-operator {
+  width: 90px;
+}
+
+.threshold-input {
+  width: 120px;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.threshold-input::-webkit-outer-spin-button,
+.threshold-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.threshold-add-button {
+  height: 44px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff9a1f, #ff7a00);
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.threshold-add-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(255, 122, 0, 0.28);
+}
+
+.threshold-add-button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .threshold-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .threshold-select,
+  .threshold-operator,
+  .threshold-input,
+  .threshold-add-button {
+    width: 100%;
+  }
+}
+
+.last-games-input {
+  width: 80px;
+  text-align: center;
+}
