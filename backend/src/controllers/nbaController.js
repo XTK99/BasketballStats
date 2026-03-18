@@ -28,7 +28,7 @@ async function getTeamGamesController(req, res) {
   } catch (error) {
     console.error("Controller error:", error);
     res.status(500).json({
-      error: "Failed to fetch player games",
+      error: "Failed to fetch team games",
       details: error.message,
     });
   }
@@ -55,7 +55,7 @@ async function getPlayerGames(req, res) {
   } catch (error) {
     console.error("Controller error:", error);
     res.status(500).json({
-      error: "Failed to fetch player games",
+      error: "Failed to fetch team games",
       details: error.message,
     });
   }
