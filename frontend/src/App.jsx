@@ -260,7 +260,12 @@ function App() {
               selectedStat={selectedStat}
               setSelectedStat={setSelectedStat}
             />
-            <StatChart games={filteredGames} selectedStat={selectedStat} />
+            <StatChart
+              games={filteredGames}
+              selectedStat={selectedStat}
+              hitRateStat={hitRateStat}
+              hitRateLine={hitRateLine}
+            />
           </section>
 
           <GameLogTable games={filteredGames} />
