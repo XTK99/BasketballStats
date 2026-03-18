@@ -51,12 +51,12 @@ function compareValue(gameValue, operator, filterValue) {
 function getOpponentFromMatchup(matchup) {
   if (!matchup) return "";
 
-  const parts = matchup.trim().split(" ");
+  const parts = matchup.trim().split(/\s+/);
   return parts[2] || "";
 }
 
 function getOpponentSearchText(matchup) {
-  const abbreviation = getOpponentFromMatchup(matchup);
+  const abbreviation = getOpponentFromMatchup(matchup).toUpperCase();
   const fullName = teamNameMap[abbreviation] || "";
 
   return `${abbreviation} ${fullName}`.toLowerCase();
@@ -67,32 +67,39 @@ export function filterGames(
   locationFilter,
   resultFilter,
   opponentFilter,
-  thresholdFilters,
+  thresholdFilters = [],
 ) {
+  if (!Array.isArray(games)) return [];
+
   return games.filter((game) => {
-    const matchesLocation =
-      locationFilter === "all" || game.location === locationFilter;
+    const rawMatchup = (game.matchup || game.MATCHUP || "").trim();
+    const matchup = rawMatchup.toLowerCase();
+    const wl = String(game.WL || game.wl || game.result || "")
+      .trim()
+      .toUpperCase();
 
-    const matchesResult =
-      resultFilter === "all" ||
-      game.result?.toLowerCase() === resultFilter.toLowerCase();
+    const isAway = matchup.includes("@");
+    const isHome = matchup.includes("vs");
 
-    const matchesOpponent =
-      !opponentFilter.trim() ||
-      getOpponentSearchText(game.matchup).includes(
-        opponentFilter.trim().toLowerCase(),
-      );
+    if (locationFilter === "home" && !isHome) return false;
+    if (locationFilter === "away" && !isAway) return false;
 
-    const matchesThresholds =
-      thresholdFilters.length === 0 ||
-      thresholdFilters.every((filter) => {
-        const gameValue = Number(game[filter.stat]);
-        if (Number.isNaN(gameValue)) return false;
-        return compareValue(gameValue, filter.operator, filter.value);
-      });
+    if (resultFilter !== "all" && wl !== resultFilter) return false;
 
-    return (
-      matchesLocation && matchesResult && matchesOpponent && matchesThresholds
-    );
+    if (opponentFilter.trim() !== "") {
+      const search = opponentFilter.trim().toLowerCase();
+      const opponentSearchText = getOpponentSearchText(rawMatchup);
+
+      if (!opponentSearchText.includes(search)) return false;
+    }
+
+    for (const filter of thresholdFilters) {
+      const value = Number(game[filter.stat]);
+
+      if (Number.isNaN(value)) return false;
+      if (!compareValue(value, filter.operator, filter.value)) return false;
+    }
+
+    return true;
   });
 }

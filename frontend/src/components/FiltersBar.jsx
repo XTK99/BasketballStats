@@ -5,6 +5,7 @@ function FiltersBar({
   setResultFilter,
   opponentFilter,
   setOpponentFilter,
+  clearFilters,
 }) {
   return (
     <section className="panel-card">
@@ -27,8 +28,8 @@ function FiltersBar({
           onChange={(e) => setResultFilter(e.target.value)}
         >
           <option value="all">All Results</option>
-          <option value="wins">Wins</option>
-          <option value="losses">Losses</option>
+          <option value="W">Wins</option>
+          <option value="L">Losses</option>
         </select>
 
         <input
@@ -38,6 +39,10 @@ function FiltersBar({
           onChange={(e) => setOpponentFilter(e.target.value)}
           placeholder="Filter by opponent (ex: DEN)"
         />
+
+        <button className="secondary-button" onClick={clearFilters}>
+          Clear Filters
+        </button>
       </div>
     </section>
   );
