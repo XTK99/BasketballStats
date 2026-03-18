@@ -4,11 +4,14 @@ import ModeToggle from "./components/ModeToggle";
 import SearchBar from "./components/SearchBar";
 import SummaryCards from "./components/SummaryCards";
 import GameLogTable from "./components/GameLogTable";
+import StatSelector from "./components/StatSelector";
+import StatChart from "./components/StatChart";
 
 function App() {
   const [mode, setMode] = useState("player");
   const [searchValue, setSearchValue] = useState("LeBron James");
   const [last, setLast] = useState(5);
+  const [selectedStat, setSelectedStat] = useState("points");
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -66,6 +69,14 @@ function App() {
           <p>Games: {data.count}</p>
 
           <SummaryCards averages={data.averages} />
+
+          <StatSelector
+            selectedStat={selectedStat}
+            setSelectedStat={setSelectedStat}
+          />
+
+          <StatChart games={data.games} selectedStat={selectedStat} />
+
           <GameLogTable games={data.games} />
         </div>
       )}
