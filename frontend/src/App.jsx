@@ -102,6 +102,10 @@ function App() {
   }, [filteredGames]);
 
   const title = mode === "player" ? data?.player : data?.teamName;
+  const loadedGames = data?.count || 0;
+  const filteredCount = filteredGames.length;
+  const filteredPercent =
+    loadedGames > 0 ? Math.round((filteredCount / loadedGames) * 100) : 0;
 
   function clearFilters() {
     setLocationFilter("all");
@@ -149,10 +153,23 @@ function App() {
       {data && (
         <>
           <section className="results-header">
-            <h2 className="results-title">{title}</h2>
-            <div className="results-meta">
-              Season: {data.season} • Loaded Games: {data.count} • Filtered
-              Games: {filteredGames.length}
+            <div className="results-header-main">
+              <div className="results-title-block">
+                <h2 className="results-title">{title}</h2>
+                <div className="results-subrow">
+                  <span className="season-badge">Season {data.season}</span>
+                </div>
+              </div>
+
+              <div className="hero-stats">
+                <div className="hero-stat-card">
+                  <span className="hero-stat-label">Games Matching</span>
+                  <span className="hero-stat-value">
+                    {filteredCount} / {loadedGames}
+                  </span>
+                  <span className="hero-stat-subvalue">{filteredPercent}%</span>
+                </div>
+              </div>
             </div>
           </section>
 
