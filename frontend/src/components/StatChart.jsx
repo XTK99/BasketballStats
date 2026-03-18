@@ -48,6 +48,7 @@ function formatStatLabel(stat) {
     steals: "Steals",
     blocks: "Blocks",
     turnovers: "Turnovers",
+    minutes: "Minutes",
     FGM: "FGM",
     FGA: "FGA",
     "3PM": "3PM",

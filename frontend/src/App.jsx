@@ -15,6 +15,7 @@ import ActiveFilters from "./components/ActiveFilters";
 import HitRateBoard from "./components/HitRateBoard";
 import { generateThresholds } from "./utils/generateThresholds";
 import { calculateHitRateBoard } from "./utils/calculateHitRateBoard";
+import { normalizeGames } from "./utils/normalizeGames";
 
 function App() {
   const [mode, setMode] = useState("player");
@@ -51,7 +52,14 @@ function App() {
       setData(null);
 
       const result = await runSearch(last);
-      setData(result);
+      console.log("RAW FIRST GAME:", result?.games?.[0]);
+
+      const normalizedResult = {
+        ...result,
+        games: normalizeGames(result?.games || []),
+      };
+
+      setData(normalizedResult);
     } catch (err) {
       console.error("Search error:", err);
       setError(err.message || "Something went wrong");
@@ -69,7 +77,13 @@ function App() {
       setLast(fullSeasonValue);
 
       const result = await runSearch(fullSeasonValue);
-      setData(result);
+
+      const normalizedResult = {
+        ...result,
+        games: normalizeGames(result?.games || []),
+      };
+
+      setData(normalizedResult);
     } catch (err) {
       console.error("Full season search error:", err);
       setError(err.message || "Something went wrong");
@@ -248,16 +262,14 @@ function App() {
           </section>
 
           {mode === "player" && (
-            <>
-              <HitRateBoard
-                title={title}
-                season={data.season}
-                stat={boardStat}
-                setStat={setBoardStat}
-                boardData={boardData}
-                gameCount={filteredGames.length}
-              />
-            </>
+            <HitRateBoard
+              title={title}
+              season={data.season}
+              stat={boardStat}
+              setStat={setBoardStat}
+              boardData={boardData}
+              gameCount={filteredGames.length}
+            />
           )}
 
           <GameLogTable games={filteredGames} />

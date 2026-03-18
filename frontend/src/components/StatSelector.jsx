@@ -8,6 +8,7 @@ function StatSelector({ selectedStat, setSelectedStat }) {
         value={selectedStat}
         onChange={(e) => setSelectedStat(e.target.value)}
       >
+        <option value="minutes">Minutes</option>
         <option value="points">Points</option>
         <option value="rebounds">Rebounds</option>
         <option value="assists">Assists</option>

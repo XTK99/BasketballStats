@@ -96,6 +96,7 @@ function getGameStatValue(game, stat) {
     steals: ["steals", "STL", "stl"],
     blocks: ["blocks", "BLK", "blk"],
     turnovers: ["turnovers", "TOV", "tov"],
+    minutes: ["minutes", "MIN", "min"],
 
     FGM: ["FGM", "fgm", "fieldGoalsMade", "field_goals_made", "madeFieldGoals"],
     FGA: [

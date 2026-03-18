@@ -1,3 +1,9 @@
+function formatPct(value) {
+  const num = Number(value);
+  if (Number.isNaN(num)) return 0;
+  return num <= 1 ? (num * 100).toFixed(1) : num.toFixed(1);
+}
+
 function GameLogTable({ games }) {
   if (!games || games.length === 0) return null;
 
@@ -7,9 +13,10 @@ function GameLogTable({ games }) {
         <table className="game-table">
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Matchup</th>
-              <th>Result</th>
+              <th>DATE</th>
+              <th>MATCHUP</th>
+              <th>RESULT</th>
+              <th>MIN</th>
               <th>PTS</th>
               <th>REB</th>
               <th>AST</th>
@@ -27,35 +34,41 @@ function GameLogTable({ games }) {
               <th>FT%</th>
             </tr>
           </thead>
+
           <tbody>
-            {games.map((game) => (
-              <tr key={game.gameId}>
-                <td>{game.date}</td>
+            {games.map((game, index) => (
+              <tr key={game.gameId || index}>
+                <td>{game.gameDate}</td>
                 <td>{game.matchup}</td>
                 <td>
-                  <span
-                    className={`result-pill ${
-                      game.result === "W" ? "result-win" : "result-loss"
-                    }`}
-                  >
-                    {game.result}
-                  </span>
+                  {game.wl ? (
+                    <span
+                      className={`result-pill ${
+                        game.wl === "W" ? "result-win" : "result-loss"
+                      }`}
+                    >
+                      {game.wl}
+                    </span>
+                  ) : (
+                    ""
+                  )}
                 </td>
+                <td>{game.minutes}</td>
                 <td>{game.points}</td>
                 <td>{game.rebounds}</td>
                 <td>{game.assists}</td>
                 <td>{game.steals}</td>
                 <td>{game.blocks}</td>
                 <td>{game.turnovers}</td>
-                <td>{game.fieldGoalsMade}</td>
-                <td>{game.fieldGoalsAttempted}</td>
-                <td>{game.fieldGoalPct}</td>
-                <td>{game.threesMade}</td>
-                <td>{game.threesAttempted}</td>
-                <td>{game.threePointPct}</td>
-                <td>{game.freeThrowsMade}</td>
-                <td>{game.freeThrowsAttempted}</td>
-                <td>{game.freeThrowPct}</td>
+                <td>{game.fgm}</td>
+                <td>{game.fga}</td>
+                <td>{formatPct(game.fgPct)}</td>
+                <td>{game.fg3m}</td>
+                <td>{game.fg3a}</td>
+                <td>{formatPct(game.fg3Pct)}</td>
+                <td>{game.ftm}</td>
+                <td>{game.fta}</td>
+                <td>{formatPct(game.ftPct)}</td>
               </tr>
             ))}
           </tbody>
