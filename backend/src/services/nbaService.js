@@ -39,12 +39,63 @@ function limitGames(games, last = 5) {
   return games.slice(0, Number(last));
 }
 
-async function findPlayerByName(playerName) {
+function normalizeName(name = "") {
+  return String(name)
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function reverseName(name = "") {
+  const parts = normalizeName(name).split(" ").filter(Boolean);
+  if (parts.length < 2) return normalizeName(name);
+
+  const first = parts[0];
+  const rest = parts.slice(1).join(" ");
+  return `${rest} ${first}`.trim();
+}
+
+async function findPlayerByName(playerName, season = "2025-26") {
   const url =
-    "https://stats.nba.com/stats/commonallplayers" +
-    "?IsOnlyCurrentSeason=1" +
-    "&LeagueID=00" +
-    "&Season=2025-26";
+    "https://stats.nba.com/stats/leaguedashplayerstats" +
+    `?College=` +
+    `&Conference=` +
+    `&Country=` +
+    `&DateFrom=` +
+    `&DateTo=` +
+    `&Division=` +
+    `&DraftPick=` +
+    `&DraftYear=` +
+    `&GameScope=` +
+    `&GameSegment=` +
+    `&Height=` +
+    `&LastNGames=0` +
+    `&LeagueID=00` +
+    `&Location=` +
+    `&MeasureType=Base` +
+    `&Month=0` +
+    `&OpponentTeamID=0` +
+    `&Outcome=` +
+    `&PORound=0` +
+    `&PaceAdjust=N` +
+    `&PerMode=PerGame` +
+    `&Period=0` +
+    `&PlayerExperience=` +
+    `&PlayerPosition=` +
+    `&PlusMinus=N` +
+    `&Rank=N` +
+    `&Season=${season}` +
+    `&SeasonSegment=` +
+    `&SeasonType=Regular+Season` +
+    `&ShotClockRange=` +
+    `&StarterBench=` +
+    `&TeamID=0` +
+    `&TwoWay=0` +
+    `&VsConference=` +
+    `&VsDivision=`;
 
   const response = await fetch(url, {
     headers: NBA_HEADERS,
@@ -70,33 +121,74 @@ async function findPlayerByName(playerName) {
     Object.fromEntries(headers.map((header, index) => [header, row[index]])),
   );
 
-  const normalizedSearch = playerName.trim().toLowerCase();
+  const normalizedSearch = normalizeName(playerName);
+  const reversedSearch = reverseName(playerName);
 
-  const exactMatch = players.find(
-    (player) => player.DISPLAY_FIRST_LAST?.toLowerCase() === normalizedSearch,
-  );
-
-  if (exactMatch) {
-    return exactMatch;
+  function getNames(player) {
+    return [player.PLAYER_NAME].filter(Boolean).map(normalizeName);
   }
 
-  const partialMatch = players.find((player) =>
-    player.DISPLAY_FIRST_LAST?.toLowerCase().includes(normalizedSearch),
-  );
+  const exactMatch = players.find((player) => {
+    const names = getNames(player);
+    return names.includes(normalizedSearch);
+  });
 
-  if (!partialMatch) {
-    throw new Error(`Player not found: ${playerName}`);
-  }
+  if (exactMatch) return exactMatch;
 
-  return partialMatch;
+  const reversedExactMatch = players.find((player) => {
+    const names = getNames(player);
+    return names.includes(reversedSearch);
+  });
+
+  if (reversedExactMatch) return reversedExactMatch;
+
+  const partialMatch = players.find((player) => {
+    const names = getNames(player);
+    return names.some(
+      (name) =>
+        name.includes(normalizedSearch) || normalizedSearch.includes(name),
+    );
+  });
+
+  if (partialMatch) return partialMatch;
+
+  const searchParts = normalizedSearch.split(" ").filter(Boolean);
+
+  const looseMatch = players.find((player) => {
+    const names = getNames(player);
+    return searchParts.every((part) =>
+      names.some((name) => name.includes(part)),
+    );
+  });
+
+  if (looseMatch) return looseMatch;
+
+  const possibleMatches = players
+    .filter((player) => {
+      const names = getNames(player);
+      return searchParts.some((part) =>
+        names.some((name) => name.includes(part)),
+      );
+    })
+    .slice(0, 10)
+    .map((player) => ({
+      PLAYER_ID: player.PLAYER_ID,
+      PLAYER_NAME: player.PLAYER_NAME,
+    }));
+
+  console.log("Player search failed for:", playerName);
+  console.log("Normalized search:", normalizedSearch);
+  console.log("Possible matches:", possibleMatches);
+
+  throw new Error(`Player not found: ${playerName}`);
 }
 
 async function fetchPlayerGames(playerName, last = 5, season = "2025-26") {
-  const player = await findPlayerByName(playerName);
+  const player = await findPlayerByName(playerName, season);
 
   const url =
     "https://stats.nba.com/stats/playergamelog" +
-    `?PlayerID=${player.PERSON_ID}` +
+    `?PlayerID=${player.PLAYER_ID}` +
     `&Season=${season}` +
     "&SeasonType=Regular+Season" +
     "&LeagueID=00";
@@ -130,8 +222,8 @@ async function fetchPlayerGames(playerName, last = 5, season = "2025-26") {
   const averages = calculateAverages(formattedGames);
 
   return {
-    player: player.DISPLAY_FIRST_LAST,
-    playerId: player.PERSON_ID,
+    player: player.PLAYER_NAME,
+    playerId: player.PLAYER_ID,
     season,
     count: formattedGames.length,
     averages,
