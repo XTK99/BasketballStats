@@ -112,6 +112,7 @@ function App() {
     setThresholdValue("");
     setThresholdFilters([]);
   }
+  console.log(data?.games?.map((game) => game.matchup));
 
   return (
     <div className="app-shell">
