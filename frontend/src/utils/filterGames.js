@@ -50,16 +50,85 @@ function compareValue(gameValue, operator, filterValue) {
 
 function getOpponentFromMatchup(matchup) {
   if (!matchup) return "";
-
-  const parts = matchup.trim().split(/\s+/);
+  const parts = String(matchup).trim().split(/\s+/);
   return parts[2] || "";
 }
 
 function getOpponentSearchText(matchup) {
   const abbreviation = getOpponentFromMatchup(matchup).toUpperCase();
   const fullName = teamNameMap[abbreviation] || "";
+  return `${abbreviation} ${fullName}`.trim().toLowerCase();
+}
 
-  return `${abbreviation} ${fullName}`.toLowerCase();
+function getNormalizedResult(game) {
+  return String(game.WL ?? game.wl ?? game.result ?? "")
+    .trim()
+    .toUpperCase();
+}
+
+function getNormalizedMatchup(game) {
+  return String(game.matchup ?? game.MATCHUP ?? "").trim();
+}
+
+function getFirstNumericValue(game, keys) {
+  for (const key of keys) {
+    const rawValue = game?.[key];
+
+    if (rawValue === undefined || rawValue === null || rawValue === "") {
+      continue;
+    }
+
+    const numericValue = Number(rawValue);
+
+    if (!Number.isNaN(numericValue)) {
+      return numericValue;
+    }
+  }
+
+  return NaN;
+}
+
+function getGameStatValue(game, stat) {
+  const statKeyMap = {
+    points: ["points", "PTS", "pts"],
+    rebounds: ["rebounds", "REB", "reb"],
+    assists: ["assists", "AST", "ast"],
+    steals: ["steals", "STL", "stl"],
+    blocks: ["blocks", "BLK", "blk"],
+    turnovers: ["turnovers", "TOV", "tov"],
+
+    FGM: ["FGM", "fgm", "fieldGoalsMade", "field_goals_made", "madeFieldGoals"],
+    FGA: [
+      "FGA",
+      "fga",
+      "fieldGoalsAttempted",
+      "field_goals_attempted",
+      "attemptedFieldGoals",
+    ],
+    "3PM": [
+      "FG3M",
+      "fg3m",
+      "3PM",
+      "threePm",
+      "threesMade",
+      "threePointersMade",
+      "madeThrees",
+    ],
+    "3PA": [
+      "FG3A",
+      "fg3a",
+      "3PA",
+      "threePa",
+      "threesAttempted",
+      "threePointersAttempted",
+      "attemptedThrees",
+    ],
+    FTM: ["FTM", "ftm", "freeThrowsMade"],
+    FTA: ["FTA", "fta", "freeThrowsAttempted"],
+  };
+
+  const possibleKeys = statKeyMap[stat] || [stat];
+  return getFirstNumericValue(game, possibleKeys);
 }
 
 export function filterGames(
@@ -72,11 +141,9 @@ export function filterGames(
   if (!Array.isArray(games)) return [];
 
   return games.filter((game) => {
-    const rawMatchup = (game.matchup || game.MATCHUP || "").trim();
+    const rawMatchup = getNormalizedMatchup(game);
     const matchup = rawMatchup.toLowerCase();
-    const wl = String(game.WL || game.wl || game.result || "")
-      .trim()
-      .toUpperCase();
+    const wl = getNormalizedResult(game);
 
     const isAway = matchup.includes("@");
     const isHome = matchup.includes("vs");
@@ -94,10 +161,15 @@ export function filterGames(
     }
 
     for (const filter of thresholdFilters) {
-      const value = Number(game[filter.stat]);
+      const value = getGameStatValue(game, filter.stat);
 
-      if (Number.isNaN(value)) return false;
-      if (!compareValue(value, filter.operator, filter.value)) return false;
+      if (Number.isNaN(value)) {
+        return false;
+      }
+
+      if (!compareValue(value, filter.operator, filter.value)) {
+        return false;
+      }
     }
 
     return true;

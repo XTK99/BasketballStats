@@ -32,10 +32,10 @@ function ThresholdFilter({
           <option value="steals">Steals</option>
           <option value="blocks">Blocks</option>
           <option value="turnovers">Turnovers</option>
-          <option value="fgm">FGM</option>
-          <option value="fga">FGA</option>
-          <option value="threePm">3PM</option>
-          <option value="threePa">3PA</option>
+          <option value="FGM">FGM</option>
+          <option value="FGA">FGA</option>
+          <option value="3PM">3PM</option>
+          <option value="3PA">3PA</option>
         </select>
 
         <select
