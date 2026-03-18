@@ -1,4 +1,6 @@
 const { NBA_HEADERS } = require("../utils/nbaHeaders");
+const { formatPlayerGames } = require("../utils/formatPlayerGames");
+const { calculateAverages } = require("../utils/calculateAverages");
 
 async function getTeamGames(teamId, season = "2025-26") {
   const url =
@@ -119,11 +121,22 @@ async function fetchPlayerGames(playerName, last = 5, season = "2025-26") {
   const headers = resultSet.headers || [];
   const rows = resultSet.rowSet || [];
 
-  const games = rows.map((row) =>
+  const rawGames = rows.map((row) =>
     Object.fromEntries(headers.map((header, index) => [header, row[index]])),
   );
 
-  return games.slice(0, Number(last));
+  const limitedGames = rawGames.slice(0, Number(last));
+  const formattedGames = formatPlayerGames(limitedGames);
+  const averages = calculateAverages(formattedGames);
+
+  return {
+    player: player.DISPLAY_FIRST_LAST,
+    playerId: player.PERSON_ID,
+    season,
+    count: formattedGames.length,
+    averages,
+    games: formattedGames,
+  };
 }
 
 module.exports = {

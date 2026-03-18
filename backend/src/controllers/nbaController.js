@@ -1,6 +1,8 @@
 const { getTeamIdByName } = require("../services/teamMap");
 const { getTeamGames, limitGames } = require("../services/nbaService");
 const { fetchPlayerGames } = require("../services/nbaService");
+const { formatTeamGames } = require("../utils/formatTeamGames");
+const { calculateTeamAverages } = require("../utils/calculateTeamAverages");
 
 function healthCheck(req, res) {
   res.json({ message: "NBA route working" });
@@ -18,12 +20,16 @@ async function getTeamGamesController(req, res) {
     const games = await getTeamGames(teamId, season);
     const limitedGames = limitGames(games, last);
 
+    const formattedGames = formatTeamGames(limitedGames);
+    const averages = calculateTeamAverages(formattedGames);
+
     res.json({
       teamName,
       teamId,
       season,
-      count: limitedGames.length,
-      games: limitedGames,
+      count: formattedGames.length,
+      averages,
+      games: formattedGames,
     });
   } catch (error) {
     console.error("Controller error:", error);
@@ -44,18 +50,12 @@ async function getPlayerGames(req, res) {
       return res.status(400).json({ error: "player query is required" });
     }
 
-    const games = await fetchPlayerGames(playerName, last, season);
-
-    res.json({
-      player: playerName,
-      season,
-      count: games.length,
-      games,
-    });
+    const result = await fetchPlayerGames(playerName, last, season);
+    res.json(result);
   } catch (error) {
     console.error("Controller error:", error);
     res.status(500).json({
-      error: "Failed to fetch team games",
+      error: "Failed to fetch player games",
       details: error.message,
     });
   }
