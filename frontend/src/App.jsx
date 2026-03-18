@@ -322,7 +322,12 @@ function App() {
                   {boxScoreError && (
                     <p className="status-error">{boxScoreError}</p>
                   )}
-                  {boxScore && <BoxScorePanel boxScore={boxScore} />}
+                  {boxScore && (
+                    <BoxScorePanel
+                      boxScore={boxScore}
+                      selectedPlayerName={mode === "player" ? title : ""}
+                    />
+                  )}
                 </>
               )}
             </section>
