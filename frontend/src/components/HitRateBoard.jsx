@@ -17,6 +17,12 @@ function formatStatLabel(stat) {
   return labels[stat] || stat;
 }
 
+function getHitRateTier(percentage) {
+  if (percentage >= 70) return "strong";
+  if (percentage >= 40) return "medium";
+  return "weak";
+}
+
 function HitRateBoard({ title, season, stat, setStat, boardData, gameCount }) {
   return (
     <section className="panel-card">
@@ -55,24 +61,31 @@ function HitRateBoard({ title, season, stat, setStat, boardData, gameCount }) {
       </div>
 
       <div className="hit-rate-board-grid">
-        {boardData.map((item) => (
-          <div key={item.line} className="hit-rate-board-card">
-            <div className="hit-rate-board-line">
-              {formatStatLabel(stat).toUpperCase()} {item.line}+
-            </div>
+        {boardData.map((item) => {
+          const tier = getHitRateTier(item.percentage);
 
-            <div className="hit-rate-board-rate">{item.percentage}%</div>
+          return (
+            <div
+              key={item.line}
+              className={`hit-rate-board-card hit-rate-board-card-${tier}`}
+            >
+              <div className="hit-rate-board-line">
+                {formatStatLabel(stat).toUpperCase()} {item.line}+
+              </div>
 
-            <div className="hit-rate-board-detail">
-              {item.hits} / {item.total}
-            </div>
+              <div className="hit-rate-board-rate">{item.percentage}%</div>
 
-            <div className="hit-rate-board-subdetail">
-              Misses: {item.misses}
-              {item.pushes > 0 ? ` • Pushes: ${item.pushes}` : ""}
+              <div className="hit-rate-board-detail">
+                {item.hits} / {item.total}
+              </div>
+
+              <div className="hit-rate-board-subdetail">
+                Misses: {item.misses}
+                {item.pushes > 0 ? ` • Pushes: ${item.pushes}` : ""}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

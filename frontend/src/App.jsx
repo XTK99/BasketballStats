@@ -237,6 +237,16 @@ function App() {
             onRemoveThresholdFilter={handleRemoveThresholdFilter}
           />
 
+          <SummaryCards averages={filteredAverages} />
+
+          <section className="panel-card">
+            <StatSelector
+              selectedStat={selectedStat}
+              setSelectedStat={setSelectedStat}
+            />
+            <StatChart games={filteredGames} selectedStat={selectedStat} />
+          </section>
+
           {mode === "player" && (
             <>
               <HitRateBoard
@@ -249,16 +259,6 @@ function App() {
               />
             </>
           )}
-
-          <SummaryCards averages={filteredAverages} />
-
-          <section className="panel-card">
-            <StatSelector
-              selectedStat={selectedStat}
-              setSelectedStat={setSelectedStat}
-            />
-            <StatChart games={filteredGames} selectedStat={selectedStat} />
-          </section>
 
           <GameLogTable games={filteredGames} />
         </>

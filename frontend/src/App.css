@@ -863,8 +863,57 @@ button {
     rgba(255, 255, 255, 0.02)
   );
   border: 1px solid rgba(255, 255, 255, 0.07);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
 }
 
+.hit-rate-board-card:hover {
+  transform: translateY(-2px);
+}
+
+.hit-rate-board-card-strong {
+  background: linear-gradient(
+    180deg,
+    rgba(34, 197, 94, 0.12),
+    rgba(34, 197, 94, 0.05)
+  );
+  border-color: rgba(74, 222, 128, 0.28);
+  box-shadow: 0 10px 24px rgba(34, 197, 94, 0.08);
+}
+
+.hit-rate-board-card-medium {
+  background: linear-gradient(
+    180deg,
+    rgba(245, 158, 11, 0.11),
+    rgba(245, 158, 11, 0.04)
+  );
+  border-color: rgba(251, 191, 36, 0.24);
+  box-shadow: 0 10px 24px rgba(245, 158, 11, 0.07);
+}
+
+.hit-rate-board-card-weak {
+  background: linear-gradient(
+    180deg,
+    rgba(239, 68, 68, 0.1),
+    rgba(239, 68, 68, 0.04)
+  );
+  border-color: rgba(248, 113, 113, 0.22);
+  box-shadow: 0 10px 24px rgba(239, 68, 68, 0.06);
+}
+.hit-rate-board-card-strong .hit-rate-board-rate {
+  color: #86efac;
+}
+
+.hit-rate-board-card-medium .hit-rate-board-rate {
+  color: #fcd34d;
+}
+
+.hit-rate-board-card-weak .hit-rate-board-rate {
+  color: #fca5a5;
+}
 .hit-rate-board-line {
   font-size: 0.82rem;
   text-transform: uppercase;
