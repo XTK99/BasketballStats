@@ -12,6 +12,8 @@ import { calculateFilteredAverages } from "./utils/calculateFilteredAverages";
 import "./App.css";
 import ThresholdFilter from "./components/ThresholdFilter";
 import ActiveFilters from "./components/ActiveFilters";
+import { calculateHitRate } from "./utils/calculateHitRate";
+import HitRateCard from "./components/HitRateCard";
 
 function App() {
   const [mode, setMode] = useState("player");
@@ -29,8 +31,11 @@ function App() {
   const [thresholdStat, setThresholdStat] = useState("points");
   const [thresholdOperator, setThresholdOperator] = useState(">=");
   const [thresholdValue, setThresholdValue] = useState("");
-
   const [thresholdFilters, setThresholdFilters] = useState([]);
+
+  const [hitRateStat, setHitRateStat] = useState("points");
+  const [hitRateType, setHitRateType] = useState("over");
+  const [hitRateLine, setHitRateLine] = useState("20");
 
   async function runSearch(gameCount) {
     const safeGameCount = Math.max(1, Number(gameCount) || 1);
@@ -108,6 +113,16 @@ function App() {
     );
   }
 
+  function clearFilters() {
+    setLocationFilter("all");
+    setResultFilter("all");
+    setOpponentFilter("");
+    setThresholdStat("points");
+    setThresholdOperator(">=");
+    setThresholdValue("");
+    setThresholdFilters([]);
+  }
+
   const filteredGames = useMemo(() => {
     if (!data?.games) return [];
 
@@ -120,6 +135,15 @@ function App() {
     );
   }, [data, locationFilter, resultFilter, opponentFilter, thresholdFilters]);
 
+  const hitRateData = useMemo(() => {
+    return calculateHitRate(
+      filteredGames,
+      hitRateStat,
+      hitRateType,
+      hitRateLine,
+    );
+  }, [filteredGames, hitRateStat, hitRateType, hitRateLine]);
+
   const filteredAverages = useMemo(() => {
     return calculateFilteredAverages(filteredGames);
   }, [filteredGames]);
@@ -129,16 +153,6 @@ function App() {
   const filteredCount = filteredGames.length;
   const filteredPercent =
     loadedGames > 0 ? Math.round((filteredCount / loadedGames) * 100) : 0;
-
-  function clearFilters() {
-    setLocationFilter("all");
-    setResultFilter("all");
-    setOpponentFilter("");
-    setThresholdStat("points");
-    setThresholdOperator(">=");
-    setThresholdValue("");
-    setThresholdFilters([]);
-  }
 
   return (
     <div className="app-shell">
@@ -227,6 +241,16 @@ function App() {
             opponentFilter={opponentFilter}
             thresholdFilters={thresholdFilters}
             onRemoveThresholdFilter={handleRemoveThresholdFilter}
+          />
+
+          <HitRateCard
+            hitRateStat={hitRateStat}
+            setHitRateStat={setHitRateStat}
+            hitRateType={hitRateType}
+            setHitRateType={setHitRateType}
+            hitRateLine={hitRateLine}
+            setHitRateLine={setHitRateLine}
+            hitRateData={hitRateData}
           />
 
           <SummaryCards averages={filteredAverages} />
