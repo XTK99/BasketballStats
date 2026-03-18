@@ -1,8 +1,25 @@
 const { getTeamIdByName } = require("../services/teamMap");
-const { getTeamGames, limitGames } = require("../services/nbaService");
-const { fetchPlayerGames } = require("../services/nbaService");
+const {
+  getTeamGames,
+  limitGames,
+  fetchPlayerGames,
+  fetchBoxScoreByGameId,
+} = require("../services/nbaService");
 const { formatTeamGames } = require("../utils/formatTeamGames");
 const { calculateTeamAverages } = require("../utils/calculateTeamAverages");
+
+async function getBoxScore(req, res) {
+  try {
+    const { gameId } = req.params;
+    const data = await fetchBoxScoreByGameId(gameId);
+    res.json(data);
+  } catch (error) {
+    console.error("Box score controller error:", error);
+    res
+      .status(500)
+      .json({ error: error.message || "Failed to fetch box score" });
+  }
+}
 
 function healthCheck(req, res) {
   res.json({ message: "NBA route working" });
@@ -65,4 +82,5 @@ module.exports = {
   healthCheck,
   getTeamGamesController,
   getPlayerGames,
+  getBoxScore,
 };

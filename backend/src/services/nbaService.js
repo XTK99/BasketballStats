@@ -231,9 +231,111 @@ async function fetchPlayerGames(playerName, last = 5, season = "2025-26") {
   };
 }
 
+async function fetchBoxScoreByGameId(gameId) {
+  const url =
+    "https://stats.nba.com/stats/boxscoretraditionalv3" + `?GameID=${gameId}`;
+
+  const response = await fetch(url, {
+    headers: NBA_HEADERS,
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    console.log("NBA API error:", text);
+    throw new Error(`Failed to fetch box score: ${response.status}`);
+  }
+
+  const data = await response.json();
+  console.log("RAW BOX SCORE RESPONSE:", JSON.stringify(data, null, 2));
+
+  const gameData = data.game || data.boxScoreTraditional || data;
+
+  const homeTeam = gameData.homeTeam;
+  const awayTeam = gameData.awayTeam;
+
+  if (!homeTeam || !awayTeam) {
+    console.log("Could not find homeTeam/awayTeam in:", Object.keys(data));
+    throw new Error("Box score data missing from NBA API response");
+  }
+
+  function normalizeTeam(team) {
+    return {
+      TEAM_ID: team.teamId,
+      TEAM_ABBREVIATION: team.teamTricode,
+      TEAM_CITY: team.teamCity,
+      TEAM_NAME: team.teamName,
+      MIN: team.statistics?.minutes || "",
+      FGM: team.statistics?.fieldGoalsMade ?? 0,
+      FGA: team.statistics?.fieldGoalsAttempted ?? 0,
+      FG_PCT: team.statistics?.fieldGoalsPercentage ?? 0,
+      FG3M: team.statistics?.threePointersMade ?? 0,
+      FG3A: team.statistics?.threePointersAttempted ?? 0,
+      FG3_PCT: team.statistics?.threePointersPercentage ?? 0,
+      FTM: team.statistics?.freeThrowsMade ?? 0,
+      FTA: team.statistics?.freeThrowsAttempted ?? 0,
+      FT_PCT: team.statistics?.freeThrowsPercentage ?? 0,
+      OREB: team.statistics?.reboundsOffensive ?? 0,
+      DREB: team.statistics?.reboundsDefensive ?? 0,
+      REB: team.statistics?.reboundsTotal ?? 0,
+      AST: team.statistics?.assists ?? 0,
+      STL: team.statistics?.steals ?? 0,
+      BLK: team.statistics?.blocks ?? 0,
+      TOV: team.statistics?.turnovers ?? 0,
+      PF: team.statistics?.foulsPersonal ?? 0,
+      PTS: team.statistics?.points ?? 0,
+      PLUS_MINUS: team.statistics?.plusMinusPoints ?? 0,
+    };
+  }
+
+  function normalizePlayers(team) {
+    return (team.players || []).map((player) => ({
+      PLAYER_ID: player.personId,
+      PLAYER_NAME:
+        `${player.firstName || ""} ${player.familyName || ""}`.trim(),
+      TEAM_ID: team.teamId,
+      START_POSITION: player.position || "",
+      COMMENT: player.comment || "",
+      MIN: player.statistics?.minutes || "",
+      FGM: player.statistics?.fieldGoalsMade ?? 0,
+      FGA: player.statistics?.fieldGoalsAttempted ?? 0,
+      FG_PCT: player.statistics?.fieldGoalsPercentage ?? 0,
+      FG3M: player.statistics?.threePointersMade ?? 0,
+      FG3A: player.statistics?.threePointersAttempted ?? 0,
+      FG3_PCT: player.statistics?.threePointersPercentage ?? 0,
+      FTM: player.statistics?.freeThrowsMade ?? 0,
+      FTA: player.statistics?.freeThrowsAttempted ?? 0,
+      FT_PCT: player.statistics?.freeThrowsPercentage ?? 0,
+      OREB: player.statistics?.reboundsOffensive ?? 0,
+      DREB: player.statistics?.reboundsDefensive ?? 0,
+      REB: player.statistics?.reboundsTotal ?? 0,
+      AST: player.statistics?.assists ?? 0,
+      STL: player.statistics?.steals ?? 0,
+      BLK: player.statistics?.blocks ?? 0,
+      TOV: player.statistics?.turnovers ?? 0,
+      PF: player.statistics?.foulsPersonal ?? 0,
+      PTS: player.statistics?.points ?? 0,
+      PLUS_MINUS: player.statistics?.plusMinusPoints ?? 0,
+    }));
+  }
+
+  const teams = [normalizeTeam(homeTeam), normalizeTeam(awayTeam)];
+  const players = [
+    ...normalizePlayers(homeTeam),
+    ...normalizePlayers(awayTeam),
+  ];
+
+  return {
+    gameId,
+    teams,
+    players,
+  };
+}
+
 module.exports = {
   getTeamGames,
   limitGames,
   fetchPlayerGames,
   findPlayerByName,
+
+  fetchBoxScoreByGameId,
 };
