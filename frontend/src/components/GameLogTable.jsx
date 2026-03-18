@@ -1,10 +1,10 @@
 function formatPct(value) {
   const num = Number(value);
-  if (Number.isNaN(num)) return 0;
+  if (Number.isNaN(num)) return "0.0";
   return num <= 1 ? (num * 100).toFixed(1) : num.toFixed(1);
 }
 
-function GameLogTable({ games }) {
+function GameLogTable({ games, onSelectGame }) {
   if (!games || games.length === 0) return null;
 
   return (
@@ -39,7 +39,17 @@ function GameLogTable({ games }) {
             {games.map((game, index) => (
               <tr key={game.gameId || index}>
                 <td>{game.gameDate}</td>
-                <td>{game.matchup}</td>
+
+                <td>
+                  <button
+                    type="button"
+                    className="matchup-link"
+                    onClick={() => onSelectGame?.(game)}
+                  >
+                    {game.matchup}
+                  </button>
+                </td>
+
                 <td>
                   {game.wl ? (
                     <span
@@ -53,6 +63,7 @@ function GameLogTable({ games }) {
                     ""
                   )}
                 </td>
+
                 <td>{game.minutes}</td>
                 <td>{game.points}</td>
                 <td>{game.rebounds}</td>

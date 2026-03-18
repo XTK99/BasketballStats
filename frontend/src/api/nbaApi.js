@@ -21,3 +21,16 @@ export async function getTeamGames(teamName, last = 5, season = "2025-26") {
 
   return response.json();
 }
+
+export async function getBoxScore(gameId) {
+  const response = await fetch(
+    `http://localhost:5000/api/nba/boxscore/${gameId}`,
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || "Failed to fetch box score");
+  }
+
+  return response.json();
+}

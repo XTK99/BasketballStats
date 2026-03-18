@@ -8,11 +8,46 @@ function getValue(obj, keys, fallback = 0) {
   return fallback;
 }
 
+function parseMatchup(matchup = "") {
+  if (!matchup || typeof matchup !== "string") {
+    return {
+      opponent: "",
+      isHome: null,
+    };
+  }
+
+  if (matchup.includes(" vs. ")) {
+    const parts = matchup.split(" vs. ");
+    return {
+      opponent: parts[1] || "",
+      isHome: true,
+    };
+  }
+
+  if (matchup.includes(" @ ")) {
+    const parts = matchup.split(" @ ");
+    return {
+      opponent: parts[1] || "",
+      isHome: false,
+    };
+  }
+
+  return {
+    opponent: "",
+    isHome: null,
+  };
+}
+
 export function normalizeGame(game) {
+  const matchup = getValue(game, ["matchup", "MATCHUP"], "");
+  const matchupInfo = parseMatchup(matchup);
+
   return {
     gameId: getValue(game, ["gameId", "GAME_ID", "Game_ID"], ""),
     gameDate: getValue(game, ["gameDate", "GAME_DATE", "date"], ""),
-    matchup: getValue(game, ["matchup", "MATCHUP"], ""),
+    matchup,
+    opponent: matchupInfo.opponent,
+    isHome: matchupInfo.isHome,
     wl: String(getValue(game, ["wl", "WL", "result"], "")).toUpperCase(),
 
     minutes: getValue(game, ["minutes", "MIN", "min"], 0),

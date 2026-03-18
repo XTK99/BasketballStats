@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { getPlayerGames, getTeamGames } from "./api/nbaApi";
 import ModeToggle from "./components/ModeToggle";
 import SearchBar from "./components/SearchBar";
 import SummaryCards from "./components/SummaryCards";
@@ -16,6 +15,10 @@ import HitRateBoard from "./components/HitRateBoard";
 import { generateThresholds } from "./utils/generateThresholds";
 import { calculateHitRateBoard } from "./utils/calculateHitRateBoard";
 import { normalizeGames } from "./utils/normalizeGames";
+import SplitsPanel from "./components/SplitsPanel";
+import { calculateSplits } from "./utils/calculateSplits";
+import { getPlayerGames, getTeamGames, getBoxScore } from "./api/nbaApi";
+import BoxScorePanel from "./components/BoxScorePanel";
 
 function App() {
   const [mode, setMode] = useState("player");
@@ -37,6 +40,12 @@ function App() {
 
   const [boardStat, setBoardStat] = useState("points");
 
+  const [selectedGame, setSelectedGame] = useState(null);
+  const [boxScore, setBoxScore] = useState(null);
+  const [boxScoreLoading, setBoxScoreLoading] = useState(false);
+  const [boxScoreError, setBoxScoreError] = useState("");
+  const [isBoxScoreOpen, setIsBoxScoreOpen] = useState(true);
+
   async function runSearch(gameCount) {
     const safeGameCount = Math.max(1, Number(gameCount) || 1);
 
@@ -44,7 +53,23 @@ function App() {
       ? getPlayerGames(searchValue, safeGameCount)
       : getTeamGames(searchValue, safeGameCount);
   }
+  async function handleSelectGame(game) {
+    try {
+      setSelectedGame(game);
+      setBoxScore(null);
+      setBoxScoreError("");
+      setBoxScoreLoading(true);
+      setIsBoxScoreOpen(true);
 
+      const result = await getBoxScore(game.gameId);
+      setBoxScore(result);
+    } catch (err) {
+      console.error("Box score error:", err);
+      setBoxScoreError(err.message || "Failed to load box score");
+    } finally {
+      setBoxScoreLoading(false);
+    }
+  }
   async function handleSearch() {
     try {
       setLoading(true);
@@ -143,6 +168,9 @@ function App() {
       thresholdFilters,
     );
   }, [data, locationFilter, resultFilter, opponentFilter, thresholdFilters]);
+  const splits = useMemo(() => {
+    return calculateSplits(filteredGames);
+  }, [filteredGames]);
 
   const boardThresholds = useMemo(() => {
     return generateThresholds(boardStat);
@@ -252,6 +280,7 @@ function App() {
           />
 
           <SummaryCards averages={filteredAverages} />
+          <SplitsPanel splits={splits} />
 
           <section className="panel-card">
             <StatSelector
@@ -271,8 +300,35 @@ function App() {
               gameCount={filteredGames.length}
             />
           )}
+          {selectedGame && (
+            <section className="panel-card">
+              <div className="boxscore-section-header">
+                <h3 className="panel-title">
+                  Box Score: {selectedGame.matchup} ({selectedGame.gameDate})
+                </h3>
 
-          <GameLogTable games={filteredGames} />
+                <button
+                  type="button"
+                  className="secondary-button boxscore-toggle-button"
+                  onClick={() => setIsBoxScoreOpen((prev) => !prev)}
+                >
+                  {isBoxScoreOpen ? "Minimize" : "Expand"}
+                </button>
+              </div>
+
+              {isBoxScoreOpen && (
+                <>
+                  {boxScoreLoading && <p>Loading box score...</p>}
+                  {boxScoreError && (
+                    <p className="status-error">{boxScoreError}</p>
+                  )}
+                  {boxScore && <BoxScorePanel boxScore={boxScore} />}
+                </>
+              )}
+            </section>
+          )}
+
+          <GameLogTable games={filteredGames} onSelectGame={handleSelectGame} />
         </>
       )}
     </div>
