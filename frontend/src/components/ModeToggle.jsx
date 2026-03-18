@@ -7,11 +7,17 @@ function ModeToggle({ mode, setMode, setSearchValue, setData, setError }) {
   }
 
   return (
-    <div style={{ marginBottom: "16px" }}>
-      <button onClick={() => handleModeChange("player")}>Player</button>
+    <div className="mode-toggle">
       <button
+        className={`mode-button ${mode === "player" ? "active" : ""}`}
+        onClick={() => handleModeChange("player")}
+      >
+        Player
+      </button>
+
+      <button
+        className={`mode-button ${mode === "team" ? "active" : ""}`}
         onClick={() => handleModeChange("team")}
-        style={{ marginLeft: "8px" }}
       >
         Team
       </button>

@@ -8,8 +8,9 @@ function SearchBar({
   loading,
 }) {
   return (
-    <div style={{ marginBottom: "20px" }}>
+    <div className="search-row">
       <input
+        className="search-input"
         type="text"
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
@@ -19,18 +20,18 @@ function SearchBar({
       />
 
       <input
+        className="search-number"
         type="number"
         value={last}
         onChange={(e) => setLast(Number(e.target.value))}
         min="1"
         max="20"
-        style={{ marginLeft: "8px", width: "60px" }}
       />
 
       <button
+        className="search-button"
         onClick={handleSearch}
         disabled={loading}
-        style={{ marginLeft: "8px" }}
       >
         {loading ? "Loading..." : "Search"}
       </button>

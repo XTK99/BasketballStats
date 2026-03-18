@@ -6,6 +6,7 @@ import SummaryCards from "./components/SummaryCards";
 import GameLogTable from "./components/GameLogTable";
 import StatSelector from "./components/StatSelector";
 import StatChart from "./components/StatChart";
+import "./App.css";
 
 function App() {
   const [mode, setMode] = useState("player");
@@ -39,46 +40,58 @@ function App() {
   const title = mode === "player" ? data?.player : data?.teamName;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>NBA Stats Viewer</h1>
+    <div className="app-shell">
+      <header className="app-header">
+        <h1 className="app-title">NBA Stats Viewer</h1>
+        <p className="app-subtitle">
+          Search recent player and team performance, compare averages, and track
+          trends.
+        </p>
+      </header>
 
-      <ModeToggle
-        mode={mode}
-        setMode={setMode}
-        setSearchValue={setSearchValue}
-        setData={setData}
-        setError={setError}
-      />
+      <section className="toolbar-card">
+        <ModeToggle
+          mode={mode}
+          setMode={setMode}
+          setSearchValue={setSearchValue}
+          setData={setData}
+          setError={setError}
+        />
 
-      <SearchBar
-        mode={mode}
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-        last={last}
-        setLast={setLast}
-        handleSearch={handleSearch}
-        loading={loading}
-      />
+        <SearchBar
+          mode={mode}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          last={last}
+          setLast={setLast}
+          handleSearch={handleSearch}
+          loading={loading}
+        />
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p className="status-error">{error}</p>}
+      </section>
 
       {data && (
-        <div>
-          <h2>{title}</h2>
-          <p>Season: {data.season}</p>
-          <p>Games: {data.count}</p>
+        <>
+          <section className="results-header">
+            <h2 className="results-title">{title}</h2>
+            <div className="results-meta">
+              Season: {data.season} • Games: {data.count}
+            </div>
+          </section>
 
           <SummaryCards averages={data.averages} />
 
-          <StatSelector
-            selectedStat={selectedStat}
-            setSelectedStat={setSelectedStat}
-          />
-
-          <StatChart games={data.games} selectedStat={selectedStat} />
+          <section className="panel-card">
+            <StatSelector
+              selectedStat={selectedStat}
+              setSelectedStat={setSelectedStat}
+            />
+            <StatChart games={data.games} selectedStat={selectedStat} />
+          </section>
 
           <GameLogTable games={data.games} />
-        </div>
+        </>
       )}
     </div>
   );

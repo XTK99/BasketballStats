@@ -1,12 +1,10 @@
 function StatSelector({ selectedStat, setSelectedStat }) {
   return (
-    <div style={{ marginBottom: "20px" }}>
-      <label htmlFor="stat-select" style={{ marginRight: "8px" }}>
-        Select Stat:
-      </label>
+    <>
+      <h3 className="panel-title">Trend Chart</h3>
 
       <select
-        id="stat-select"
+        className="search-select"
         value={selectedStat}
         onChange={(e) => setSelectedStat(e.target.value)}
       >
@@ -20,7 +18,7 @@ function StatSelector({ selectedStat, setSelectedStat }) {
         <option value="threePointPct">3P%</option>
         <option value="freeThrowPct">FT%</option>
       </select>
-    </div>
+    </>
   );
 }
 

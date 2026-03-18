@@ -1,30 +1,24 @@
 function SummaryCards({ averages }) {
   if (!averages) return null;
 
+  const cards = [
+    { label: "PTS", value: averages.points },
+    { label: "REB", value: averages.rebounds },
+    { label: "AST", value: averages.assists },
+    { label: "STL", value: averages.steals },
+    { label: "BLK", value: averages.blocks },
+    { label: "TOV", value: averages.turnovers },
+  ];
+
   return (
-    <div style={{ marginBottom: "20px" }}>
-      <h3>Averages</h3>
-      <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-        <div>
-          <strong>PTS:</strong> {averages.points}
+    <section className="summary-grid">
+      {cards.map((card) => (
+        <div key={card.label} className="summary-card">
+          <div className="summary-label">{card.label}</div>
+          <div className="summary-value">{card.value}</div>
         </div>
-        <div>
-          <strong>REB:</strong> {averages.rebounds}
-        </div>
-        <div>
-          <strong>AST:</strong> {averages.assists}
-        </div>
-        <div>
-          <strong>STL:</strong> {averages.steals}
-        </div>
-        <div>
-          <strong>BLK:</strong> {averages.blocks}
-        </div>
-        <div>
-          <strong>TOV:</strong> {averages.turnovers}
-        </div>
-      </div>
-    </div>
+      ))}
+    </section>
   );
 }
 
