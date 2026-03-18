@@ -12,8 +12,9 @@ import { calculateFilteredAverages } from "./utils/calculateFilteredAverages";
 import "./App.css";
 import ThresholdFilter from "./components/ThresholdFilter";
 import ActiveFilters from "./components/ActiveFilters";
-import { calculateHitRate } from "./utils/calculateHitRate";
-import HitRateCard from "./components/HitRateCard";
+import HitRateBoard from "./components/HitRateBoard";
+import { generateThresholds } from "./utils/generateThresholds";
+import { calculateHitRateBoard } from "./utils/calculateHitRateBoard";
 
 function App() {
   const [mode, setMode] = useState("player");
@@ -33,19 +34,14 @@ function App() {
   const [thresholdValue, setThresholdValue] = useState("");
   const [thresholdFilters, setThresholdFilters] = useState([]);
 
-  const [hitRateStat, setHitRateStat] = useState("points");
-  const [hitRateType, setHitRateType] = useState("over");
-  const [hitRateLine, setHitRateLine] = useState("20");
+  const [boardStat, setBoardStat] = useState("points");
 
   async function runSearch(gameCount) {
     const safeGameCount = Math.max(1, Number(gameCount) || 1);
 
-    const result =
-      mode === "player"
-        ? await getPlayerGames(searchValue, safeGameCount)
-        : await getTeamGames(searchValue, safeGameCount);
-
-    return result;
+    return mode === "player"
+      ? getPlayerGames(searchValue, safeGameCount)
+      : getTeamGames(searchValue, safeGameCount);
   }
 
   async function handleSearch() {
@@ -100,7 +96,6 @@ function App() {
       );
 
       if (alreadyExists) return prev;
-
       return [...prev, newFilter];
     });
 
@@ -135,14 +130,13 @@ function App() {
     );
   }, [data, locationFilter, resultFilter, opponentFilter, thresholdFilters]);
 
-  const hitRateData = useMemo(() => {
-    return calculateHitRate(
-      filteredGames,
-      hitRateStat,
-      hitRateType,
-      hitRateLine,
-    );
-  }, [filteredGames, hitRateStat, hitRateType, hitRateLine]);
+  const boardThresholds = useMemo(() => {
+    return generateThresholds(boardStat);
+  }, [boardStat]);
+
+  const boardData = useMemo(() => {
+    return calculateHitRateBoard(filteredGames, boardStat, boardThresholds);
+  }, [filteredGames, boardStat, boardThresholds]);
 
   const filteredAverages = useMemo(() => {
     return calculateFilteredAverages(filteredGames);
@@ -243,15 +237,18 @@ function App() {
             onRemoveThresholdFilter={handleRemoveThresholdFilter}
           />
 
-          <HitRateCard
-            hitRateStat={hitRateStat}
-            setHitRateStat={setHitRateStat}
-            hitRateType={hitRateType}
-            setHitRateType={setHitRateType}
-            hitRateLine={hitRateLine}
-            setHitRateLine={setHitRateLine}
-            hitRateData={hitRateData}
-          />
+          {mode === "player" && (
+            <>
+              <HitRateBoard
+                title={title}
+                season={data.season}
+                stat={boardStat}
+                setStat={setBoardStat}
+                boardData={boardData}
+                gameCount={filteredGames.length}
+              />
+            </>
+          )}
 
           <SummaryCards averages={filteredAverages} />
 
@@ -260,12 +257,7 @@ function App() {
               selectedStat={selectedStat}
               setSelectedStat={setSelectedStat}
             />
-            <StatChart
-              games={filteredGames}
-              selectedStat={selectedStat}
-              hitRateStat={hitRateStat}
-              hitRateLine={hitRateLine}
-            />
+            <StatChart games={filteredGames} selectedStat={selectedStat} />
           </section>
 
           <GameLogTable games={filteredGames} />
