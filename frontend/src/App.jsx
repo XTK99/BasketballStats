@@ -26,13 +26,22 @@ function App() {
   const [resultFilter, setResultFilter] = useState("all");
   const [opponentFilter, setOpponentFilter] = useState("");
 
-  // current threshold input controls
   const [thresholdStat, setThresholdStat] = useState("points");
   const [thresholdOperator, setThresholdOperator] = useState(">=");
   const [thresholdValue, setThresholdValue] = useState("");
 
-  // applied threshold filters
   const [thresholdFilters, setThresholdFilters] = useState([]);
+
+  async function runSearch(gameCount) {
+    const safeGameCount = Math.max(1, Number(gameCount) || 1);
+
+    const result =
+      mode === "player"
+        ? await getPlayerGames(searchValue, safeGameCount)
+        : await getTeamGames(searchValue, safeGameCount);
+
+    return result;
+  }
 
   async function handleSearch() {
     try {
@@ -40,14 +49,28 @@ function App() {
       setError("");
       setData(null);
 
-      const result =
-        mode === "player"
-          ? await getPlayerGames(searchValue, last)
-          : await getTeamGames(searchValue, last);
-
+      const result = await runSearch(last);
       setData(result);
     } catch (err) {
       console.error("Search error:", err);
+      setError(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleUseFullSeason() {
+    try {
+      setLoading(true);
+      setError("");
+
+      const fullSeasonValue = 100;
+      setLast(fullSeasonValue);
+
+      const result = await runSearch(fullSeasonValue);
+      setData(result);
+    } catch (err) {
+      console.error("Full season search error:", err);
       setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
@@ -116,7 +139,6 @@ function App() {
     setThresholdValue("");
     setThresholdFilters([]);
   }
-  console.log(data?.games?.map((game) => game.matchup));
 
   return (
     <div className="app-shell">
@@ -145,6 +167,8 @@ function App() {
           setLast={setLast}
           handleSearch={handleSearch}
           loading={loading}
+          fullSeasonCount={loadedGames}
+          onUseFullSeason={handleUseFullSeason}
         />
 
         {error && <p className="status-error">{error}</p>}
@@ -163,11 +187,15 @@ function App() {
 
               <div className="hero-stats">
                 <div className="hero-stat-card">
-                  <span className="hero-stat-label">Games Matching</span>
+                  <span className="hero-stat-label">
+                    Games Matching Filters
+                  </span>
                   <span className="hero-stat-value">
                     {filteredCount} / {loadedGames}
                   </span>
-                  <span className="hero-stat-subvalue">{filteredPercent}%</span>
+                  <span className="hero-stat-subvalue">
+                    {filteredPercent}% match
+                  </span>
                 </div>
               </div>
             </div>

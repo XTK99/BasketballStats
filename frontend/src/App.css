@@ -153,9 +153,49 @@ button {
   text-align: center;
 }
 
+.last-games-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 10px 0 12px;
+  border-radius: 12px;
+  background: rgba(7, 16, 34, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.last-games-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #9fb2d2;
+  white-space: nowrap;
+}
+
 .last-games-input {
-  width: 70px;
+  width: 64px;
+  height: 30px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #ffffff;
   text-align: center;
+  font-weight: 700;
+  padding: 0;
+  border-radius: 8px;
+}
+
+.last-games-input::-webkit-outer-spin-button,
+.last-games-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.last-games-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.full-season-button {
+  white-space: nowrap;
 }
 
 .search-select {

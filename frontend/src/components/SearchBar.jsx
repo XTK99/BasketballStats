@@ -6,16 +6,9 @@ function SearchBar({
   setLast,
   handleSearch,
   loading,
+  fullSeasonCount,
+  onUseFullSeason,
 }) {
-  function handleLastWheel(e) {
-    e.preventDefault();
-
-    const current = Number(last || 0);
-    const nextValue = e.deltaY < 0 ? current + 1 : current - 1;
-
-    setLast(Math.max(1, nextValue));
-  }
-
   return (
     <div className="search-row">
       <input
@@ -23,32 +16,33 @@ function SearchBar({
         type="text"
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
-        placeholder={mode === "player" ? "Search player" : "Search team"}
+        placeholder={mode === "player" ? "Search player..." : "Search team..."}
       />
 
-      <input
-        className="last-games-input"
-        type="text"
-        inputMode="numeric"
-        value={String(last)}
-        onChange={(e) => {
-          const digitsOnly = e.target.value.replace(/[^\d]/g, "");
-          setLast(digitsOnly === "" ? 1 : Number(digitsOnly));
-        }}
-        onWheel={(e) => {
-          e.preventDefault();
-          const current = Number(last || 1);
-          const nextValue = e.deltaY < 0 ? current + 1 : current - 1;
-          setLast(Math.max(1, nextValue));
-        }}
-        onWheelCapture={(e) => {
-          e.preventDefault();
-        }}
-        placeholder="Last"
-      />
+      <div className="last-games-group">
+        <label className="last-games-label" htmlFor="last-games-input">
+          Last
+        </label>
+        <input
+          id="last-games-input"
+          className="search-number last-games-input"
+          type="number"
+          min="1"
+          value={last}
+          onChange={(e) => setLast(Number(e.target.value) || 1)}
+        />
+      </div>
 
       <button
         type="button"
+        className="secondary-button full-season-button"
+        onClick={onUseFullSeason}
+        disabled={!fullSeasonCount}
+      >
+        Full Season
+      </button>
+
+      <button
         className="search-button"
         onClick={handleSearch}
         disabled={loading}
