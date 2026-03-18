@@ -3,6 +3,9 @@ export function filterGames(
   locationFilter,
   resultFilter,
   opponentFilter,
+  thresholdStat,
+  thresholdOperator,
+  thresholdValue,
 ) {
   return games.filter((game) => {
     const matchup = game.matchup || "";
@@ -27,6 +30,26 @@ export function filterGames(
       !normalizedOpponentFilter ||
       matchup.toLowerCase().includes(normalizedOpponentFilter);
 
-    return matchesLocation && matchesResult && matchesOpponent;
+    const numericThreshold = Number(thresholdValue);
+    const hasThreshold =
+      thresholdValue !== "" && !Number.isNaN(numericThreshold);
+
+    let matchesThreshold = true;
+
+    if (hasThreshold) {
+      const statValue = Number(game[thresholdStat]) || 0;
+
+      if (thresholdOperator === ">=") {
+        matchesThreshold = statValue >= numericThreshold;
+      } else if (thresholdOperator === "<=") {
+        matchesThreshold = statValue <= numericThreshold;
+      } else {
+        matchesThreshold = statValue === numericThreshold;
+      }
+    }
+
+    return (
+      matchesLocation && matchesResult && matchesOpponent && matchesThreshold
+    );
   });
 }

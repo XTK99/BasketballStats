@@ -10,6 +10,7 @@ import FiltersBar from "./components/FiltersBar";
 import { filterGames } from "./utils/filterGames";
 import { calculateFilteredAverages } from "./utils/calculateFilteredAverages";
 import "./App.css";
+import ThresholdFilter from "./components/ThresholdFilter";
 
 function App() {
   const [mode, setMode] = useState("player");
@@ -23,6 +24,9 @@ function App() {
   const [locationFilter, setLocationFilter] = useState("all");
   const [resultFilter, setResultFilter] = useState("all");
   const [opponentFilter, setOpponentFilter] = useState("");
+  const [thresholdStat, setThresholdStat] = useState("points");
+  const [thresholdOperator, setThresholdOperator] = useState(">=");
+  const [thresholdValue, setThresholdValue] = useState("");
 
   async function handleSearch() {
     try {
@@ -51,8 +55,19 @@ function App() {
       locationFilter,
       resultFilter,
       opponentFilter,
+      thresholdStat,
+      thresholdOperator,
+      thresholdValue,
     );
-  }, [data, locationFilter, resultFilter, opponentFilter]);
+  }, [
+    data,
+    locationFilter,
+    resultFilter,
+    opponentFilter,
+    thresholdStat,
+    thresholdOperator,
+    thresholdValue,
+  ]);
 
   const filteredAverages = useMemo(() => {
     return calculateFilteredAverages(filteredGames);
@@ -109,6 +124,15 @@ function App() {
             setResultFilter={setResultFilter}
             opponentFilter={opponentFilter}
             setOpponentFilter={setOpponentFilter}
+          />
+
+          <ThresholdFilter
+            thresholdStat={thresholdStat}
+            setThresholdStat={setThresholdStat}
+            thresholdOperator={thresholdOperator}
+            setThresholdOperator={setThresholdOperator}
+            thresholdValue={thresholdValue}
+            setThresholdValue={setThresholdValue}
           />
 
           <SummaryCards averages={filteredAverages} />
