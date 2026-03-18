@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { getPlayerGames, getTeamGames } from "./api/nbaApi";
 import ModeToggle from "./components/ModeToggle";
 import SearchBar from "./components/SearchBar";
@@ -6,6 +6,9 @@ import SummaryCards from "./components/SummaryCards";
 import GameLogTable from "./components/GameLogTable";
 import StatSelector from "./components/StatSelector";
 import StatChart from "./components/StatChart";
+import FiltersBar from "./components/FiltersBar";
+import { filterGames } from "./utils/filterGames";
+import { calculateFilteredAverages } from "./utils/calculateFilteredAverages";
 import "./App.css";
 
 function App() {
@@ -16,6 +19,10 @@ function App() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const [locationFilter, setLocationFilter] = useState("all");
+  const [resultFilter, setResultFilter] = useState("all");
+  const [opponentFilter, setOpponentFilter] = useState("");
 
   async function handleSearch() {
     try {
@@ -36,6 +43,20 @@ function App() {
       setLoading(false);
     }
   }
+
+  const filteredGames = useMemo(() => {
+    if (!data?.games) return [];
+    return filterGames(
+      data.games,
+      locationFilter,
+      resultFilter,
+      opponentFilter,
+    );
+  }, [data, locationFilter, resultFilter, opponentFilter]);
+
+  const filteredAverages = useMemo(() => {
+    return calculateFilteredAverages(filteredGames);
+  }, [filteredGames]);
 
   const title = mode === "player" ? data?.player : data?.teamName;
 
@@ -76,21 +97,31 @@ function App() {
           <section className="results-header">
             <h2 className="results-title">{title}</h2>
             <div className="results-meta">
-              Season: {data.season} • Games: {data.count}
+              Season: {data.season} • Loaded Games: {data.count} • Filtered
+              Games: {filteredGames.length}
             </div>
           </section>
 
-          <SummaryCards averages={data.averages} />
+          <FiltersBar
+            locationFilter={locationFilter}
+            setLocationFilter={setLocationFilter}
+            resultFilter={resultFilter}
+            setResultFilter={setResultFilter}
+            opponentFilter={opponentFilter}
+            setOpponentFilter={setOpponentFilter}
+          />
+
+          <SummaryCards averages={filteredAverages} />
 
           <section className="panel-card">
             <StatSelector
               selectedStat={selectedStat}
               setSelectedStat={setSelectedStat}
             />
-            <StatChart games={data.games} selectedStat={selectedStat} />
+            <StatChart games={filteredGames} selectedStat={selectedStat} />
           </section>
 
-          <GameLogTable games={data.games} />
+          <GameLogTable games={filteredGames} />
         </>
       )}
     </div>
