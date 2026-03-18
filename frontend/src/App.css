@@ -903,6 +903,7 @@ button {
   border-color: rgba(248, 113, 113, 0.22);
   box-shadow: 0 10px 24px rgba(239, 68, 68, 0.06);
 }
+
 .hit-rate-board-card-strong .hit-rate-board-rate {
   color: #86efac;
 }
@@ -914,6 +915,7 @@ button {
 .hit-rate-board-card-weak .hit-rate-board-rate {
   color: #fca5a5;
 }
+
 .hit-rate-board-line {
   font-size: 0.82rem;
   text-transform: uppercase;
@@ -940,4 +942,35 @@ button {
   margin-top: 6px;
   font-size: 0.88rem;
   color: #9db0cf;
+}
+
+.hit-rate-board-splits {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.hit-rate-board-split {
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hit-rate-board-split-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9db0cf;
+  font-weight: 700;
+}
+
+.hit-rate-board-split-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
 }

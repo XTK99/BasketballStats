@@ -56,6 +56,37 @@ function getGameStatValue(game, stat) {
   return NaN;
 }
 
+function calculateMiniHitRate(games, stat, line) {
+  if (!Array.isArray(games) || games.length === 0) {
+    return {
+      hits: 0,
+      total: 0,
+      percentage: 0,
+    };
+  }
+
+  let hits = 0;
+  let total = 0;
+
+  for (const game of games) {
+    const value = getGameStatValue(game, stat);
+
+    if (Number.isNaN(value)) continue;
+
+    total += 1;
+
+    if (value >= line) {
+      hits += 1;
+    }
+  }
+
+  return {
+    hits,
+    total,
+    percentage: total > 0 ? Math.round((hits / total) * 100) : 0,
+  };
+}
+
 export function calculateHitRateForLine(games, stat, line) {
   if (!Array.isArray(games) || games.length === 0) {
     return {
@@ -65,6 +96,8 @@ export function calculateHitRateForLine(games, stat, line) {
       pushes: 0,
       total: 0,
       percentage: 0,
+      last5: { hits: 0, total: 0, percentage: 0 },
+      last10: { hits: 0, total: 0, percentage: 0 },
     };
   }
 
@@ -87,7 +120,11 @@ export function calculateHitRateForLine(games, stat, line) {
     }
   }
 
-  const percentage = total > 0 ? Math.round((hits / total) * 100) : 0;
+  const validGames = games.filter(
+    (game) => !Number.isNaN(getGameStatValue(game, stat)),
+  );
+  const last5Games = validGames.slice(0, 5);
+  const last10Games = validGames.slice(0, 10);
 
   return {
     line,
@@ -95,7 +132,9 @@ export function calculateHitRateForLine(games, stat, line) {
     misses,
     pushes,
     total,
-    percentage,
+    percentage: total > 0 ? Math.round((hits / total) * 100) : 0,
+    last5: calculateMiniHitRate(last5Games, stat, line),
+    last10: calculateMiniHitRate(last10Games, stat, line),
   };
 }
 

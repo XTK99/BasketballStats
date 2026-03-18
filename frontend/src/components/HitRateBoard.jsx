@@ -81,7 +81,22 @@ function HitRateBoard({ title, season, stat, setStat, boardData, gameCount }) {
 
               <div className="hit-rate-board-subdetail">
                 Misses: {item.misses}
-                {item.pushes > 0 ? ` • Pushes: ${item.pushes}` : ""}
+              </div>
+
+              <div className="hit-rate-board-splits">
+                <div className="hit-rate-board-split">
+                  <span className="hit-rate-board-split-label">Last 5</span>
+                  <span className="hit-rate-board-split-value">
+                    {item.last5.hits} / {item.last5.total}
+                  </span>
+                </div>
+
+                <div className="hit-rate-board-split">
+                  <span className="hit-rate-board-split-label">Last 10</span>
+                  <span className="hit-rate-board-split-value">
+                    {item.last10.hits} / {item.last10.total}
+                  </span>
+                </div>
               </div>
             </div>
           );
