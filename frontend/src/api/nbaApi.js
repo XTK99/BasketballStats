@@ -10,8 +10,19 @@ export async function getPlayerGames(player, last = 5, season = "2025-26") {
   return response.json();
 }
 
-export async function getTeamGames(teamName, last = 5, season = "2025-26") {
-  const url = `http://localhost:5000/api/nba/team-games?teamName=${encodeURIComponent(teamName)}&last=${last}&season=${season}`;
+export async function getTeamGames(
+  teamIdentifier,
+  last = 5,
+  season = "2025-26",
+) {
+  const isNumericTeamId =
+    typeof teamIdentifier === "number" || /^\d+$/.test(String(teamIdentifier));
+
+  const queryParam = isNumericTeamId
+    ? `teamId=${encodeURIComponent(teamIdentifier)}`
+    : `teamName=${encodeURIComponent(teamIdentifier)}`;
+
+  const url = `http://localhost:5000/api/nba/team-games?${queryParam}&last=${last}&season=${season}`;
   const response = await fetch(url);
 
   if (!response.ok) {

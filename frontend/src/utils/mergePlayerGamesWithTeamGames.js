@@ -14,25 +14,33 @@ export function mergePlayerGamesWithTeamGames(
       seasonGameNumber: index + 1,
       played: Boolean(matchingPlayerGame),
 
-      minutes: matchingPlayerGame ? matchingPlayerGame.minutes : null,
-      points: matchingPlayerGame ? matchingPlayerGame.points : null,
-      rebounds: matchingPlayerGame ? matchingPlayerGame.rebounds : null,
-      assists: matchingPlayerGame ? matchingPlayerGame.assists : null,
-      steals: matchingPlayerGame ? matchingPlayerGame.steals : null,
-      blocks: matchingPlayerGame ? matchingPlayerGame.blocks : null,
-      turnovers: matchingPlayerGame ? matchingPlayerGame.turnovers : null,
+      minutes: matchingPlayerGame ? matchingPlayerGame.minutes : 0,
+      points: matchingPlayerGame ? matchingPlayerGame.points : 0,
+      rebounds: matchingPlayerGame ? matchingPlayerGame.rebounds : 0,
+      assists: matchingPlayerGame ? matchingPlayerGame.assists : 0,
+      steals: matchingPlayerGame ? matchingPlayerGame.steals : 0,
+      blocks: matchingPlayerGame ? matchingPlayerGame.blocks : 0,
+      turnovers: matchingPlayerGame ? matchingPlayerGame.turnovers : 0,
 
-      fgm: matchingPlayerGame ? matchingPlayerGame.fgm : null,
-      fga: matchingPlayerGame ? matchingPlayerGame.fga : null,
-      fgPct: matchingPlayerGame ? matchingPlayerGame.fgPct : null,
+      fgm: matchingPlayerGame ? matchingPlayerGame.fgm : 0,
+      fga: matchingPlayerGame ? matchingPlayerGame.fga : 0,
+      fgPct: matchingPlayerGame ? matchingPlayerGame.fgPct : 0,
 
-      fg3m: matchingPlayerGame ? matchingPlayerGame.fg3m : null,
-      fg3a: matchingPlayerGame ? matchingPlayerGame.fg3a : null,
-      fg3Pct: matchingPlayerGame ? matchingPlayerGame.fg3Pct : null,
+      fg3m: matchingPlayerGame ? matchingPlayerGame.fg3m : 0,
+      fg3a: matchingPlayerGame ? matchingPlayerGame.fg3a : 0,
+      fg3Pct: matchingPlayerGame ? matchingPlayerGame.fg3Pct : 0,
 
-      ftm: matchingPlayerGame ? matchingPlayerGame.ftm : null,
-      fta: matchingPlayerGame ? matchingPlayerGame.fta : null,
-      ftPct: matchingPlayerGame ? matchingPlayerGame.ftPct : null,
+      ftm: matchingPlayerGame ? matchingPlayerGame.ftm : 0,
+      fta: matchingPlayerGame ? matchingPlayerGame.fta : 0,
+      ftPct: matchingPlayerGame ? matchingPlayerGame.ftPct : 0,
+
+      wl: matchingPlayerGame ? matchingPlayerGame.wl : teamGame.wl || "",
+      teamScore: matchingPlayerGame
+        ? matchingPlayerGame.teamScore
+        : (teamGame.teamScore ?? null),
+      opponentScore: matchingPlayerGame
+        ? matchingPlayerGame.opponentScore
+        : (teamGame.opponentScore ?? null),
     };
   });
 }

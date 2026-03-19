@@ -16,6 +16,7 @@ import StatChart from "./components/StatChart";
 import HitRateBoard from "./components/HitRateBoard";
 import GameLogTable from "./components/GameLogTable";
 import BoxScorePanel from "./components/BoxScorePanel";
+import BettingSimulator from "./components/BettingSimulator";
 
 import { normalizeGames } from "./utils/normalizeGames";
 import { filterGames } from "./utils/filterGames";
@@ -34,6 +35,8 @@ const FULL_SEASON_GAME_COUNT = 100;
 
 function App() {
   const [mode, setMode] = useState("player");
+  const [viewMode, setViewMode] = useState("dashboard");
+
   const [searchValue, setSearchValue] = useState("LeBron James");
   const [last, setLast] = useState(DEFAULT_GAME_COUNT);
   const [selectedStat, setSelectedStat] = useState(DEFAULT_SELECTED_STAT);
@@ -64,6 +67,8 @@ function App() {
   const [seasonTimelineGames, setSeasonTimelineGames] = useState([]);
   const [teamGamesPlayedCount, setTeamGamesPlayedCount] = useState(0);
   const [teamGamesTotalCount, setTeamGamesTotalCount] = useState(0);
+  const [includeMissedGamesInChart, setIncludeMissedGamesInChart] =
+    useState(true);
 
   async function runSearch(gameCount) {
     const safeGameCount = Math.max(1, Number(gameCount) || 1);
@@ -103,12 +108,17 @@ function App() {
       setData(normalizedResult);
 
       if (mode === "player") {
-        const playerTeamName =
-          result?.teamName || result?.team || result?.playerTeam || "";
+        const playerTeamIdentifier =
+          result?.teamId ||
+          result?.teamName ||
+          result?.team ||
+          result?.playerTeam ||
+          result?.teamAbbreviation ||
+          "";
 
-        if (playerTeamName) {
+        if (playerTeamIdentifier) {
           const fullTeamResult = await getTeamGames(
-            playerTeamName,
+            playerTeamIdentifier,
             FULL_SEASON_GAME_COUNT,
           );
 
@@ -217,39 +227,89 @@ function App() {
     setThresholdFilters([]);
   }
 
-  const filteredGames = useMemo(() => {
-    if (!data?.games) return [];
+  const gamesForFiltering = useMemo(() => {
+    if (mode === "player" && seasonTimelineGames.length > 0) {
+      return seasonTimelineGames;
+    }
 
+    return data?.games || [];
+  }, [mode, seasonTimelineGames, data]);
+
+  const searchedTimelineGames = useMemo(() => {
+    if (mode !== "player") {
+      return data?.games || [];
+    }
+
+    if (seasonTimelineGames.length === 0) {
+      return data?.games || [];
+    }
+
+    return seasonTimelineGames.slice(-last);
+  }, [mode, seasonTimelineGames, data, last]);
+
+  const filteredGames = useMemo(() => {
     return filterGames(
-      data.games,
+      gamesForFiltering,
       locationFilter,
       resultFilter,
       opponentFilter,
       thresholdFilters,
     );
-  }, [data, locationFilter, resultFilter, opponentFilter, thresholdFilters]);
+  }, [
+    gamesForFiltering,
+    locationFilter,
+    resultFilter,
+    opponentFilter,
+    thresholdFilters,
+  ]);
+
+  const playedFilteredGames = useMemo(() => {
+    if (mode !== "player") {
+      return filteredGames;
+    }
+
+    return filteredGames.filter((game) => game.played !== false);
+  }, [mode, filteredGames]);
 
   const filteredAverages = useMemo(() => {
-    return calculateFilteredAverages(filteredGames);
-  }, [filteredGames]);
+    return calculateFilteredAverages(playedFilteredGames);
+  }, [playedFilteredGames]);
 
   const splits = useMemo(() => {
-    return calculateSplits(filteredGames);
-  }, [filteredGames]);
+    return calculateSplits(playedFilteredGames);
+  }, [playedFilteredGames]);
 
   const boardThresholds = useMemo(() => {
     return generateThresholds(boardStat);
   }, [boardStat]);
 
   const boardData = useMemo(() => {
-    return calculateHitRateBoard(filteredGames, boardStat, boardThresholds);
-  }, [filteredGames, boardStat, boardThresholds]);
+    return calculateHitRateBoard(
+      playedFilteredGames,
+      boardStat,
+      boardThresholds,
+    );
+  }, [playedFilteredGames, boardStat, boardThresholds]);
 
   const title = mode === "player" ? data?.player : data?.teamName;
-  const loadedGames = data?.count || 0;
-  const filteredCount = filteredGames.length;
+
+  const loadedGames =
+    mode === "player" ? searchedTimelineGames.length : data?.count || 0;
+
+  const filteredCount =
+    mode === "player"
+      ? filteredGames.filter((game) => game.played).length
+      : filteredGames.length;
+
   const filteredPercent =
     loadedGames > 0 ? Math.round((filteredCount / loadedGames) * 100) : 0;
+
+  const chartGames =
+    mode === "player"
+      ? includeMissedGamesInChart
+        ? searchedTimelineGames
+        : playedFilteredGames
+      : [...filteredGames].reverse();
 
   return (
     <div className="app-shell">
@@ -287,134 +347,170 @@ function App() {
 
       {data && (
         <>
-          <section className="results-header">
-            <div className="results-header-main">
-              <div className="results-title-block">
-                <h2 className="results-title">{title}</h2>
-                <div className="results-subrow">
-                  <span className="season-badge">Season {data.season}</span>
-                  {mode === "player" && teamGamesTotalCount > 0 && (
-                    <div className="results-subrow">
-                      <span className="season-badge">
-                        Played {teamGamesPlayedCount} / {teamGamesTotalCount}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
+          <section className="view-toggle-card">
+            <div className="view-toggle">
+              <button
+                type="button"
+                className={`view-toggle-button ${
+                  viewMode === "dashboard" ? "is-active" : ""
+                }`}
+                onClick={() => setViewMode("dashboard")}
+              >
+                Dashboard
+              </button>
 
-              <div className="hero-stats">
-                <div className="hero-stat-card">
-                  <span className="hero-stat-label">
-                    Games Matching Filters
-                  </span>
-                  <span className="hero-stat-value">
-                    {filteredCount} / {loadedGames}
-                  </span>
-                  <span className="hero-stat-subvalue">
-                    {filteredPercent}% match
-                  </span>
-                </div>
-              </div>
+              <button
+                type="button"
+                className={`view-toggle-button ${
+                  viewMode === "betting" ? "is-active" : ""
+                }`}
+                onClick={() => setViewMode("betting")}
+              >
+                Betting Simulator
+              </button>
             </div>
           </section>
 
-          <FiltersBar
-            locationFilter={locationFilter}
-            setLocationFilter={setLocationFilter}
-            resultFilter={resultFilter}
-            setResultFilter={setResultFilter}
-            opponentFilter={opponentFilter}
-            setOpponentFilter={setOpponentFilter}
-            clearFilters={clearFilters}
-          />
+          {viewMode === "dashboard" ? (
+            <>
+              <section className="results-header">
+                <div className="results-header-main">
+                  <div className="results-title-block">
+                    <h2 className="results-title">{title}</h2>
 
-          <ThresholdFilter
-            thresholdStat={thresholdStat}
-            setThresholdStat={setThresholdStat}
-            thresholdOperator={thresholdOperator}
-            setThresholdOperator={setThresholdOperator}
-            thresholdValue={thresholdValue}
-            setThresholdValue={setThresholdValue}
-            onAddFilter={handleAddThresholdFilter}
-          />
+                    <div className="results-subrow">
+                      <span className="season-badge">Season {data.season}</span>
 
-          <ActiveFilters
-            locationFilter={locationFilter}
-            resultFilter={resultFilter}
-            opponentFilter={opponentFilter}
-            thresholdFilters={thresholdFilters}
-            onRemoveLocationFilter={handleRemoveLocationFilter}
-            onRemoveResultFilter={handleRemoveResultFilter}
-            onRemoveOpponentFilter={handleRemoveOpponentFilter}
-            onRemoveThresholdFilter={handleRemoveThresholdFilter}
-          />
+                      {mode === "player" && teamGamesTotalCount > 0 && (
+                        <span className="season-badge">
+                          Played {teamGamesPlayedCount} / {teamGamesTotalCount}
+                        </span>
+                      )}
+                    </div>
+                  </div>
 
-          <SummaryCards averages={filteredAverages} />
-          <SplitsPanel splits={splits} />
+                  <div className="hero-stats">
+                    <div className="hero-stat-card">
+                      <span className="hero-stat-label">
+                        Games Matching Filters
+                      </span>
+                      <span className="hero-stat-value">
+                        {filteredCount} / {loadedGames}
+                      </span>
+                      <span className="hero-stat-subvalue">
+                        {filteredPercent}% match
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </section>
 
-          <section className="panel-card">
-            <StatSelector
-              selectedStat={selectedStat}
-              setSelectedStat={setSelectedStat}
-            />
-            <StatChart
-              games={
-                mode === "player"
-                  ? seasonTimelineGames.length > 0
-                    ? seasonTimelineGames
-                    : [...filteredGames].reverse()
-                  : [...filteredGames].reverse()
-              }
-              selectedStat={selectedStat}
-            />
-          </section>
+              <FiltersBar
+                locationFilter={locationFilter}
+                setLocationFilter={setLocationFilter}
+                resultFilter={resultFilter}
+                setResultFilter={setResultFilter}
+                opponentFilter={opponentFilter}
+                setOpponentFilter={setOpponentFilter}
+                clearFilters={clearFilters}
+              />
 
-          {mode === "player" && (
-            <HitRateBoard
-              title={title}
-              season={data.season}
-              stat={boardStat}
-              setStat={setBoardStat}
-              boardData={boardData}
-              gameCount={filteredGames.length}
-            />
-          )}
+              <ThresholdFilter
+                thresholdStat={thresholdStat}
+                setThresholdStat={setThresholdStat}
+                thresholdOperator={thresholdOperator}
+                setThresholdOperator={setThresholdOperator}
+                thresholdValue={thresholdValue}
+                setThresholdValue={setThresholdValue}
+                onAddFilter={handleAddThresholdFilter}
+              />
 
-          {selectedGame && (
-            <section className="panel-card">
-              <div className="boxscore-section-header">
-                <h3 className="panel-title">
-                  Box Score: {selectedGame.matchup} ({selectedGame.gameDate})
-                </h3>
+              <ActiveFilters
+                locationFilter={locationFilter}
+                resultFilter={resultFilter}
+                opponentFilter={opponentFilter}
+                thresholdFilters={thresholdFilters}
+                onRemoveLocationFilter={handleRemoveLocationFilter}
+                onRemoveResultFilter={handleRemoveResultFilter}
+                onRemoveOpponentFilter={handleRemoveOpponentFilter}
+                onRemoveThresholdFilter={handleRemoveThresholdFilter}
+              />
 
-                <button
-                  type="button"
-                  className="secondary-button boxscore-toggle-button"
-                  onClick={() => setIsBoxScoreOpen((prev) => !prev)}
-                >
-                  {isBoxScoreOpen ? "Minimize" : "Expand"}
-                </button>
-              </div>
+              <SummaryCards averages={filteredAverages} />
+              <SplitsPanel splits={splits} />
 
-              {isBoxScoreOpen && (
-                <>
-                  {boxScoreLoading && <p>Loading box score...</p>}
-                  {boxScoreError && (
-                    <p className="status-error">{boxScoreError}</p>
-                  )}
-                  {boxScore && (
-                    <BoxScorePanel
-                      boxScore={boxScore}
-                      selectedPlayerName={mode === "player" ? title : ""}
-                    />
-                  )}
-                </>
+              <section className="panel-card">
+                <StatSelector
+                  selectedStat={selectedStat}
+                  setSelectedStat={setSelectedStat}
+                />
+                <StatChart
+                  games={chartGames}
+                  selectedStat={selectedStat}
+                  includeMissedGamesInChart={includeMissedGamesInChart}
+                  setIncludeMissedGamesInChart={setIncludeMissedGamesInChart}
+                  mode={mode}
+                />
+              </section>
+
+              {mode === "player" && (
+                <HitRateBoard
+                  title={title}
+                  season={data.season}
+                  stat={boardStat}
+                  setStat={setBoardStat}
+                  boardData={boardData}
+                  gameCount={playedFilteredGames.length}
+                />
               )}
-            </section>
-          )}
 
-          <GameLogTable games={filteredGames} onSelectGame={handleSelectGame} />
+              {selectedGame && (
+                <section className="panel-card">
+                  <div className="boxscore-section-header">
+                    <h3 className="panel-title">
+                      Box Score: {selectedGame.matchup} ({selectedGame.gameDate}
+                      )
+                    </h3>
+
+                    <button
+                      type="button"
+                      className="secondary-button boxscore-toggle-button"
+                      onClick={() => setIsBoxScoreOpen((prev) => !prev)}
+                    >
+                      {isBoxScoreOpen ? "Minimize" : "Expand"}
+                    </button>
+                  </div>
+
+                  {isBoxScoreOpen && (
+                    <>
+                      {boxScoreLoading && <p>Loading box score...</p>}
+                      {boxScoreError && (
+                        <p className="status-error">{boxScoreError}</p>
+                      )}
+                      {boxScore && (
+                        <BoxScorePanel
+                          boxScore={boxScore}
+                          selectedPlayerName={mode === "player" ? title : ""}
+                        />
+                      )}
+                    </>
+                  )}
+                </section>
+              )}
+
+              <GameLogTable
+                games={mode === "player" ? playedFilteredGames : filteredGames}
+                onSelectGame={handleSelectGame}
+              />
+            </>
+          ) : (
+            <BettingSimulator
+              games={mode === "player" ? searchedTimelineGames : filteredGames}
+              selectedStat={selectedStat}
+              title={title}
+              mode={mode}
+            />
+          )}
         </>
       )}
     </div>

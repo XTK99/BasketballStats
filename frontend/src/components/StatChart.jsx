@@ -224,7 +224,10 @@ function CustomTooltip({ active, payload, selectedStat }) {
       </div>
 
       {point.played === false ? (
-        <div style={{ color: "#f8fafc", fontSize: 14 }}>Did not play</div>
+        <div style={{ color: "#f8fafc", fontSize: 14 }}>
+          {formatStatLabel(selectedStat)}:{" "}
+          <span style={{ fontWeight: 600 }}>0</span> (Did not play)
+        </div>
       ) : (
         <div style={{ color: "#60a5fa", fontSize: 14 }}>
           {formatStatLabel(selectedStat)}:{" "}
@@ -237,12 +240,19 @@ function CustomTooltip({ active, payload, selectedStat }) {
   );
 }
 
-function StatChart({ games, selectedStat, hitRateStat, hitRateLine }) {
+function StatChart({
+  games,
+  selectedStat,
+  hitRateStat,
+  hitRateLine,
+  includeMissedGamesInChart,
+  setIncludeMissedGamesInChart,
+  mode,
+}) {
   const chartData = games.map((game) => ({
     xLabel: formatGameDate(game.gameDate),
     fullDate: game.gameDate || "",
-    statValue:
-      game.played === false ? null : getChartStatValue(game, selectedStat),
+    statValue: getChartStatValue(game, selectedStat) ?? 0,
     matchup: game.matchup || game.MATCHUP || "",
     played: game.played !== false,
     seasonGameNumber: game.seasonGameNumber || null,
@@ -267,6 +277,27 @@ function StatChart({ games, selectedStat, hitRateStat, hitRateLine }) {
           </h3>
           <p className="chart-subtitle">Season game-by-game performance</p>
         </div>
+
+        {mode === "player" && (
+          <label
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              color: "#cbd5e1",
+              fontSize: 14,
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={includeMissedGamesInChart}
+              onChange={(event) =>
+                setIncludeMissedGamesInChart(event.target.checked)
+              }
+            />
+            Include missed games as 0
+          </label>
+        )}
       </div>
 
       <ResponsiveContainer width="100%" height={340}>
