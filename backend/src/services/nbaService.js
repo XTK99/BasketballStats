@@ -220,10 +220,12 @@ async function fetchPlayerGames(playerName, last = 5, season = "2025-26") {
   const limitedGames = rawGames.slice(0, Number(last));
   const formattedGames = formatPlayerGames(limitedGames);
   const averages = calculateAverages(formattedGames);
-
   return {
     player: player.PLAYER_NAME,
     playerId: player.PLAYER_ID,
+    teamId: player.TEAM_ID,
+    teamName: player.TEAM_NAME,
+    teamAbbreviation: player.TEAM_ABBREVIATION,
     season,
     count: formattedGames.length,
     averages,

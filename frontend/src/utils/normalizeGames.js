@@ -58,6 +58,18 @@ export function normalizeGame(game) {
     blocks: getValue(game, ["blocks", "BLK", "blk"], 0),
     turnovers: getValue(game, ["turnovers", "TOV", "tov"], 0),
 
+    teamScore: getValue(
+      game,
+      ["teamScore", "TEAM_SCORE", "score", "teamPts"],
+      null,
+    ),
+
+    opponentScore: getValue(
+      game,
+      ["opponentScore", "OPPONENT_SCORE", "oppScore", "opponentPts", "OPP_PTS"],
+      null,
+    ),
+
     fgm: getValue(game, ["fgm", "FGM", "fieldGoalsMade", "madeFieldGoals"], 0),
 
     fga: getValue(

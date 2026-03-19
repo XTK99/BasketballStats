@@ -27,22 +27,38 @@ function healthCheck(req, res) {
 
 async function getTeamGamesController(req, res) {
   try {
-    const { teamName, last = 5, season = "2025-26" } = req.query;
+    const { teamId, teamName, last = 5, season = "2025-26" } = req.query;
 
-    if (!teamName) {
-      return res.status(400).json({ error: "teamName is required" });
+    let resolvedTeamId = teamId ? Number(teamId) : null;
+    let resolvedTeamName = teamName || "";
+
+    if (!resolvedTeamId) {
+      if (!teamName) {
+        return res
+          .status(400)
+          .json({ error: "teamId or teamName is required" });
+      }
+
+      resolvedTeamId = getTeamIdByName(teamName);
+      resolvedTeamName = teamName;
     }
 
-    const teamId = getTeamIdByName(teamName);
-    const games = await getTeamGames(teamId, season);
+    if (!resolvedTeamId) {
+      return res.status(400).json({
+        error: "Invalid team identifier",
+        details: `Could not resolve team: ${teamName || teamId}`,
+      });
+    }
+
+    const games = await getTeamGames(resolvedTeamId, season);
     const limitedGames = limitGames(games, last);
 
     const formattedGames = formatTeamGames(limitedGames);
     const averages = calculateTeamAverages(formattedGames);
 
     res.json({
-      teamName,
-      teamId,
+      teamName: resolvedTeamName,
+      teamId: resolvedTeamId,
       season,
       count: formattedGames.length,
       averages,

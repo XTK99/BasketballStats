@@ -1,30 +1,43 @@
 import { useMemo, useState } from "react";
+
+import "./App.css";
+
+import { getPlayerGames, getTeamGames, getBoxScore } from "./api/nbaApi";
+
 import ModeToggle from "./components/ModeToggle";
 import SearchBar from "./components/SearchBar";
-import SummaryCards from "./components/SummaryCards";
-import GameLogTable from "./components/GameLogTable";
-import StatSelector from "./components/StatSelector";
-import StatChart from "./components/StatChart";
 import FiltersBar from "./components/FiltersBar";
-import { filterGames } from "./utils/filterGames";
-import { calculateFilteredAverages } from "./utils/calculateFilteredAverages";
-import "./App.css";
 import ThresholdFilter from "./components/ThresholdFilter";
 import ActiveFilters from "./components/ActiveFilters";
+import SummaryCards from "./components/SummaryCards";
+import SplitsPanel from "./components/SplitsPanel";
+import StatSelector from "./components/StatSelector";
+import StatChart from "./components/StatChart";
 import HitRateBoard from "./components/HitRateBoard";
+import GameLogTable from "./components/GameLogTable";
+import BoxScorePanel from "./components/BoxScorePanel";
+
+import { normalizeGames } from "./utils/normalizeGames";
+import { filterGames } from "./utils/filterGames";
+import { calculateFilteredAverages } from "./utils/calculateFilteredAverages";
+import { calculateSplits } from "./utils/calculateSplits";
 import { generateThresholds } from "./utils/generateThresholds";
 import { calculateHitRateBoard } from "./utils/calculateHitRateBoard";
-import { normalizeGames } from "./utils/normalizeGames";
-import SplitsPanel from "./components/SplitsPanel";
-import { calculateSplits } from "./utils/calculateSplits";
-import { getPlayerGames, getTeamGames, getBoxScore } from "./api/nbaApi";
-import BoxScorePanel from "./components/BoxScorePanel";
+import { mergePlayerGamesWithTeamGames } from "./utils/mergePlayerGamesWithTeamGames";
+
+const DEFAULT_THRESHOLD_STAT = "points";
+const DEFAULT_THRESHOLD_OPERATOR = ">=";
+const DEFAULT_BOARD_STAT = "points";
+const DEFAULT_SELECTED_STAT = "points";
+const DEFAULT_GAME_COUNT = 5;
+const FULL_SEASON_GAME_COUNT = 100;
 
 function App() {
   const [mode, setMode] = useState("player");
   const [searchValue, setSearchValue] = useState("LeBron James");
-  const [last, setLast] = useState(5);
-  const [selectedStat, setSelectedStat] = useState("points");
+  const [last, setLast] = useState(DEFAULT_GAME_COUNT);
+  const [selectedStat, setSelectedStat] = useState(DEFAULT_SELECTED_STAT);
+
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -33,12 +46,14 @@ function App() {
   const [resultFilter, setResultFilter] = useState("all");
   const [opponentFilter, setOpponentFilter] = useState("");
 
-  const [thresholdStat, setThresholdStat] = useState("points");
-  const [thresholdOperator, setThresholdOperator] = useState(">=");
+  const [thresholdStat, setThresholdStat] = useState(DEFAULT_THRESHOLD_STAT);
+  const [thresholdOperator, setThresholdOperator] = useState(
+    DEFAULT_THRESHOLD_OPERATOR,
+  );
   const [thresholdValue, setThresholdValue] = useState("");
   const [thresholdFilters, setThresholdFilters] = useState([]);
 
-  const [boardStat, setBoardStat] = useState("points");
+  const [boardStat, setBoardStat] = useState(DEFAULT_BOARD_STAT);
 
   const [selectedGame, setSelectedGame] = useState(null);
   const [boxScore, setBoxScore] = useState(null);
@@ -46,12 +61,91 @@ function App() {
   const [boxScoreError, setBoxScoreError] = useState("");
   const [isBoxScoreOpen, setIsBoxScoreOpen] = useState(true);
 
+  const [seasonTimelineGames, setSeasonTimelineGames] = useState([]);
+  const [teamGamesPlayedCount, setTeamGamesPlayedCount] = useState(0);
+  const [teamGamesTotalCount, setTeamGamesTotalCount] = useState(0);
+
   async function runSearch(gameCount) {
     const safeGameCount = Math.max(1, Number(gameCount) || 1);
 
     return mode === "player"
       ? getPlayerGames(searchValue, safeGameCount)
       : getTeamGames(searchValue, safeGameCount);
+  }
+
+  function resetBoxScoreState() {
+    setSelectedGame(null);
+    setBoxScore(null);
+    setBoxScoreError("");
+    setBoxScoreLoading(false);
+    setIsBoxScoreOpen(true);
+  }
+
+  async function performSearch(gameCount) {
+    setLoading(true);
+    setError("");
+    setData(null);
+    setSeasonTimelineGames([]);
+    setTeamGamesPlayedCount(0);
+    setTeamGamesTotalCount(0);
+    resetBoxScoreState();
+
+    try {
+      const result = await runSearch(gameCount);
+
+      const normalizedGames = normalizeGames(result?.games || []);
+
+      const normalizedResult = {
+        ...result,
+        games: normalizedGames,
+      };
+
+      setData(normalizedResult);
+
+      if (mode === "player") {
+        const playerTeamName =
+          result?.teamName || result?.team || result?.playerTeam || "";
+
+        if (playerTeamName) {
+          const fullTeamResult = await getTeamGames(
+            playerTeamName,
+            FULL_SEASON_GAME_COUNT,
+          );
+
+          const normalizedTeamGames = normalizeGames(
+            fullTeamResult?.games || [],
+          );
+
+          const chronologicalTeamGames = [...normalizedTeamGames].reverse();
+          const chronologicalPlayerGames = [...normalizedGames].reverse();
+
+          const mergedTimeline = mergePlayerGamesWithTeamGames(
+            chronologicalPlayerGames,
+            chronologicalTeamGames,
+          );
+
+          setSeasonTimelineGames(mergedTimeline);
+          setTeamGamesPlayedCount(
+            mergedTimeline.filter((game) => game.played).length,
+          );
+          setTeamGamesTotalCount(mergedTimeline.length);
+        }
+      }
+    } catch (err) {
+      console.error("Search error:", err);
+      setError(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleSearch() {
+    await performSearch(last);
+  }
+
+  async function handleUseFullSeason() {
+    setLast(FULL_SEASON_GAME_COUNT);
+    await performSearch(FULL_SEASON_GAME_COUNT);
   }
 
   async function handleSelectGame(game) {
@@ -72,52 +166,6 @@ function App() {
     }
   }
 
-  async function handleSearch() {
-    try {
-      setLoading(true);
-      setError("");
-      setData(null);
-
-      const result = await runSearch(last);
-
-      const normalizedResult = {
-        ...result,
-        games: normalizeGames(result?.games || []),
-      };
-
-      setData(normalizedResult);
-    } catch (err) {
-      console.error("Search error:", err);
-      setError(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function handleUseFullSeason() {
-    try {
-      setLoading(true);
-      setError("");
-
-      const fullSeasonValue = 100;
-      setLast(fullSeasonValue);
-
-      const result = await runSearch(fullSeasonValue);
-
-      const normalizedResult = {
-        ...result,
-        games: normalizeGames(result?.games || []),
-      };
-
-      setData(normalizedResult);
-    } catch (err) {
-      console.error("Full season search error:", err);
-      setError(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  }
-
   function handleAddThresholdFilter() {
     if (thresholdValue === "") return;
 
@@ -135,8 +183,7 @@ function App() {
           filter.value === newFilter.value,
       );
 
-      if (alreadyExists) return prev;
-      return [...prev, newFilter];
+      return alreadyExists ? prev : [...prev, newFilter];
     });
 
     setThresholdValue("");
@@ -164,8 +211,8 @@ function App() {
     setLocationFilter("all");
     setResultFilter("all");
     setOpponentFilter("");
-    setThresholdStat("points");
-    setThresholdOperator(">=");
+    setThresholdStat(DEFAULT_THRESHOLD_STAT);
+    setThresholdOperator(DEFAULT_THRESHOLD_OPERATOR);
     setThresholdValue("");
     setThresholdFilters([]);
   }
@@ -182,6 +229,10 @@ function App() {
     );
   }, [data, locationFilter, resultFilter, opponentFilter, thresholdFilters]);
 
+  const filteredAverages = useMemo(() => {
+    return calculateFilteredAverages(filteredGames);
+  }, [filteredGames]);
+
   const splits = useMemo(() => {
     return calculateSplits(filteredGames);
   }, [filteredGames]);
@@ -193,10 +244,6 @@ function App() {
   const boardData = useMemo(() => {
     return calculateHitRateBoard(filteredGames, boardStat, boardThresholds);
   }, [filteredGames, boardStat, boardThresholds]);
-
-  const filteredAverages = useMemo(() => {
-    return calculateFilteredAverages(filteredGames);
-  }, [filteredGames]);
 
   const title = mode === "player" ? data?.player : data?.teamName;
   const loadedGames = data?.count || 0;
@@ -246,6 +293,13 @@ function App() {
                 <h2 className="results-title">{title}</h2>
                 <div className="results-subrow">
                   <span className="season-badge">Season {data.season}</span>
+                  {mode === "player" && teamGamesTotalCount > 0 && (
+                    <div className="results-subrow">
+                      <span className="season-badge">
+                        Played {teamGamesPlayedCount} / {teamGamesTotalCount}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -304,7 +358,16 @@ function App() {
               selectedStat={selectedStat}
               setSelectedStat={setSelectedStat}
             />
-            <StatChart games={filteredGames} selectedStat={selectedStat} />
+            <StatChart
+              games={
+                mode === "player"
+                  ? seasonTimelineGames.length > 0
+                    ? seasonTimelineGames
+                    : [...filteredGames].reverse()
+                  : [...filteredGames].reverse()
+              }
+              selectedStat={selectedStat}
+            />
           </section>
 
           {mode === "player" && (
