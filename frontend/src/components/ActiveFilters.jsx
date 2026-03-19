@@ -3,23 +3,46 @@ function ActiveFilters({
   resultFilter,
   opponentFilter,
   thresholdFilters,
+  onRemoveLocationFilter,
+  onRemoveResultFilter,
+  onRemoveOpponentFilter,
   onRemoveThresholdFilter,
 }) {
-  const normalFilters = [];
+  const filterChips = [];
 
   if (locationFilter !== "all") {
-    normalFilters.push(`Location: ${locationFilter}`);
+    filterChips.push({
+      key: "location",
+      label: `Location: ${locationFilter}`,
+      onRemove: onRemoveLocationFilter,
+    });
   }
 
   if (resultFilter !== "all") {
-    normalFilters.push(`Result: ${resultFilter}`);
+    filterChips.push({
+      key: "result",
+      label: `Result: ${resultFilter}`,
+      onRemove: onRemoveResultFilter,
+    });
   }
 
   if (opponentFilter.trim()) {
-    normalFilters.push(`Opponent: ${opponentFilter}`);
+    filterChips.push({
+      key: "opponent",
+      label: `Opponent: ${opponentFilter.toUpperCase()}`,
+      onRemove: onRemoveOpponentFilter,
+    });
   }
 
-  if (normalFilters.length === 0 && thresholdFilters.length === 0) {
+  thresholdFilters.forEach((filter, index) => {
+    filterChips.push({
+      key: `${filter.stat}-${filter.operator}-${filter.value}-${index}`,
+      label: `${filter.stat} ${filter.operator} ${filter.value}`,
+      onRemove: () => onRemoveThresholdFilter(index),
+    });
+  });
+
+  if (filterChips.length === 0) {
     return null;
   }
 
@@ -28,22 +51,13 @@ function ActiveFilters({
       <h3 className="panel-title">Active Filters</h3>
 
       <div className="active-filters">
-        {normalFilters.map((filter) => (
-          <span key={filter} className="filter-pill">
-            {filter}
-          </span>
-        ))}
-
-        {thresholdFilters.map((filter, index) => (
-          <span
-            key={`${filter.stat}-${filter.operator}-${filter.value}-${index}`}
-            className="filter-pill"
-          >
-            {filter.stat} {filter.operator} {filter.value}
+        {filterChips.map((chip) => (
+          <span key={chip.key} className="filter-pill">
+            {chip.label}
             <button
               type="button"
               className="filter-pill-remove"
-              onClick={() => onRemoveThresholdFilter(index)}
+              onClick={chip.onRemove}
             >
               ×
             </button>

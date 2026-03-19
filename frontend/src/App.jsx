@@ -53,6 +53,7 @@ function App() {
       ? getPlayerGames(searchValue, safeGameCount)
       : getTeamGames(searchValue, safeGameCount);
   }
+
   async function handleSelectGame(game) {
     try {
       setSelectedGame(game);
@@ -70,6 +71,7 @@ function App() {
       setBoxScoreLoading(false);
     }
   }
+
   async function handleSearch() {
     try {
       setLoading(true);
@@ -77,7 +79,6 @@ function App() {
       setData(null);
 
       const result = await runSearch(last);
-      console.log("RAW FIRST GAME:", result?.games?.[0]);
 
       const normalizedResult = {
         ...result,
@@ -147,6 +148,18 @@ function App() {
     );
   }
 
+  function handleRemoveLocationFilter() {
+    setLocationFilter("all");
+  }
+
+  function handleRemoveResultFilter() {
+    setResultFilter("all");
+  }
+
+  function handleRemoveOpponentFilter() {
+    setOpponentFilter("");
+  }
+
   function clearFilters() {
     setLocationFilter("all");
     setResultFilter("all");
@@ -168,6 +181,7 @@ function App() {
       thresholdFilters,
     );
   }, [data, locationFilter, resultFilter, opponentFilter, thresholdFilters]);
+
   const splits = useMemo(() => {
     return calculateSplits(filteredGames);
   }, [filteredGames]);
@@ -276,6 +290,9 @@ function App() {
             resultFilter={resultFilter}
             opponentFilter={opponentFilter}
             thresholdFilters={thresholdFilters}
+            onRemoveLocationFilter={handleRemoveLocationFilter}
+            onRemoveResultFilter={handleRemoveResultFilter}
+            onRemoveOpponentFilter={handleRemoveOpponentFilter}
             onRemoveThresholdFilter={handleRemoveThresholdFilter}
           />
 
@@ -300,6 +317,7 @@ function App() {
               gameCount={filteredGames.length}
             />
           )}
+
           {selectedGame && (
             <section className="panel-card">
               <div className="boxscore-section-header">
