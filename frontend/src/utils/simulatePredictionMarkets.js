@@ -16,12 +16,13 @@ function getMarketOutcome({ statValue, line, marketType }) {
   return statValue < line ? "yes" : "no";
 }
 
-function getSimpleModelProbability({ statValue, line }) {
+function getSimpleModelProbability({ statValue, line, marketType }) {
   if (!Number.isFinite(statValue) || !Number.isFinite(line)) {
     return 0.5;
   }
 
-  const diff = statValue - line;
+  const diff = marketType === "over" ? statValue - line : line - statValue;
+
   const scaled = 0.5 + diff * 0.03;
 
   return Math.min(0.95, Math.max(0.05, scaled));
@@ -34,12 +35,27 @@ export function simulatePredictionMarkets({
   marketType,
   yesPrice,
   contracts,
-  side = "yes",
-  ignoreMissedGames = true,
+  side,
+  ignoreMissedGames,
 }) {
   const safeGames = Array.isArray(games) ? games : [];
+
+  if (safeGames.length === 0) {
+    return {
+      summary: {
+        totalTrades: 0,
+        wins: 0,
+        losses: 0,
+        totalCost: 0,
+        totalPnl: 0,
+        roiPercent: 0,
+        avgEdgePercent: 0,
+      },
+      results: [],
+    };
+  }
   const numericLine = Number(line);
-  const numericYesPrice = clampPrice(yesPrice);
+  const fallbackYesPrice = clampPrice(Number(yesPrice));
   const numericContracts = Number(contracts || 0);
 
   let totalCost = 0;
@@ -60,10 +76,17 @@ export function simulatePredictionMarkets({
     }
 
     const statValue = Number(game?.[statKey] ?? 0);
-    const marketProbability = getImpliedProbabilityFromPrice(numericYesPrice);
+
+    const rowYesPrice = clampPrice(
+      Number(game?.entryYesPrice ?? game?.yesPrice ?? fallbackYesPrice),
+    );
+
+    const marketProbability = getImpliedProbabilityFromPrice(rowYesPrice);
+
     const modelProbability = getSimpleModelProbability({
       statValue,
       line: numericLine,
+      marketType,
     });
 
     const outcome = getMarketOutcome({
@@ -72,13 +95,13 @@ export function simulatePredictionMarkets({
       marketType,
     });
 
-    const entryPrice = side === "yes" ? numericYesPrice : 1 - numericYesPrice;
+    const entryPrice = side === "yes" ? rowYesPrice : 1 - rowYesPrice;
     const cost = getContractCost(entryPrice, numericContracts);
     const payout = getMaxPayout(numericContracts);
 
     const pnl = getRealizedPnl({
       side,
-      yesPrice: numericYesPrice,
+      yesPrice: rowYesPrice,
       contracts: numericContracts,
       outcome,
     });
@@ -104,15 +127,18 @@ export function simulatePredictionMarkets({
           ? `Over ${numericLine} ${statKey}`
           : `Under ${numericLine} ${statKey}`,
       side,
-      yesPrice: numericYesPrice,
-      noPrice: Number((1 - numericYesPrice).toFixed(2)),
+      yesPrice: rowYesPrice,
+      noPrice: Number((1 - rowYesPrice).toFixed(2)),
+      entryYesPrice: rowYesPrice,
+      priceTimestamp: game.priceTimestamp ?? null,
+      marketTicker: game.marketTicker ?? null,
       marketProbability,
       modelProbability,
       edgePercent: getEdgePercent(modelProbability, marketProbability),
       contracts: numericContracts,
       cost: Number(cost.toFixed(2)),
       payout: Number(payout.toFixed(2)),
-      pnl,
+      pnl: Number(pnl.toFixed(2)),
       roiPercent: getRoiPercent(pnl, cost),
       outcome,
     });

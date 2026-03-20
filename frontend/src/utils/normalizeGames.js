@@ -37,14 +37,119 @@ function parseMatchup(matchup = "") {
     isHome: null,
   };
 }
+const TEAM_TIMEZONES = {
+  ATL: "America/New_York",
+  BOS: "America/New_York",
+  BKN: "America/New_York",
+  CHA: "America/New_York",
+  CHI: "America/Chicago",
+  CLE: "America/New_York",
+  DAL: "America/Chicago",
+  DEN: "America/Denver",
+  DET: "America/New_York",
+  GSW: "America/Los_Angeles",
+  HOU: "America/Chicago",
+  IND: "America/Indiana/Indianapolis",
+  LAC: "America/Los_Angeles",
+  LAL: "America/Los_Angeles",
+  MEM: "America/Chicago",
+  MIA: "America/New_York",
+  MIL: "America/Chicago",
+  MIN: "America/Chicago",
+  NOP: "America/Chicago",
+  NYK: "America/New_York",
+  OKC: "America/Chicago",
+  ORL: "America/New_York",
+  PHI: "America/New_York",
+  PHX: "America/Phoenix",
+  POR: "America/Los_Angeles",
+  SAC: "America/Los_Angeles",
+  SAS: "America/Chicago",
+  TOR: "America/Toronto",
+  UTA: "America/Denver",
+  WAS: "America/New_York",
+};
+
+function estimateGameStartTs(game) {
+  const gameDate = getValue(game, ["date", "gameDate", "GAME_DATE"], "");
+  const matchup = getValue(game, ["matchup", "MATCHUP"], "");
+
+  if (!gameDate || !matchup) {
+    return null;
+  }
+
+  const matchupInfo = parseMatchup(matchup);
+
+  const hour12 = 7;
+  const minute = matchupInfo.isHome ? 30 : 0;
+
+  const parsed = new Date(
+    `${gameDate} ${hour12}:${String(minute).padStart(2, "0")} PM`,
+  );
+
+  const ms = parsed.getTime();
+
+  return Number.isFinite(ms) ? Math.floor(ms / 1000) : null;
+}
+
+function normalizeGameStartTs(game) {
+  const rawTs = getValue(
+    game,
+    [
+      "gameStartTs",
+      "GAME_START_TS",
+      "game_start_ts",
+      "startTimeUnix",
+      "start_ts",
+      "startTs",
+    ],
+    null,
+  );
+
+  if (rawTs !== null) {
+    const num = Number(rawTs);
+    return Number.isFinite(num) ? num : null;
+  }
+
+  const rawDateTime = getValue(
+    game,
+    [
+      "gameDateTime",
+      "GAME_DATE_TIME",
+      "game_datetime",
+      "startTime",
+      "scheduledStart",
+      "scheduledStartTime",
+      "gameTimeUTC",
+    ],
+    null,
+  );
+
+  if (rawDateTime) {
+    const ms = new Date(rawDateTime).getTime();
+    if (Number.isFinite(ms)) {
+      return Math.floor(ms / 1000);
+    }
+  }
+
+  return null;
+}
 
 export function normalizeGame(game) {
+  console.log("RAW GAME IN NORMALIZE:", game);
+
   const matchup = getValue(game, ["matchup", "MATCHUP"], "");
   const matchupInfo = parseMatchup(matchup);
 
-  return {
+  const actualGameStartTs = normalizeGameStartTs(game);
+  const estimatedGameStartTs = estimateGameStartTs(game);
+  const finalGameStartTs = actualGameStartTs ?? estimatedGameStartTs;
+
+  const normalized = {
     gameId: getValue(game, ["gameId", "GAME_ID", "Game_ID"], ""),
     gameDate: getValue(game, ["gameDate", "GAME_DATE", "date"], ""),
+    gameStartTs: finalGameStartTs,
+
     matchup,
     opponent: matchupInfo.opponent,
     isHome: matchupInfo.isHome,
@@ -153,8 +258,24 @@ export function normalizeGame(game) {
       0,
     ),
   };
+
+  console.log("START TS DEBUG:", {
+    gameId: normalized.gameId,
+    gameDate: normalized.gameDate,
+    matchup: normalized.matchup,
+    actualGameStartTs,
+    estimatedGameStartTs,
+    finalGameStartTs,
+  });
+
+  console.log("NORMALIZED GAME:", normalized);
+
+  return normalized;
 }
 
 export function normalizeGames(games = []) {
-  return games.map(normalizeGame);
+  const normalizedGames = games.map(normalizeGame);
+  console.log("ALL NORMALIZED GAMES:", normalizedGames);
+  console.log("FIRST NORMALIZED GAME:", normalizedGames[0]);
+  return normalizedGames;
 }

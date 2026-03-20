@@ -1701,3 +1701,69 @@ button {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+.kalshi-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.kalshi-market-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.kalshi-market-row .search-input {
+  flex: 1 1 260px;
+  min-width: 220px;
+}
+
+.market-snapshot {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.market-snapshot-card {
+  padding: 14px;
+  border-radius: 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.market-snapshot-wide {
+  grid-column: span 2;
+}
+
+.market-snapshot-label {
+  font-size: 0.72rem;
+  color: #8fa5c8;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.market-snapshot-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f8fafc;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+@media (max-width: 640px) {
+  .market-snapshot-wide {
+    grid-column: span 1;
+  }
+}
+.betting-view-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

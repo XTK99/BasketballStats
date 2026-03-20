@@ -17,7 +17,7 @@ import HitRateBoard from "./components/HitRateBoard";
 import GameLogTable from "./components/GameLogTable";
 import BoxScorePanel from "./components/BoxScorePanel";
 import BettingSimulator from "./components/BettingSimulator";
-
+import HistoricalKalshiTestCard from "./components/HistoricalKalshiTestCard";
 import { normalizeGames } from "./utils/normalizeGames";
 import { filterGames } from "./utils/filterGames";
 import { calculateFilteredAverages } from "./utils/calculateFilteredAverages";
@@ -504,12 +504,17 @@ function App() {
               />
             </>
           ) : (
-            <BettingSimulator
-              games={mode === "player" ? searchedTimelineGames : filteredGames}
-              selectedStat={selectedStat}
-              title={title}
-              mode={mode}
-            />
+            <div className="betting-view-stack">
+              <HistoricalKalshiTestCard />
+              <BettingSimulator
+                games={
+                  mode === "player" ? searchedTimelineGames : filteredGames
+                }
+                selectedStat={selectedStat}
+                title={title}
+                mode={mode}
+              />
+            </div>
           )}
         </>
       )}

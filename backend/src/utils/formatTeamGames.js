@@ -3,6 +3,21 @@ function formatTeamGames(games) {
     teamId: game.Team_ID || game.TEAM_ID,
     gameId: game.Game_ID || game.GAME_ID,
     date: game.GAME_DATE,
+    gameStartTs:
+      game.gameStartTs ??
+      game.GAME_START_TS ??
+      game.game_start_ts ??
+      game.startTimeUnix ??
+      null,
+    gameDateTime:
+      game.gameDateTime ??
+      game.GAME_DATE_TIME ??
+      game.GAME_DATE_EST ??
+      game.game_datetime ??
+      game.startTime ??
+      game.scheduledStart ??
+      null,
+
     matchup: game.MATCHUP,
     result: game.WL,
     wins: game.W,
