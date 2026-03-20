@@ -108,27 +108,6 @@ export function findKalshiEventForGame({ events, game, playerName }) {
 
   scored.sort((a, b) => b.score - a.score);
 
-  console.log("KALSHI EVENT MATCH DEBUG", {
-    playerName,
-    gameId: game?.gameId,
-    matchup: game?.matchup,
-    opponent: game?.opponent,
-    topEvents: scored.slice(0, 10).map((item) => ({
-      ticker: item.event?.ticker,
-      title: item.event?.title,
-      subtitle: item.event?.subtitle,
-      series_ticker: item.event?.series_ticker,
-      score: item.score,
-      hasOpponent: item.hasOpponent,
-      hasLakers: item.hasLakers,
-      hasSportsWords: item.hasSportsWords,
-      marketCount: Array.isArray(item.event?.markets)
-        ? item.event.markets.length
-        : 0,
-      text: item.text,
-    })),
-  });
-
   const best = scored[0];
 
   if (!best || best.score < 8) {

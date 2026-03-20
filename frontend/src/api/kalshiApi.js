@@ -147,6 +147,37 @@ export async function getKalshiHistoricalCandlesticks({
     `${KALSHI_BASE_URL}/historical/markets/${safeTicker}/candlesticks?${params.toString()}`,
   );
 }
+export async function getKalshiDirectTeamBets({
+  team,
+  status = "open",
+  limit = 500,
+  maxPages = 5,
+  minCloseTs = "",
+  maxCloseTs = "",
+} = {}) {
+  if (!team?.trim()) {
+    throw new Error("Team is required");
+  }
+
+  const params = new URLSearchParams({
+    team: team.trim(),
+    status: String(status),
+    limit: String(limit),
+    maxPages: String(maxPages),
+  });
+
+  if (minCloseTs) {
+    params.set("minCloseTs", String(minCloseTs));
+  }
+
+  if (maxCloseTs) {
+    params.set("maxCloseTs", String(maxCloseTs));
+  }
+
+  return safeFetchJson(
+    `${KALSHI_BASE_URL}/debug/find-direct-team-bets?${params.toString()}`,
+  );
+}
 
 export async function getKalshiCandlesticksAuto({
   ticker,

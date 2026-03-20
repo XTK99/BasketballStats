@@ -37,6 +37,7 @@ function parseMatchup(matchup = "") {
     isHome: null,
   };
 }
+
 const TEAM_TIMEZONES = {
   ATL: "America/New_York",
   BOS: "America/New_York",
@@ -136,8 +137,6 @@ function normalizeGameStartTs(game) {
 }
 
 export function normalizeGame(game) {
-  console.log("RAW GAME IN NORMALIZE:", game);
-
   const matchup = getValue(game, ["matchup", "MATCHUP"], "");
   const matchupInfo = parseMatchup(matchup);
 
@@ -259,23 +258,10 @@ export function normalizeGame(game) {
     ),
   };
 
-  console.log("START TS DEBUG:", {
-    gameId: normalized.gameId,
-    gameDate: normalized.gameDate,
-    matchup: normalized.matchup,
-    actualGameStartTs,
-    estimatedGameStartTs,
-    finalGameStartTs,
-  });
-
-  console.log("NORMALIZED GAME:", normalized);
-
   return normalized;
 }
 
 export function normalizeGames(games = []) {
   const normalizedGames = games.map(normalizeGame);
-  console.log("ALL NORMALIZED GAMES:", normalizedGames);
-  console.log("FIRST NORMALIZED GAME:", normalizedGames[0]);
   return normalizedGames;
 }

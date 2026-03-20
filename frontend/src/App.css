@@ -1767,3 +1767,100 @@ button {
   flex-direction: column;
   gap: 16px;
 }
+.top-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.view-mode-group {
+  display: flex;
+  gap: 10px;
+}
+
+.view-mode-group button {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(8, 18, 38, 0.9);
+  color: #dbe7ff;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.view-mode-group button:hover {
+  background: rgba(18, 35, 70, 0.95);
+}
+
+.active-view-button {
+  background: linear-gradient(135deg, #2563eb, #3b82f6) !important;
+  color: white !important;
+  border-color: transparent !important;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.28);
+}
+.season-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.season-picker-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #d7e5ff;
+  letter-spacing: 0.02em;
+}
+
+.season-select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.season-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  min-width: 110px;
+  padding: 10px 36px 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(120, 160, 255, 0.18);
+  background: linear-gradient(
+    180deg,
+    rgba(10, 22, 48, 0.96) 0%,
+    rgba(7, 16, 36, 0.98) 100%
+  );
+  color: #f5f9ff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  color-scheme: dark;
+}
+
+.season-select:hover {
+  border-color: rgba(120, 160, 255, 0.32);
+}
+
+.season-select:focus {
+  border-color: rgba(76, 132, 255, 0.75);
+  box-shadow:
+    0 0 0 3px rgba(59, 130, 246, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.season-select-chevron {
+  position: absolute;
+  right: 12px;
+  pointer-events: none;
+  color: #9fb6e8;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+.season-select option {
+  background: #0b1730;
+  color: #f5f9ff;
+}

@@ -6,8 +6,6 @@ export async function enrichGameWithHistoricalPrice(
   game,
   { lookbackHours = 168, periodInterval = 1 } = {},
 ) {
-  console.log("ENRICH FUNCTION RAN", game);
-
   const ticker =
     game?.marketTicker ??
     game?.ticker ??
@@ -22,7 +20,6 @@ export async function enrichGameWithHistoricalPrice(
     game?.series_ticker ??
     game?.marketMatch?.seriesTicker ??
     game?.marketMatch?.rawMarket?.series_ticker ??
-    game?.marketMatch?.rawMarket?.event_ticker ??
     null;
 
   const rawSettledTs =
@@ -31,40 +28,44 @@ export async function enrichGameWithHistoricalPrice(
     game?.marketMatch?.marketSettledTs ??
     game?.marketMatch?.rawMarket?.settled_ts ??
     game?.marketMatch?.rawMarket?.market_settled_ts ??
-    game?.marketMatch?.rawMarket?.close_time;
+    null;
 
   const marketSettledTs = Number(rawSettledTs);
 
   const rawGameStartTs = game?.gameStartTs ?? game?.gameStartUnix;
   const gameStartTs = Number(rawGameStartTs);
 
-  console.log("CANDLESTICK INPUT DEBUG", {
-    gameId: game?.gameId,
-    matchup: game?.matchup,
-    ticker,
-    seriesTicker,
-    marketSettledTs,
-    gameStartTs,
-    rawSettledTs,
-    rawGameStartTs,
-    marketMatch: game?.marketMatch,
-  });
-
   if (!ticker) {
-    console.log("MISSING marketTicker", game);
     return {
       ...game,
       entryYesPrice: null,
+      entryYesBid: null,
+      previousPrice: null,
       priceTimestamp: null,
       priceError: "Missing marketTicker",
     };
   }
 
-  if (!Number.isFinite(gameStartTs) || gameStartTs <= 0) {
-    console.log("MISSING gameStartTs", game);
+  if (!seriesTicker) {
     return {
       ...game,
+      marketTicker: ticker,
       entryYesPrice: null,
+      entryYesBid: null,
+      previousPrice: null,
+      priceTimestamp: null,
+      priceError: "Missing seriesTicker",
+    };
+  }
+
+  if (!Number.isFinite(gameStartTs) || gameStartTs <= 0) {
+    return {
+      ...game,
+      marketTicker: ticker,
+      seriesTicker,
+      entryYesPrice: null,
+      entryYesBid: null,
+      previousPrice: null,
       priceTimestamp: null,
       priceError: "Missing gameStartTs",
     };
@@ -82,19 +83,9 @@ export async function enrichGameWithHistoricalPrice(
 
   const safePeriodInterval =
     requestedCandles > MAX_CANDLES
-      ? Math.ceil((endTs - startTs) / 60 / MAX_CANDLES)
+      ? Math.max(1, Math.ceil((endTs - startTs) / 60 / MAX_CANDLES))
       : requestedInterval;
 
-  console.log("CANDLE RANGE DEBUG", {
-    gameId: game?.gameId,
-    matchup: game?.matchup,
-    lookbackHours,
-    startTs,
-    endTs,
-    requestedInterval,
-    requestedCandles,
-    safePeriodInterval,
-  });
   try {
     const response = await getKalshiCandlesticksAuto({
       ticker,
@@ -108,24 +99,15 @@ export async function enrichGameWithHistoricalPrice(
       includeLatestBeforeStart: true,
     });
 
-    console.log("KALSHI CANDLE RESPONSE", {
-      gameId: game?.gameId,
-      matchup: game?.matchup,
-      ticker,
-      response,
-    });
-
-    const candles =
-      response?.candlesticks ?? response?.history ?? response?.data ?? [];
+    const candles = Array.isArray(response?.candlesticks)
+      ? response.candlesticks
+      : Array.isArray(response?.history)
+        ? response.history
+        : Array.isArray(response?.data)
+          ? response.data
+          : [];
 
     const entry = getPregameEntryFromCandles(candles, gameStartTs);
-
-    console.log("SELECTED ENTRY", {
-      gameId: game?.gameId,
-      matchup: game?.matchup,
-      ticker,
-      entry,
-    });
 
     if (!entry) {
       return {
@@ -136,6 +118,8 @@ export async function enrichGameWithHistoricalPrice(
           ? marketSettledTs
           : null,
         entryYesPrice: null,
+        entryYesBid: null,
+        previousPrice: null,
         priceTimestamp: null,
         priceError: "No pregame candle found",
       };
@@ -148,7 +132,9 @@ export async function enrichGameWithHistoricalPrice(
       marketSettledTs: Number.isFinite(marketSettledTs)
         ? marketSettledTs
         : null,
-      entryYesPrice: clampPrice(entry.yesPrice),
+      entryYesPrice: clampPrice(entry.yesAsk),
+      entryYesBid: clampPrice(entry.yesBid),
+      previousPrice: clampPrice(entry.previousPrice),
       priceTimestamp: entry.ts,
       priceError: "",
     };
@@ -163,6 +149,8 @@ export async function enrichGameWithHistoricalPrice(
         ? marketSettledTs
         : null,
       entryYesPrice: null,
+      entryYesBid: null,
+      previousPrice: null,
       priceTimestamp: null,
       priceError: error.message || "Failed to fetch historical price",
     };

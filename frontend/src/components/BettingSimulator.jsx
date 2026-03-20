@@ -101,20 +101,6 @@ function BettingSimulator({ games, selectedStat, title, playerName }) {
           maxPages: 10,
           withNestedMarkets: true,
         });
-        console.log("ALL EVENTS COUNT", events.length);
-
-        console.log(
-          "EVENT FAMILY SAMPLE",
-          events.slice(0, 30).map((event) => ({
-            ticker: event?.ticker,
-            title: event?.title,
-            subtitle: event?.subtitle,
-            series_ticker: event?.series_ticker,
-            marketCount: Array.isArray(event?.markets)
-              ? event.markets.length
-              : 0,
-          })),
-        );
 
         const enrichedResults = [];
 
@@ -128,29 +114,6 @@ function BettingSimulator({ games, selectedStat, title, playerName }) {
           });
 
           const eventMarkets = matchingEvent?.markets ?? [];
-          console.log("MATCHED EVENT SUMMARY", {
-            gameId: game.gameId,
-            matchup: game.matchup,
-            opponent: game.opponent,
-            playerName: playerName || "LeBron James",
-            eventTicker: matchingEvent?.ticker,
-            eventTitle: matchingEvent?.title,
-            eventSubtitle: matchingEvent?.subtitle,
-            marketCount: eventMarkets.length,
-            marketPreview: eventMarkets.slice(0, 20).map((m) => ({
-              ticker: m?.ticker,
-              market_ticker: m?.market_ticker,
-              id: m?.id,
-              title: m?.title,
-              question: m?.question,
-              subtitle: m?.subtitle,
-              yes_sub_title: m?.yes_sub_title,
-              no_sub_title: m?.no_sub_title,
-              event_ticker: m?.event_ticker,
-              series_ticker: m?.series_ticker,
-              custom_strike: m?.custom_strike,
-            })),
-          });
 
           const marketMatch = findKalshiMarketForGame({
             markets: eventMarkets,
@@ -161,11 +124,6 @@ function BettingSimulator({ games, selectedStat, title, playerName }) {
             opponent: game.opponent,
             gameId: game.gameId,
             matchup: game.matchup,
-          });
-          console.log("RAW MARKET MATCH RESULT", {
-            gameId: game.gameId,
-            matchup: game.matchup,
-            marketMatch,
           });
 
           const gameWithMarket = {
@@ -183,39 +141,7 @@ function BettingSimulator({ games, selectedStat, title, playerName }) {
             marketTitle: marketMatch?.marketTitle ?? marketMatch?.title ?? null,
             gameStartTs: game.gameStartTs ?? game.gameStartUnix ?? null,
           };
-          console.log("GAME WITH MARKET BEFORE ENRICH", {
-            gameId: gameWithMarket.gameId,
-            matchup: gameWithMarket.matchup,
-            marketTicker: gameWithMarket.marketTicker,
-            seriesTicker: gameWithMarket.seriesTicker,
-            marketSettledTs: gameWithMarket.marketSettledTs,
-            marketTitle: gameWithMarket.marketTitle,
-            gameStartTs: gameWithMarket.gameStartTs,
-          });
 
-          console.log("MARKET MATCH DEBUG", {
-            gameId: game.gameId,
-            matchup: game.matchup,
-            opponent: game.opponent,
-            playerName: playerName || "LeBron James",
-            statKey,
-            line: Number(line),
-            marketType,
-            matchingEventTicker: matchingEvent?.ticker,
-            matchingEventTitle: matchingEvent?.title,
-            eventMarketCount: eventMarkets.length,
-            eventMarketsPreview: eventMarkets.slice(0, 15).map((m) => ({
-              ticker: m?.ticker,
-              title: m?.title,
-              subtitle: m?.subtitle,
-              yes_sub_title: m?.yes_sub_title,
-              no_sub_title: m?.no_sub_title,
-              strike_type: m?.strike_type,
-              floor_strike: m?.floor_strike,
-              cap_strike: m?.cap_strike,
-            })),
-            marketMatch,
-          });
           if (!gameWithMarket.marketTicker) {
             enrichedResults.push({
               ...gameWithMarket,
@@ -235,29 +161,10 @@ function BettingSimulator({ games, selectedStat, title, playerName }) {
               periodInterval: 1,
             },
           );
-          console.log("ENRICHED GAME RESULT", {
-            gameId: enrichedGame?.gameId,
-            matchup: enrichedGame?.matchup,
-            marketTicker: enrichedGame?.marketTicker,
-            entryYesPrice: enrichedGame?.entryYesPrice,
-            priceTimestamp: enrichedGame?.priceTimestamp,
-            priceError: enrichedGame?.priceError,
-          });
 
           enrichedResults.push(enrichedGame);
         }
 
-        console.log(
-          "ENRICHED RESULTS SUMMARY",
-          enrichedResults.map((g) => ({
-            gameId: g.gameId,
-            matchup: g.matchup,
-            marketTicker: g.marketTicker,
-            entryYesPrice: g.entryYesPrice,
-            priceTimestamp: g.priceTimestamp,
-            priceError: g.priceError,
-          })),
-        );
         if (!cancelled) {
           setHistoricalGames(enrichedResults);
         }
@@ -282,7 +189,16 @@ function BettingSimulator({ games, selectedStat, title, playerName }) {
     return () => {
       cancelled = true;
     };
-  }, [games, priceSource, lookbackHours, statKey, line, marketType, title]);
+  }, [
+    games,
+    priceSource,
+    lookbackHours,
+    statKey,
+    line,
+    marketType,
+    title,
+    playerName,
+  ]);
 
   const liveYesBid = getBestYesBid(orderbookData);
   const liveNoBid = getBestNoBid(orderbookData);
@@ -313,16 +229,6 @@ function BettingSimulator({ games, selectedStat, title, playerName }) {
         Number.isFinite(game.entryYesPrice),
     );
   }, [games, historicalGames, priceSource, historicalLoading]);
-
-  console.log(
-    "SIMULATION GAMES",
-    simulationGames.map((g) => ({
-      gameId: g.gameId,
-      matchup: g.matchup,
-      entryYesPrice: g.entryYesPrice,
-      priceError: g.priceError,
-    })),
-  );
 
   const simulation = useMemo(() => {
     return simulatePredictionMarkets({

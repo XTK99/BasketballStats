@@ -4,13 +4,17 @@ function SearchBar({
   setSearchValue,
   last,
   setLast,
-  handleSearch,
+  onSearch,
   loading,
-  fullSeasonCount,
   onUseFullSeason,
 }) {
+  function handleSubmit(event) {
+    event.preventDefault();
+    onSearch();
+  }
+
   return (
-    <div className="search-row">
+    <form className="search-row" onSubmit={handleSubmit}>
       <input
         className="search-input"
         type="text"
@@ -37,19 +41,15 @@ function SearchBar({
         type="button"
         className="secondary-button full-season-button"
         onClick={onUseFullSeason}
-        disabled={!fullSeasonCount}
+        disabled={loading}
       >
         Full Season
       </button>
 
-      <button
-        className="search-button"
-        onClick={handleSearch}
-        disabled={loading}
-      >
+      <button type="submit" className="search-button" disabled={loading}>
         {loading ? "Loading..." : "Search"}
       </button>
-    </div>
+    </form>
   );
 }
 

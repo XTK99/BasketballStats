@@ -1,22 +1,33 @@
-function ModeToggle({ mode, setMode, setSearchValue, setData, setError }) {
-  function handleModeChange(newMode) {
-    setMode(newMode);
-    setData(null);
-    setError("");
-    setSearchValue(newMode === "player" ? "LeBron James" : "LAL");
+function ModeToggle({
+  mode,
+  setMode,
+  setData,
+  setError,
+  setSelectedGame,
+  setBoxScore,
+}) {
+  function handleModeChange(nextMode) {
+    setMode(nextMode);
+
+    if (setData) setData(null);
+    if (setError) setError("");
+    if (setSelectedGame) setSelectedGame(null);
+    if (setBoxScore) setBoxScore(null);
   }
 
   return (
     <div className="mode-toggle">
       <button
-        className={`mode-button ${mode === "player" ? "active" : ""}`}
+        type="button"
+        className={mode === "player" ? "mode-button active" : "mode-button"}
         onClick={() => handleModeChange("player")}
       >
         Player
       </button>
 
       <button
-        className={`mode-button ${mode === "team" ? "active" : ""}`}
+        type="button"
+        className={mode === "team" ? "mode-button active" : "mode-button"}
         onClick={() => handleModeChange("team")}
       >
         Team

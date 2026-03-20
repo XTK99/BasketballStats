@@ -26,7 +26,9 @@ function getStatAliases(statKey) {
 
   return map[statKey] || [statKey];
 }
+
 const DEBUG_ALLOW_FALLBACK_MARKET = true;
+
 const TEAM_NAME_MAP = {
   ATL: "atlanta hawks",
   BOS: "boston celtics",
@@ -93,11 +95,13 @@ function getMarketText(market) {
       market?.question,
       market?.yes_sub_title,
       market?.no_sub_title,
+      ...flattenValues(market?.custom_strike),
     ]
       .filter(Boolean)
       .join(" "),
   );
 }
+
 function looksLikeBasketballPlayerProp(text) {
   return (
     text.includes("points") ||
@@ -168,12 +172,14 @@ function textHasKalshiMilestone(text, line, marketType) {
 
   return [
     `${milestone} +`,
+    `${milestone}+`,
     `${milestone}plus`,
     `${milestone} plus`,
     `${milestone} or more`,
     `at least ${milestone}`,
   ].some((candidate) => text.includes(candidate));
 }
+
 function getPlayerAliases(playerName) {
   const normalized = normalizeText(playerName);
   const parts = normalized.split(" ").filter(Boolean);
@@ -218,8 +224,9 @@ function getStrikeCandidates(market) {
       if (typeof value === "object") {
         return Object.values(value).flatMap((nested) => {
           if (nested == null) return [];
-          if (typeof nested === "number")
+          if (typeof nested === "number") {
             return [String(nested), nested.toFixed(1)];
+          }
           if (typeof nested === "string") return [nested];
           return [];
         });
@@ -257,6 +264,7 @@ function marketHasLine(market, text, line, marketType) {
       `at most ${milestone}`,
     );
   }
+
   const normalizedCandidates = candidates.map(normalizeText);
   const strikeValues = getStrikeCandidates(market);
 
@@ -363,124 +371,9 @@ export function findKalshiMarketForGame({
       };
     });
 
-  const prefilteredTop = [...scoredMarkets]
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 15)
-    .map((item) => ({
-      ticker: item.market?.ticker,
-      title: item.market?.title,
-      question: item.market?.question,
-      event_ticker: item.market?.event_ticker,
-      series_ticker: item.market?.series_ticker,
-      settled_ts: item.market?.settled_ts,
-      custom_strike: item.market?.custom_strike,
-      score: item.score,
-      looksRelevant: item.looksRelevant,
-      hasPlayer: item.hasPlayer,
-      hasOpponent: item.hasOpponent,
-      hasStat: item.hasStat,
-      hasSide: item.hasSide,
-      hasLine: item.hasLine,
-      hasExactLine: item.hasExactLine,
-      hasMilestoneLine: item.hasMilestoneLine,
-      text: item.text,
-      market_ticker: item.market?.market_ticker,
-      id: item.market?.id,
-      subtitle: item.market?.subtitle,
-      yes_sub_title: item.market?.yes_sub_title,
-      no_sub_title: item.market?.no_sub_title,
-    }));
-
-  const playerMatched = scoredMarkets
-    .filter((item) => item.hasPlayer)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 20)
-    .map((item) => ({
-      ticker: item.market?.ticker,
-      title: item.market?.title,
-      question: item.market?.question,
-      event_ticker: item.market?.event_ticker,
-      series_ticker: item.market?.series_ticker,
-      settled_ts: item.market?.settled_ts,
-      custom_strike: item.market?.custom_strike,
-      score: item.score,
-      looksRelevant: item.looksRelevant,
-      hasPlayer: item.hasPlayer,
-      hasOpponent: item.hasOpponent,
-      hasStat: item.hasStat,
-      hasSide: item.hasSide,
-      hasLine: item.hasLine,
-      hasExactLine: item.hasExactLine,
-      hasMilestoneLine: item.hasMilestoneLine,
-      text: item.text,
-      market_ticker: item.market?.market_ticker,
-      id: item.market?.id,
-      subtitle: item.market?.subtitle,
-      yes_sub_title: item.market?.yes_sub_title,
-      no_sub_title: item.market?.no_sub_title,
-    }));
-
   const candidates = scoredMarkets
     .filter((item) => item.looksRelevant && item.hasPlayer && item.hasStat)
     .sort((a, b) => b.score - a.score);
-
-  console.log("KALSHI PREFILTER DEBUG", {
-    gameId,
-    matchup,
-    playerName,
-    statKey,
-    line,
-    marketType,
-    opponent,
-    playerAliases,
-    opponentAliases,
-    targetStats,
-    prefilteredTop,
-  });
-
-  console.log("PLAYER-MATCHED MARKETS", {
-    playerName,
-    statKey,
-    line,
-    marketType,
-    opponent,
-    playerMatched,
-  });
-
-  console.log("KALSHI MATCH DEBUG", {
-    playerName,
-    statKey,
-    line,
-    marketType,
-    opponent,
-    playerAliases,
-    opponentAliases,
-    targetStats,
-    topCandidates: candidates.slice(0, 10).map((item) => ({
-      ticker: item.market?.ticker,
-      title: item.market?.title,
-      question: item.market?.question,
-      event_ticker: item.market?.event_ticker,
-      series_ticker: item.market?.series_ticker,
-      settled_ts: item.market?.settled_ts,
-      custom_strike: item.market?.custom_strike,
-      score: item.score,
-      looksRelevant: item.looksRelevant,
-      hasPlayer: item.hasPlayer,
-      hasOpponent: item.hasOpponent,
-      hasStat: item.hasStat,
-      hasSide: item.hasSide,
-      hasLine: item.hasLine,
-      hasExactLine: item.hasExactLine,
-      hasMilestoneLine: item.hasMilestoneLine,
-      text: item.text,
-      market_ticker: item.market?.market_ticker,
-      id: item.market?.id,
-      subtitle: item.market?.subtitle,
-      yes_sub_title: item.market?.yes_sub_title,
-      no_sub_title: item.market?.no_sub_title,
-    })),
-  });
 
   const best = candidates[0];
 
@@ -488,36 +381,6 @@ export function findKalshiMarketForGame({
     const fallback = scoredMarkets
       .filter((item) => item.looksRelevant && (item.hasPlayer || item.hasStat))
       .sort((a, b) => b.score - a.score)[0];
-    console.log("NO KALSHI MARKET MATCH", {
-      gameId,
-      matchup,
-      playerName,
-      opponent,
-      statKey,
-      line,
-      marketType,
-      candidateCount: candidates.length,
-      fallback: fallback
-        ? {
-            ticker: fallback.market?.ticker,
-            market_ticker: fallback.market?.market_ticker,
-            id: fallback.market?.id,
-            title: fallback.market?.title,
-            question: fallback.market?.question,
-            subtitle: fallback.market?.subtitle,
-            event_ticker: fallback.market?.event_ticker,
-            series_ticker: fallback.market?.series_ticker,
-            custom_strike: fallback.market?.custom_strike,
-            text: fallback.text,
-            score: fallback.score,
-            hasPlayer: fallback.hasPlayer,
-            hasOpponent: fallback.hasOpponent,
-            hasStat: fallback.hasStat,
-            hasLine: fallback.hasLine,
-            hasSide: fallback.hasSide,
-          }
-        : null,
-    });
 
     if (!DEBUG_ALLOW_FALLBACK_MARKET || !fallback) {
       return null;
@@ -547,30 +410,7 @@ export function findKalshiMarketForGame({
       rawMarket: fallback.market,
     };
   }
-  console.log("CHOSEN KALSHI MARKET", {
-    gameId,
-    matchup,
-    playerName,
-    opponent,
-    statKey,
-    line,
-    marketType,
-    ticker: best.market?.ticker,
-    market_ticker: best.market?.market_ticker,
-    id: best.market?.id,
-    event_ticker: best.market?.event_ticker,
-    series_ticker: best.market?.series_ticker,
-    title: best.market?.title,
-    question: best.market?.question,
-    subtitle: best.market?.subtitle,
-    score: best.score,
-    hasPlayer: best.hasPlayer,
-    hasOpponent: best.hasOpponent,
-    hasStat: best.hasStat,
-    hasLine: best.hasLine,
-    hasSide: best.hasSide,
-    text: best.text,
-  });
+
   return {
     marketTicker:
       best.market?.ticker ??

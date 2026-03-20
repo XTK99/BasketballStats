@@ -65,33 +65,45 @@ function getCandleTs(candle) {
   return null;
 }
 
-export function getPregameEntryFromCandles(candles, gameStartTs) {
-  const safeCandles = Array.isArray(candles) ? candles : [];
-
-  const eligible = safeCandles
-    .map((candle) => {
-      const ts = getCandleTs(candle);
-      const yesPrice = getYesPriceFromCandle(candle);
-
-      return {
-        ts,
-        yesPrice,
-        raw: candle,
-      };
-    })
-    .filter(
-      (row) =>
-        Number.isFinite(row.ts) &&
-        Number.isFinite(row.yesPrice) &&
-        row.ts <= Number(gameStartTs),
-    )
-    .sort((a, b) => b.ts - a.ts);
-
-  if (eligible.length === 0) {
+export function getPregameEntryFromCandles(candles = [], gameStartTs) {
+  if (!Array.isArray(candles) || candles.length === 0) {
     return null;
   }
 
-  console.log("selected historical entry", eligible[0]);
+  const sorted = [...candles]
+    .map((candle) => ({
+      ...candle,
+      ts: Number(candle?.end_period_ts),
+    }))
+    .filter((candle) => Number.isFinite(candle.ts))
+    .sort((a, b) => a.ts - b.ts);
 
-  return eligible[0];
+  if (sorted.length === 0) {
+    return null;
+  }
+
+  let chosen = null;
+
+  for (const candle of sorted) {
+    if (candle.ts <= gameStartTs) {
+      chosen = candle;
+    } else {
+      break;
+    }
+  }
+
+  if (!chosen) {
+    return null;
+  }
+
+  const yesAsk = Number(chosen?.yes_ask?.close_dollars);
+  const yesBid = Number(chosen?.yes_bid?.close_dollars);
+  const previousPrice = Number(chosen?.price?.previous_dollars);
+
+  return {
+    ts: chosen.ts,
+    yesAsk: Number.isFinite(yesAsk) ? yesAsk : null,
+    yesBid: Number.isFinite(yesBid) ? yesBid : null,
+    previousPrice: Number.isFinite(previousPrice) ? previousPrice : null,
+  };
 }
