@@ -283,12 +283,68 @@ function App() {
       setTeamLoading(false);
     }
   }
+
   async function handleSelectPlayerFromBoxScore(playerName) {
-    if (!playerName) return;
+    const trimmedPlayerName = String(playerName || "").trim();
+    if (!trimmedPlayerName) return;
+
+    const previousSelectedGameId =
+      selectedGame?.gameId ||
+      selectedGameId ||
+      boxScore?.gameId ||
+      boxScore?.game?.gameId ||
+      null;
+
+    const previousSelectedGame = selectedGame || null;
 
     setActiveDashboardView("player");
-    setPlayerQuery(playerName);
-    await loadPlayerDashboard(playerName);
+    setPlayerQuery(trimmedPlayerName);
+
+    try {
+      const normalizedPlayerGames =
+        (await loadPlayerDashboard(trimmedPlayerName)) || [];
+
+      if (!previousSelectedGameId) return;
+
+      const matchingGame = normalizedPlayerGames.find(
+        (game) =>
+          game?.gameId === previousSelectedGameId ||
+          game?.GAME_ID === previousSelectedGameId,
+      );
+
+      if (matchingGame) {
+        await handleSelectGame(matchingGame);
+        return;
+      }
+
+      setIsBoxScoreOpen(true);
+      setSelectedGameId(previousSelectedGameId);
+      setSelectedGame(
+        previousSelectedGame || {
+          gameId: previousSelectedGameId,
+        },
+      );
+      setBoxScoreLoading(true);
+      setBoxScoreError("");
+
+      const response = await getBoxScore(previousSelectedGameId);
+      setBoxScore(response);
+
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          boxScoreRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 50);
+      });
+    } catch (err) {
+      console.error("Failed to switch to player from box score:", err);
+      setBoxScoreError("Failed to load box score.");
+      setBoxScore(null);
+    } finally {
+      setBoxScoreLoading(false);
+    }
   }
 
   async function loadPlayerDashboard(playerName) {
@@ -298,10 +354,6 @@ function App() {
     setTeamLoading(true);
     setPlayerError("");
     setTeamError("");
-    setSelectedGameId(null);
-    setSelectedGame(null);
-    setBoxScore(null);
-    setBoxScoreError("");
 
     if (!trimmedQuery) {
       setPlayerGames([]);
@@ -310,16 +362,12 @@ function App() {
       setTeamTitle("Team");
       setPlayerError("");
       setTeamError("");
-      return;
+      return [];
     }
 
     try {
       setPlayerLoading(true);
       setPlayerError("");
-      setSelectedGameId(null);
-      setSelectedGame(null);
-      setBoxScore(null);
-      setBoxScoreError("");
 
       const playerResponse = await getPlayerGames(trimmedQuery, last, season);
 
@@ -333,7 +381,6 @@ function App() {
         playerResponse?.playerName || playerResponse?.player || trimmedQuery,
       );
 
-      // Team load is helpful, but should not break player view
       try {
         const derivedTeamQuery = deriveTeamQuery(
           playerResponse,
@@ -344,7 +391,7 @@ function App() {
           setTeamQuery("");
           setTeamGames([]);
           setTeamTitle("Team");
-          return;
+          return normalizedPlayerGames;
         }
 
         skipNextTeamAutoSearchRef.current = true;
@@ -366,16 +413,18 @@ function App() {
         setTeamGames([]);
         setTeamError("Failed to load team dashboard.");
       }
+
+      return normalizedPlayerGames;
     } catch (err) {
       console.error("Player fetch failed:", err);
       setPlayerError("Failed to load player dashboard.");
       setPlayerGames([]);
+      return [];
     } finally {
       setPlayerLoading(false);
       setTeamLoading(false);
     }
   }
-
   async function handleTeamSearch() {
     const trimmedQuery = teamQuery.trim();
 
@@ -404,37 +453,6 @@ function App() {
       setTeamGames([]);
     } finally {
       setTeamLoading(false);
-    }
-  }
-
-  async function handleSelectGame(game) {
-    setIsBoxScoreOpen(true);
-    const gameId = game?.gameId;
-    if (!gameId) return;
-
-    try {
-      setSelectedGameId(gameId);
-      setSelectedGame(game);
-      setBoxScoreLoading(true);
-      setBoxScoreError("");
-
-      const response = await getBoxScore(gameId);
-      setBoxScore(response);
-
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          boxScoreRef.current?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        }, 50);
-      });
-    } catch (err) {
-      console.error(err);
-      setBoxScoreError("Failed to load box score.");
-      setBoxScore(null);
-    } finally {
-      setBoxScoreLoading(false);
     }
   }
 
