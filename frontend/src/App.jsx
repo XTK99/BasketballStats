@@ -514,19 +514,23 @@ function App() {
               filters={teamFilters}
               onUpdateFilter={updateTeamFilter}
               onRemoveThresholdFilter={removeTeamThresholdFilter}
-              averages={teamAverages}
-              matchupOpponent={teamMatchupOpponent}
-              selectedStat={teamSelectedStat}
-              setSelectedStat={setTeamSelectedStat}
-              boardStat={teamBoardStat}
-              setBoardStat={setTeamBoardStat}
-              filteredGames={filteredTeamGames}
-              selectedLine={teamSelectedLine}
-              propInsights={teamPropInsights}
-              matchupSnapshot={teamMatchupSnapshot}
               onToggleLocation={toggleTeamLocation}
               onToggleResult={toggleTeamResult}
               onClearFilters={clearTeamFilters}
+              averages={teamAverages}
+              selectedStat={teamSelectedStat}
+              setSelectedStat={setTeamSelectedStat}
+              filteredGames={filteredTeamGames}
+              propInsights={teamPropInsights}
+              selectedGame={selectedGame}
+              selectedGameId={selectedGameId}
+              onSelectGame={handleSelectGame}
+              boxScore={boxScore}
+              boxScoreLoading={boxScoreLoading}
+              boxScoreError={boxScoreError}
+              isBoxScoreOpen={isBoxScoreOpen}
+              setIsBoxScoreOpen={setIsBoxScoreOpen}
+              boxScoreRef={boxScoreRef}
             />
           }
         />

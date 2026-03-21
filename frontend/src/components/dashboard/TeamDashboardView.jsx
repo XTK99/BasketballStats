@@ -8,6 +8,7 @@ import StatSelector from "../StatSelector";
 import StatChart from "../StatChart";
 import HitRateBoard from "../HitRateBoard";
 import GameLogTable from "../GameLogTable";
+import BoxScorePanel from "../BoxScorePanel";
 import "./TeamDashboardView.css";
 
 const STAT_LABEL_MAP = {
@@ -42,8 +43,16 @@ function TeamDashboardView({
   selectedStat,
   setSelectedStat,
   filteredGames,
-  selectedLine,
   propInsights,
+  selectedGame,
+  selectedGameId,
+  onSelectGame,
+  boxScore,
+  boxScoreLoading,
+  boxScoreError,
+  isBoxScoreOpen,
+  setIsBoxScoreOpen,
+  boxScoreRef,
 }) {
   return (
     <div className="section-stack">
@@ -107,10 +116,48 @@ function TeamDashboardView({
             mode="team"
           />
 
+          <section ref={boxScoreRef} className="section-stack">
+            {(selectedGame || boxScoreLoading || boxScoreError) && (
+              <section className="panel-card selected-game-card">
+                <div className="selected-game-header">
+                  <div>
+                    <h3 className="panel-title">Selected Game</h3>
+                    <p className="selected-game-subtitle">
+                      {selectedGame
+                        ? `${selectedGame.gameDate} • ${selectedGame.matchup} • ${
+                            selectedGame.result || "—"
+                          }`
+                        : "Loading selected game..."}
+                    </p>
+                  </div>
+
+                  <div className="selected-game-actions">
+                    <button
+                      type="button"
+                      className="collapse-button"
+                      onClick={() => setIsBoxScoreOpen((prev) => !prev)}
+                    >
+                      {isBoxScoreOpen ? "Hide Box Score" : "Show Box Score"}
+                    </button>
+                  </div>
+                </div>
+              </section>
+            )}
+          </section>
+
+          {isBoxScoreOpen && (
+            <BoxScorePanel
+              boxScore={boxScore}
+              loading={boxScoreLoading}
+              error={boxScoreError}
+              selectedPlayerName=""
+            />
+          )}
+
           <GameLogTable
             games={filteredGames}
-            onSelectGame={() => {}}
-            selectedGameId={null}
+            onSelectGame={onSelectGame}
+            selectedGameId={selectedGameId}
           />
         </>
       )}
