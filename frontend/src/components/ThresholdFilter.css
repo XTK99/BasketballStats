@@ -1,85 +1,81 @@
-.threshold-filter {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
-}
-
-.panel-title {
-  margin: 0 0 12px;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text);
-}
-
-.threshold-controls {
+.threshold-section {
   display: flex;
+  flex-direction: column;
   gap: 12px;
-  flex-wrap: wrap;
+  padding-top: 14px;
+  border-top: 1px solid rgba(148, 163, 184, 0.14);
 }
 
-.threshold-select,
-.threshold-input,
-.threshold-button {
+.threshold-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.78);
+}
+
+.threshold-row {
+  display: grid;
+  grid-template-columns: 160px 80px 170px 140px;
+  gap: 12px;
+  align-items: center;
+  justify-content: start;
+}
+
+.threshold-row select,
+.threshold-row input {
+  width: 100%;
   min-height: 42px;
-  border-radius: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+  color: #e2e8f0;
+  padding: 0 14px;
   font: inherit;
 }
 
-.threshold-select,
-.threshold-input {
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text);
-  padding: 10px 12px;
+.threshold-row input::placeholder {
+  color: rgba(148, 163, 184, 0.7);
 }
 
-.threshold-select {
-  min-width: 140px;
-}
-
-.threshold-operator {
-  min-width: 90px;
-}
-
-.threshold-input {
-  min-width: 120px;
-}
-
-.threshold-input::placeholder {
-  color: var(--text-muted);
-}
-
-.threshold-button {
-  padding: 10px 16px;
-  border: 1px solid rgba(96, 165, 250, 0.4);
-  background: rgba(96, 165, 250, 0.18);
-  color: var(--text);
-  font-weight: 600;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.threshold-button:hover {
-  background: rgba(96, 165, 250, 0.28);
-  border-color: rgba(96, 165, 250, 0.55);
-}
-
-.threshold-select:focus,
-.threshold-input:focus {
+.threshold-row select:focus,
+.threshold-row input:focus {
   outline: none;
-  border-color: rgba(96, 165, 250, 0.5);
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.12);
+  border-color: rgba(96, 165, 250, 0.7);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+.add-filter-button {
+  min-height: 42px;
+  width: 140px;
+  border-radius: 12px;
+  border: 1px solid rgba(96, 165, 250, 0.8);
+  background: linear-gradient(
+    180deg,
+    rgba(59, 130, 246, 0.34),
+    rgba(37, 99, 235, 0.22)
+  );
+  color: #eff6ff;
+  font-weight: 700;
+  padding: 0 16px;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
 }
 
-@media (max-width: 768px) {
-  .threshold-controls {
-    flex-direction: column;
-  }
+.add-filter-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.22);
+}
 
-  .threshold-select,
-  .threshold-input,
-  .threshold-button {
-    width: 100%;
+.add-filter-button:focus-visible {
+  outline: 2px solid rgba(147, 197, 253, 0.85);
+  outline-offset: 2px;
+}
+
+@media (max-width: 900px) {
+  .threshold-row {
+    grid-template-columns: 1fr;
   }
 }

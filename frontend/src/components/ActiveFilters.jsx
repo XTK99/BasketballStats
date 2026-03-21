@@ -1,5 +1,12 @@
 import "./ActiveFilters.css";
 
+function formatFilterLabel(value) {
+  return String(value || "")
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (char) => char.toUpperCase())
+    .trim();
+}
+
 function ActiveFilters({
   locations = [],
   results = [],
@@ -43,10 +50,16 @@ function ActiveFilters({
           <button
             key={`${filter.stat}-${filter.operator}-${filter.value}-${index}`}
             type="button"
-            className="active-filter-pill removable"
+            className="active-filter-pill active-filter-pill-button"
             onClick={() => onRemoveThresholdFilter(index)}
+            title="Remove filter"
           >
-            {filter.stat} {filter.operator} {filter.value} ×
+            <span className="active-filter-pill-text">
+              {formatFilterLabel(filter.stat)} {filter.operator} {filter.value}
+            </span>
+            <span className="active-filter-remove" aria-hidden="true">
+              ×
+            </span>
           </button>
         ))}
       </div>

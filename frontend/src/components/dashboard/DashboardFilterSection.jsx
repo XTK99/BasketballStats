@@ -12,7 +12,7 @@ function DashboardFilterSection({
   onClearFilters,
 }) {
   return (
-    <section className="panel-card">
+    <section className="panel-card dashboard-filter-section">
       <FiltersBar
         locations={filters.locations}
         results={filters.results}

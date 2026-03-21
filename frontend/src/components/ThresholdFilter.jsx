@@ -1,26 +1,7 @@
-import { useState } from "react";
 import "./ThresholdFilter.css";
+import { useState } from "react";
 
-const STAT_OPTIONS = [
-  { value: "minutes", label: "Minutes" },
-  { value: "points", label: "Points" },
-  { value: "rebounds", label: "Rebounds" },
-  { value: "assists", label: "Assists" },
-  { value: "steals", label: "Steals" },
-  { value: "blocks", label: "Blocks" },
-  { value: "turnovers", label: "Turnovers" },
-  { value: "threesMade", label: "3PM" },
-];
-
-const OPERATOR_OPTIONS = [
-  { value: ">=", label: "≥" },
-  { value: "<=", label: "≤" },
-  { value: "=", label: "=" },
-  { value: ">", label: ">" },
-  { value: "<", label: "<" },
-];
-
-function ThresholdFilter({ thresholdFilters, setThresholdFilters }) {
+function ThresholdFilter({ thresholdFilters = [], setThresholdFilters }) {
   const [stat, setStat] = useState("minutes");
   const [operator, setOperator] = useState(">=");
   const [value, setValue] = useState("");
@@ -28,54 +9,54 @@ function ThresholdFilter({ thresholdFilters, setThresholdFilters }) {
   function handleAddFilter() {
     const numericValue = Number(value);
 
-    if (!value || Number.isNaN(numericValue)) return;
+    if (!value.trim() || Number.isNaN(numericValue)) return;
 
-    setThresholdFilters([
-      ...thresholdFilters,
-      { stat, operator, value: numericValue },
-    ]);
+    const newFilter = {
+      stat,
+      operator,
+      value: numericValue,
+    };
 
+    setThresholdFilters([...thresholdFilters, newFilter]);
     setValue("");
   }
 
   return (
-    <div className="threshold-filter">
-      <h3 className="panel-title">Stat Threshold</h3>
+    <div className="threshold-section">
+      <div className="threshold-title">Stat Threshold</div>
 
-      <div className="threshold-controls">
-        <select
-          className="threshold-select"
-          value={stat}
-          onChange={(e) => setStat(e.target.value)}
-        >
-          {STAT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
+      <div className="threshold-row">
+        <select value={stat} onChange={(e) => setStat(e.target.value)}>
+          <option value="minutes">Minutes</option>
+          <option value="points">Points</option>
+          <option value="rebounds">Rebounds</option>
+          <option value="assists">Assists</option>
+          <option value="steals">Steals</option>
+          <option value="blocks">Blocks</option>
+          <option value="turnovers">Turnovers</option>
+          <option value="threesMade">3PM</option>
         </select>
 
-        <select
-          className="threshold-select threshold-operator"
-          value={operator}
-          onChange={(e) => setOperator(e.target.value)}
-        >
-          {OPERATOR_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
+        <select value={operator} onChange={(e) => setOperator(e.target.value)}>
+          <option value=">=">≥</option>
+          <option value="<=">≤</option>
+          <option value=">">{">"}</option>
+          <option value="<">{"<"}</option>
+          <option value="=">=</option>
         </select>
 
         <input
-          className="threshold-input"
           type="number"
+          placeholder="Value"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="Value"
         />
 
-        <button className="threshold-button" onClick={handleAddFilter}>
+        <button
+          type="button"
+          className="add-filter-button"
+          onClick={handleAddFilter}
+        >
           Add Filter
         </button>
       </div>
