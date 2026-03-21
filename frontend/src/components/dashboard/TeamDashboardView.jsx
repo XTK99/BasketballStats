@@ -2,12 +2,12 @@ import DashboardHeaderCard from "./DashboardHeaderCard";
 import DashboardFilterSection from "./DashboardFilterSection";
 import SearchBar from "../SearchBar";
 import SummaryCards from "../SummaryCards";
-import MatchupSnapshot from "../MatchupSnapshot";
 import PropEdgeCard from "../PropEdgeCard";
 import SplitsPanel from "../SplitsPanel";
 import StatSelector from "../StatSelector";
 import StatChart from "../StatChart";
 import HitRateBoard from "../HitRateBoard";
+import GameLogTable from "../GameLogTable";
 import "./TeamDashboardView.css";
 
 const STAT_LABEL_MAP = {
@@ -39,13 +39,11 @@ function TeamDashboardView({
   onToggleResult,
   onClearFilters,
   averages,
-  matchupOpponent,
   selectedStat,
   setSelectedStat,
   filteredGames,
   selectedLine,
   propInsights,
-  matchupSnapshot,
 }) {
   return (
     <div className="section-stack">
@@ -83,13 +81,6 @@ function TeamDashboardView({
             onSelectStat={setSelectedStat}
           />
 
-          <MatchupSnapshot
-            title="Matchup Snapshot"
-            opponent={matchupOpponent}
-            statLabel={STAT_LABEL_MAP[selectedStat] || selectedStat}
-            snapshot={matchupSnapshot}
-          />
-
           <PropEdgeCard
             title={title}
             statLabel={STAT_LABEL_MAP[selectedStat] || selectedStat}
@@ -97,6 +88,7 @@ function TeamDashboardView({
           />
 
           <SplitsPanel games={filteredGames} selectedStat={selectedStat} />
+
           <section className="panel-card">
             <StatSelector
               selectedStat={selectedStat}
@@ -113,6 +105,12 @@ function TeamDashboardView({
             games={filteredGames}
             selectedStat={selectedStat}
             mode="team"
+          />
+
+          <GameLogTable
+            games={filteredGames}
+            onSelectGame={() => {}}
+            selectedGameId={null}
           />
         </>
       )}
