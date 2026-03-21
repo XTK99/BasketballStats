@@ -204,6 +204,46 @@ function App() {
   async function handlePlayerSearch() {
     await loadPlayerDashboard(playerQuery);
   }
+
+  async function handleSelectGame(gameOrGameId) {
+    setIsBoxScoreOpen(true);
+
+    const game =
+      typeof gameOrGameId === "string"
+        ? [...playerGames, ...teamGames].find(
+            (entry) => entry.gameId === gameOrGameId,
+          )
+        : gameOrGameId;
+
+    const gameId = game?.gameId;
+    if (!gameId) return;
+
+    try {
+      setSelectedGameId(gameId);
+      setSelectedGame(game);
+      setBoxScoreLoading(true);
+      setBoxScoreError("");
+
+      const response = await getBoxScore(gameId);
+      setBoxScore(response);
+
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          boxScoreRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 50);
+      });
+    } catch (err) {
+      console.error(err);
+      setBoxScoreError("Failed to load box score.");
+      setBoxScore(null);
+    } finally {
+      setBoxScoreLoading(false);
+    }
+  }
+
   async function handleSelectTeamFromBoxScore(teamName) {
     if (!teamName) return;
 
@@ -500,25 +540,61 @@ function App() {
   return (
     <div className="app-shell">
       <header className="app-header">
-        <h1 className="app-title">Basketball Stats Dashboard</h1>
-        <p className="app-subtitle">App is rendering.</p>
+        <div className="app-hero">
+          <div className="app-hero-top">
+            <div className="app-hero-copy">
+              <p className="app-kicker">NBA analytics workspace</p>
+              <h1 className="app-title">Basketball Stats Dashboard</h1>
+              <p className="app-subtitle">
+                Explore player and team trends, filter game logs, inspect box
+                scores, and compare recent performance.
+              </p>
+            </div>
+
+            <div className="app-hero-actions">
+              <div className="segmented-group">
+                <button
+                  className={`segment-btn ${viewMode === "dashboard" ? "active" : ""}`}
+                  onClick={() => setViewMode("dashboard")}
+                >
+                  Dashboard
+                </button>
+
+                <button
+                  className={`segment-btn ${viewMode === "simulator" ? "active" : ""}`}
+                  onClick={() => setViewMode("simulator")}
+                >
+                  Betting Simulator
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {viewMode === "dashboard" && (
+            <div className="dashboard-view-switcher">
+              <div className="segmented-group">
+                <button
+                  className={`segment-btn ${
+                    activeDashboardView === "player" ? "active" : ""
+                  }`}
+                  onClick={() => setActiveDashboardView("player")}
+                >
+                  Player
+                </button>
+
+                <button
+                  className={`segment-btn ${
+                    activeDashboardView === "team" ? "active" : ""
+                  }`}
+                  onClick={() => setActiveDashboardView("team")}
+                >
+                  Team
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </header>
-
-      <section className="view-toggle-row">
-        <button
-          className={`tab-button ${viewMode === "dashboard" ? "active" : ""}`}
-          onClick={() => setViewMode("dashboard")}
-        >
-          Dashboard
-        </button>
-
-        <button
-          className={`tab-button ${viewMode === "simulator" ? "active" : ""}`}
-          onClick={() => setViewMode("simulator")}
-        >
-          Betting Simulator
-        </button>
-      </section>
 
       {viewMode === "dashboard" && (
         <DashboardCarousel

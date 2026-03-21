@@ -55,6 +55,10 @@ function PlayerDashboardView({
   setIsBoxScoreOpen,
   boxScoreRef,
   onSelectTeamFromBoxScore,
+  hitRateStat,
+  hitRateLine,
+  includeMissedGamesInChart,
+  setIncludeMissedGamesInChart,
 }) {
   return (
     <div className="section-stack">
@@ -109,6 +113,12 @@ function PlayerDashboardView({
               games={filteredGames}
               selectedStat={selectedStat}
               mode="player"
+              onSelectGame={onSelectGame}
+              selectedGameId={selectedGameId}
+              hitRateStat={hitRateStat}
+              hitRateLine={hitRateLine}
+              includeMissedGamesInChart={includeMissedGamesInChart}
+              setIncludeMissedGamesInChart={setIncludeMissedGamesInChart}
             />
           </section>
 

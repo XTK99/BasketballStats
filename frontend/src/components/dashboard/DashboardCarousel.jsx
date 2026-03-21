@@ -32,21 +32,6 @@ function DashboardCarousel({
 
   return (
     <>
-      <div className="dashboard-view-indicators">
-        {views.map((view) => (
-          <button
-            key={view.key}
-            type="button"
-            className={`dashboard-view-dot ${
-              activeDashboardView === view.key ? "active" : ""
-            }`}
-            onClick={() => setActiveDashboardView(view.key)}
-          >
-            {view.label}
-          </button>
-        ))}
-      </div>
-
       <section className="dashboard-carousel-shell">
         <button
           type="button"

@@ -159,6 +159,7 @@ function formatStatLabel(stat) {
 
   return labels[stat] || stat;
 }
+
 function getFirstNumber(game, keys) {
   for (const key of keys) {
     const value = game[key];
@@ -169,6 +170,7 @@ function getFirstNumber(game, keys) {
   }
   return null;
 }
+
 function formatGameDate(dateString) {
   if (!dateString) return "";
 
@@ -276,7 +278,26 @@ function CustomTooltip({ active, payload, selectedStat }) {
     </div>
   );
 }
+function CustomDot(props) {
+  const { cx, cy, payload, onSelectGame, selectedGameId } = props;
 
+  if (cx == null || cy == null || !payload) return null;
+
+  const isSelected = payload.gameId === selectedGameId;
+
+  return (
+    <circle
+      cx={cx}
+      cy={cy}
+      r={isSelected ? 6 : 4}
+      fill="#60a5fa"
+      stroke={isSelected ? "#ffffff" : "none"}
+      strokeWidth={isSelected ? 2 : 0}
+      style={{ cursor: "pointer" }}
+      onClick={() => onSelectGame?.(payload.originalGame)}
+    />
+  );
+}
 function StatChart({
   games,
   selectedStat,
@@ -285,8 +306,12 @@ function StatChart({
   includeMissedGamesInChart,
   setIncludeMissedGamesInChart,
   mode,
+  onSelectGame,
+  selectedGameId,
 }) {
   const chartData = [...games].reverse().map((game) => ({
+    gameId: game.gameId || game.GAME_ID || "",
+    originalGame: game,
     xLabel: formatGameDate(game.gameDate),
     fullDate: game.gameDate || "",
     statValue: getChartStatValue(game, selectedStat) ?? 0,
@@ -379,9 +404,21 @@ function StatChart({
             dataKey="statValue"
             stroke="#60a5fa"
             strokeWidth={3}
-            dot={{ r: 4, fill: "#60a5fa" }}
-            activeDot={{ r: 6 }}
             connectNulls={false}
+            dot={(dotProps) => (
+              <CustomDot
+                {...dotProps}
+                onSelectGame={onSelectGame}
+                selectedGameId={selectedGameId}
+              />
+            )}
+            activeDot={(dotProps) => (
+              <CustomDot
+                {...dotProps}
+                onSelectGame={onSelectGame}
+                selectedGameId={selectedGameId}
+              />
+            )}
           />
         </LineChart>
       </ResponsiveContainer>
