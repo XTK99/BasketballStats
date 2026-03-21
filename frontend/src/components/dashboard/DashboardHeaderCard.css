@@ -22,3 +22,27 @@
     grid-template-columns: 1fr;
   }
 }
+.dashboard-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.dashboard-kicker {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.dashboard-entity-title {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.1;
+  font-weight: 800;
+  color: var(--text);
+  word-break: break-word;
+}

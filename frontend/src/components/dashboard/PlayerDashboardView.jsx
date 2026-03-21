@@ -120,7 +120,14 @@ function PlayerDashboardView({
             setBoardStat={setBoardStat}
             mode="player"
           />
-
+          {isBoxScoreOpen && (
+            <BoxScorePanel
+              boxScore={boxScore}
+              loading={boxScoreLoading}
+              error={boxScoreError}
+              selectedPlayerName={query}
+            />
+          )}
           <GameLogTable
             games={filteredGames}
             onSelectGame={onSelectGame}
@@ -152,15 +159,6 @@ function PlayerDashboardView({
                   </div>
                 </div>
               </section>
-            )}
-
-            {isBoxScoreOpen && (
-              <BoxScorePanel
-                boxScore={boxScore}
-                loading={boxScoreLoading}
-                error={boxScoreError}
-                selectedPlayerName={query}
-              />
             )}
           </section>
         </>

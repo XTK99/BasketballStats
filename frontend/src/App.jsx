@@ -210,15 +210,14 @@ function App() {
       if (!derivedTeamQuery) {
         setTeamGames([]);
         setTeamTitle("Team");
-        setTeamQuery("");
         return;
       }
 
       skipNextTeamAutoSearchRef.current = true;
-      setTeamQuery(derivedTeamQuery);
       setTeamTitle(derivedTeamQuery);
 
       const teamResponse = await getTeamGames(derivedTeamQuery, last, season);
+
       const normalizedTeamGames = normalizeGames(
         teamResponse?.games || [],
         "team",
