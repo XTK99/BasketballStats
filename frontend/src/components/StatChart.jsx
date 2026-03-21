@@ -286,7 +286,7 @@ function StatChart({
   setIncludeMissedGamesInChart,
   mode,
 }) {
-  const chartData = games.map((game) => ({
+  const chartData = [...games].reverse().map((game) => ({
     xLabel: formatGameDate(game.gameDate),
     fullDate: game.gameDate || "",
     statValue: getChartStatValue(game, selectedStat) ?? 0,

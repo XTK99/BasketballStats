@@ -11,6 +11,7 @@ function SearchBar({
   last,
   setLast,
   onSearch,
+  showSearchButton = true,
 }) {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -52,8 +53,17 @@ function SearchBar({
         }
 
         if (!ignore) {
+          const normalizedQuery = query.trim().toLowerCase();
+
+          const exactMatches = nextSuggestions.filter(
+            (item) => item.label.trim().toLowerCase() === normalizedQuery,
+          );
+
+          const shouldShowSuggestions =
+            nextSuggestions.length > 0 && exactMatches.length === 0;
+
           setSuggestions(nextSuggestions);
-          setShowSuggestions(nextSuggestions.length > 0);
+          setShowSuggestions(shouldShowSuggestions);
           setActiveIndex(-1);
         }
       } catch (err) {
@@ -188,9 +198,11 @@ function SearchBar({
         <option value={82}>Full Season</option>
       </select>
 
-      <button className="search-button" onClick={onSearch}>
-        Search
-      </button>
+      {showSearchButton && (
+        <button className="search-button" onClick={onSearch}>
+          Search
+        </button>
+      )}
     </div>
   );
 }
