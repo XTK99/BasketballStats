@@ -44,8 +44,7 @@ function PlayerDashboardView({
   matchupOpponent,
   selectedStat,
   setSelectedStat,
-  boardStat,
-  setBoardStat,
+
   filteredGames,
   selectedLine,
   propInsights,
@@ -90,7 +89,11 @@ function PlayerDashboardView({
             onClearFilters={onClearFilters}
           />
 
-          <SummaryCards averages={averages} />
+          <SummaryCards
+            averages={averages}
+            selectedStat={selectedStat}
+            onSelectStat={setSelectedStat}
+          />
 
           <PropEdgeCard
             title={title}
@@ -98,7 +101,7 @@ function PlayerDashboardView({
             insights={propInsights}
           />
 
-          <SplitsPanel games={filteredGames} />
+          <SplitsPanel games={filteredGames} selectedStat={selectedStat} />
 
           <section className="panel-card">
             <StatSelector
@@ -115,8 +118,6 @@ function PlayerDashboardView({
           <HitRateBoard
             games={filteredGames}
             selectedStat={selectedStat}
-            boardStat={boardStat}
-            setBoardStat={setBoardStat}
             mode="player"
           />
 

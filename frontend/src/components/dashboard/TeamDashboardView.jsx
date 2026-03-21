@@ -42,8 +42,6 @@ function TeamDashboardView({
   matchupOpponent,
   selectedStat,
   setSelectedStat,
-  boardStat,
-  setBoardStat,
   filteredGames,
   selectedLine,
   propInsights,
@@ -79,7 +77,11 @@ function TeamDashboardView({
             onClearFilters={onClearFilters}
           />
 
-          <SummaryCards averages={averages} />
+          <SummaryCards
+            averages={averages}
+            selectedStat={selectedStat}
+            onSelectStat={setSelectedStat}
+          />
 
           <MatchupSnapshot
             title="Matchup Snapshot"
@@ -94,8 +96,7 @@ function TeamDashboardView({
             insights={propInsights}
           />
 
-          <SplitsPanel games={filteredGames} />
-
+          <SplitsPanel games={filteredGames} selectedStat={selectedStat} />
           <section className="panel-card">
             <StatSelector
               selectedStat={selectedStat}
@@ -111,8 +112,6 @@ function TeamDashboardView({
           <HitRateBoard
             games={filteredGames}
             selectedStat={selectedStat}
-            boardStat={boardStat}
-            setBoardStat={setBoardStat}
             mode="team"
           />
         </>

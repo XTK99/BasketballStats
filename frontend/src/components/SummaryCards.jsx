@@ -1,26 +1,39 @@
 import "./SummaryCards.css";
 
-function SummaryCards({ averages }) {
-  if (!averages) return null;
+const CARDS = [
+  { key: "points", label: "PTS" },
+  { key: "rebounds", label: "REB" },
+  { key: "assists", label: "AST" },
+  { key: "steals", label: "STL" },
+  { key: "blocks", label: "BLK" },
+  { key: "turnovers", label: "TOV" },
+  { key: "threesMade", label: "3PM" },
+  { key: "minutes", label: "MIN" },
+];
 
-  const cards = [
-    { label: "PTS", value: averages.points },
-    { label: "REB", value: averages.rebounds },
-    { label: "AST", value: averages.assists },
-    { label: "STL", value: averages.steals },
-    { label: "BLK", value: averages.blocks },
-    { label: "TOV", value: averages.turnovers },
-    { label: "3PM", value: averages.threesMade },
-    { label: "MIN", value: averages.minutes },
-  ];
+function formatValue(value) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return "0.0";
+  return num.toFixed(1);
+}
+
+function SummaryCards({ averages, selectedStat, onSelectStat }) {
+  if (!averages) return null;
 
   return (
     <section className="summary-grid">
-      {cards.map((card) => (
-        <div key={card.label} className="summary-card">
+      {CARDS.map((card) => (
+        <button
+          key={card.key}
+          type="button"
+          className={`summary-card ${
+            selectedStat === card.key ? "summary-card-active" : ""
+          }`}
+          onClick={() => onSelectStat(card.key)}
+        >
           <div className="summary-label">{card.label}</div>
-          <div className="summary-value">{card.value ?? "0.0"}</div>
-        </div>
+          <div className="summary-value">{formatValue(averages[card.key])}</div>
+        </button>
       ))}
     </section>
   );

@@ -101,21 +101,17 @@ function HitRateBoard({
   games = [],
   mode = "player",
   selectedStat = "points",
-  boardStat,
-  setBoardStat,
 }) {
-  const activeStat = boardStat || selectedStat;
   const thresholdMap = getThresholdMap(mode);
-  const statOptions = Object.keys(thresholdMap);
 
   const boardData = useMemo(() => {
-    const thresholds = thresholdMap[activeStat] || [];
+    const thresholds = thresholdMap[selectedStat] || [];
     return thresholds.map((threshold) =>
-      buildHitRateData(games, activeStat, threshold),
+      buildHitRateData(games, selectedStat, threshold),
     );
-  }, [games, activeStat, thresholdMap]);
+  }, [games, selectedStat, thresholdMap]);
 
-  const statLabel = STAT_LABELS[activeStat] || activeStat;
+  const statLabel = STAT_LABELS[selectedStat] || selectedStat;
   const title =
     mode === "team"
       ? `${statLabel} Team Hit Rate Board`
@@ -128,24 +124,12 @@ function HitRateBoard({
           <h3 className="panel-title hit-rate-board-title">{title}</h3>
           <div className="results-meta">{games.length} games</div>
         </div>
-
-        <select
-          value={activeStat}
-          onChange={(event) => setBoardStat(event.target.value)}
-          className="hit-rate-board-select"
-        >
-          {statOptions.map((stat) => (
-            <option key={stat} value={stat}>
-              {STAT_LABELS[stat] || stat}
-            </option>
-          ))}
-        </select>
       </div>
 
       <div className="hit-rate-board-grid">
         {boardData.map((item) => (
           <article
-            key={`${activeStat}-${item.threshold}`}
+            key={`${selectedStat}-${item.threshold}`}
             className={`hit-rate-board-card ${getTierClass(item.hitRate)}`}
           >
             <div className="hit-rate-board-line">
