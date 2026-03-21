@@ -2,7 +2,6 @@ import DashboardHeaderCard from "./DashboardHeaderCard";
 import DashboardFilterSection from "./DashboardFilterSection";
 import SearchBar from "../SearchBar";
 import SummaryCards from "../SummaryCards";
-
 import PropEdgeCard from "../PropEdgeCard";
 import SplitsPanel from "../SplitsPanel";
 import StatSelector from "../StatSelector";
@@ -41,14 +40,10 @@ function PlayerDashboardView({
   onToggleResult,
   onClearFilters,
   averages,
-  matchupOpponent,
   selectedStat,
   setSelectedStat,
-
   filteredGames,
-  selectedLine,
   propInsights,
-  matchupSnapshot,
   selectedGame,
   selectedGameId,
   onSelectGame,
@@ -121,21 +116,6 @@ function PlayerDashboardView({
             mode="player"
           />
 
-          {isBoxScoreOpen && (
-            <BoxScorePanel
-              boxScore={boxScore}
-              loading={boxScoreLoading}
-              error={boxScoreError}
-              selectedPlayerName={query}
-            />
-          )}
-
-          <GameLogTable
-            games={filteredGames}
-            onSelectGame={onSelectGame}
-            selectedGameId={selectedGameId}
-          />
-
           <section ref={boxScoreRef} className="section-stack">
             {(selectedGame || boxScoreLoading || boxScoreError) && (
               <section className="panel-card selected-game-card">
@@ -164,6 +144,21 @@ function PlayerDashboardView({
               </section>
             )}
           </section>
+
+          {isBoxScoreOpen && (
+            <BoxScorePanel
+              boxScore={boxScore}
+              loading={boxScoreLoading}
+              error={boxScoreError}
+              selectedPlayerName={query}
+            />
+          )}
+
+          <GameLogTable
+            games={filteredGames}
+            onSelectGame={onSelectGame}
+            selectedGameId={selectedGameId}
+          />
         </>
       )}
     </div>

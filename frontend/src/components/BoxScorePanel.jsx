@@ -96,23 +96,6 @@ function BoxScorePanel({
 
   return (
     <div className="boxscore-panel">
-      {selectedPlayerName ? (
-        <section className="panel-card viewed-player-card">
-          <div className="viewed-player-header">
-            <div>
-              <h3 className="panel-title">Viewed Player</h3>
-              <p className="viewed-player-subtitle">
-                Search: {selectedPlayerName}
-              </p>
-            </div>
-
-            <span className="viewed-player-badge">
-              {matchedPlayer?.PLAYER_NAME || "No box score match yet"}
-            </span>
-          </div>
-        </section>
-      ) : null}
-
       <div className="boxscore-game-summary">
         <div
           className={`boxscore-summary-team boxscore-summary-away ${
