@@ -15,7 +15,12 @@ async function fetchJson(url, fallbackMessage) {
 
   return response.json();
 }
-
+export async function searchTeams(query) {
+  return fetchJson(
+    `${API_BASE}/api/nba/team-search?q=${encodeURIComponent(query)}`,
+    "Failed to search teams",
+  );
+}
 export async function searchPlayers(query, season = "2025-26") {
   return fetchJson(
     `${API_BASE}/api/nba/player-search?q=${encodeURIComponent(query)}&season=${encodeURIComponent(season)}`,

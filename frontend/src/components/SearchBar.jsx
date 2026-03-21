@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { searchPlayers } from "../api/nbaApi";
+import { searchPlayers, searchTeams } from "../api/nbaApi";
 import "./SearchBar.css";
 
 function SearchBar({
@@ -23,7 +23,7 @@ function SearchBar({
     async function fetchSuggestions() {
       const query = searchValue.trim();
 
-      if (mode !== "player" || query.length < 2) {
+      if (query.length < 2) {
         setSuggestions([]);
         setShowSuggestions(false);
         setActiveIndex(-1);
@@ -31,10 +31,27 @@ function SearchBar({
       }
 
       try {
-        const data = await searchPlayers(query);
+        let nextSuggestions = [];
+
+        if (mode === "player") {
+          const data = await searchPlayers(query, season);
+          nextSuggestions = (data.players || []).map((player) => ({
+            id: player.id,
+            value: player.name,
+            label: player.name,
+            meta: player.team || "",
+          }));
+        } else {
+          const data = await searchTeams(query);
+          nextSuggestions = (data.teams || []).map((team) => ({
+            id: team.id,
+            value: team.name,
+            label: team.name,
+            meta: team.abbreviation || "",
+          }));
+        }
 
         if (!ignore) {
-          const nextSuggestions = data.players || [];
           setSuggestions(nextSuggestions);
           setShowSuggestions(nextSuggestions.length > 0);
           setActiveIndex(-1);
@@ -54,7 +71,7 @@ function SearchBar({
       ignore = true;
       clearTimeout(timeoutId);
     };
-  }, [searchValue, mode]);
+  }, [searchValue, mode, season]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -65,23 +82,19 @@ function SearchBar({
     }
 
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-  function handleSelectPlayer(playerName) {
-    setSearchValue(playerName);
+  function handleSelectSuggestion(value) {
+    setSearchValue(value);
     setShowSuggestions(false);
     setActiveIndex(-1);
   }
 
   function handleKeyDown(e) {
-    if (mode !== "player") {
-      if (e.key === "Enter") onSearch();
-      return;
-    }
-
     if (e.key === "ArrowDown" && suggestions.length > 0) {
       e.preventDefault();
       setShowSuggestions(true);
@@ -106,7 +119,7 @@ function SearchBar({
       e.preventDefault();
 
       if (showSuggestions && activeIndex >= 0 && suggestions[activeIndex]) {
-        handleSelectPlayer(suggestions[activeIndex].name);
+        handleSelectSuggestion(suggestions[activeIndex].value);
       } else {
         setShowSuggestions(false);
         setActiveIndex(-1);
@@ -125,7 +138,7 @@ function SearchBar({
           onChange={(e) => setSearchValue(e.target.value)}
           onKeyDown={handleKeyDown}
           onFocus={() => {
-            if (mode === "player" && suggestions.length > 0) {
+            if (suggestions.length > 0) {
               setShowSuggestions(true);
             }
           }}
@@ -134,18 +147,21 @@ function SearchBar({
           }
         />
 
-        {mode === "player" && showSuggestions && suggestions.length > 0 && (
+        {showSuggestions && suggestions.length > 0 && (
           <div className="search-suggestions">
-            {suggestions.map((player, index) => (
+            {suggestions.map((item, index) => (
               <button
-                key={player.id}
+                key={item.id}
                 type="button"
                 className={`search-suggestion-item ${
                   index === activeIndex ? "active" : ""
                 }`}
-                onClick={() => handleSelectPlayer(player.name)}
+                onClick={() => handleSelectSuggestion(item.value)}
               >
-                {player.name}
+                <span className="search-suggestion-label">{item.label}</span>
+                {item.meta ? (
+                  <span className="search-suggestion-meta">{item.meta}</span>
+                ) : null}
               </button>
             ))}
           </div>

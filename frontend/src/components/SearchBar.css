@@ -129,3 +129,19 @@
     flex: none;
   }
 }
+.search-suggestion-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.search-suggestion-label {
+  font-weight: 500;
+}
+
+.search-suggestion-meta {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}

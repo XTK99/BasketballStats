@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import "./App.css";
 
 import { getPlayerGames, getTeamGames, getBoxScore } from "./api/nbaApi";
@@ -63,7 +63,7 @@ function App() {
   const [isBoxScoreOpen, setIsBoxScoreOpen] = useState(true);
   const [mode, setMode] = useState("player");
   const [viewMode, setViewMode] = useState("dashboard");
-  const [searchValue, setSearchValue] = useState("LeBron James");
+  const [searchValue, setSearchValue] = useState("");
   const [season, setSeason] = useState("2025-26");
   const [last, setLast] = useState(10);
   const [selectedStat, setSelectedStat] = useState("points");
@@ -82,6 +82,17 @@ function App() {
 
   const boxScoreRef = useRef(null);
   const [selectedGame, setSelectedGame] = useState(null);
+
+  useEffect(() => {
+    setSearchValue("");
+    setGames([]);
+    setError("");
+    setSelectedGameId(null);
+    setSelectedGame(null);
+    setBoxScore(null);
+    setBoxScoreError("");
+  }, [mode]);
+
   function updateFilter(key, value) {
     setFilters((prev) => ({ ...prev, [key]: value }));
   }
