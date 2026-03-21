@@ -1,186 +1,74 @@
-const teamNameMap = {
-  ATL: "atlanta hawks",
-  BOS: "boston celtics",
-  BKN: "brooklyn nets",
-  CHA: "charlotte hornets",
-  CHI: "chicago bulls",
-  CLE: "cleveland cavaliers",
-  DAL: "dallas mavericks",
-  DEN: "denver nuggets",
-  DET: "detroit pistons",
-  GSW: "golden state warriors",
-  HOU: "houston rockets",
-  IND: "indiana pacers",
-  LAC: "los angeles clippers",
-  LAL: "los angeles lakers",
-  MEM: "memphis grizzlies",
-  MIA: "miami heat",
-  MIL: "milwaukee bucks",
-  MIN: "minnesota timberwolves",
-  NOP: "new orleans pelicans",
-  NYK: "new york knicks",
-  OKC: "oklahoma city thunder",
-  ORL: "orlando magic",
-  PHI: "philadelphia 76ers",
-  PHX: "phoenix suns",
-  POR: "portland trail blazers",
-  SAC: "sacramento kings",
-  SAS: "san antonio spurs",
-  TOR: "toronto raptors",
-  UTA: "utah jazz",
-  WAS: "washington wizards",
-};
+function matchesThreshold(game, filter) {
+  const statKey =
+    filter?.stat || filter?.selectedStat || filter?.key || filter?.field;
 
-function compareValue(gameValue, operator, filterValue) {
+  const operator = filter?.operator || filter?.comparison || ">=";
+  const thresholdValue = Number(
+    filter?.value ?? filter?.line ?? filter?.threshold ?? filter?.target,
+  );
+
+  const gameValue = Number(game?.[statKey]);
+
+  if (!statKey) return true;
+  if (!Number.isFinite(thresholdValue)) return true;
+  if (!Number.isFinite(gameValue)) return false;
+
   switch (operator) {
     case ">":
-      return gameValue > filterValue;
+      return gameValue > thresholdValue;
     case ">=":
-      return gameValue >= filterValue;
+      return gameValue >= thresholdValue;
     case "<":
-      return gameValue < filterValue;
+      return gameValue < thresholdValue;
     case "<=":
-      return gameValue <= filterValue;
+      return gameValue <= thresholdValue;
     case "=":
-      return gameValue === filterValue;
+    case "==":
+      return gameValue === thresholdValue;
     default:
       return true;
   }
 }
 
-function getOpponentFromMatchup(matchup) {
-  if (!matchup) return "";
-  const parts = String(matchup).trim().split(/\s+/);
-  return parts[2] || "";
-}
+export function filterGames(games = [], filters = {}) {
+  const locations = Array.isArray(filters.locations)
+    ? filters.locations.map((value) => String(value).toLowerCase())
+    : ["home", "away"];
 
-function getOpponentSearchText(matchup) {
-  const abbreviation = getOpponentFromMatchup(matchup).toUpperCase();
-  const fullName = teamNameMap[abbreviation] || "";
-  return `${abbreviation} ${fullName}`.trim().toLowerCase();
-}
+  const results = Array.isArray(filters.results)
+    ? filters.results.map((value) => String(value).toLowerCase())
+    : ["win", "loss"];
 
-function getNormalizedResult(game) {
-  return String(game.WL ?? game.wl ?? game.result ?? "")
+  const opponentFilter = String(filters.opponent || "")
     .trim()
-    .toUpperCase();
-}
+    .toLowerCase();
 
-function getNormalizedMatchup(game) {
-  return String(game.matchup ?? game.MATCHUP ?? "").trim();
-}
-
-function getFirstNumericValue(game, keys) {
-  for (const key of keys) {
-    const rawValue = game?.[key];
-
-    if (rawValue === undefined || rawValue === null || rawValue === "") {
-      continue;
-    }
-
-    const numericValue = Number(rawValue);
-
-    if (!Number.isNaN(numericValue)) {
-      return numericValue;
-    }
-  }
-
-  return NaN;
-}
-
-function getGameStatValue(game, stat) {
-  const statKeyMap = {
-    points: ["points", "PTS", "pts"],
-    rebounds: ["rebounds", "REB", "reb"],
-    assists: ["assists", "AST", "ast"],
-    steals: ["steals", "STL", "stl"],
-    blocks: ["blocks", "BLK", "blk"],
-    turnovers: ["turnovers", "TOV", "tov"],
-    minutes: ["minutes", "MIN", "min"],
-
-    FGM: ["FGM", "fgm", "fieldGoalsMade", "field_goals_made", "madeFieldGoals"],
-    FGA: [
-      "FGA",
-      "fga",
-      "fieldGoalsAttempted",
-      "field_goals_attempted",
-      "attemptedFieldGoals",
-    ],
-    "3PM": [
-      "FG3M",
-      "fg3m",
-      "3PM",
-      "threePm",
-      "threesMade",
-      "threePointersMade",
-      "madeThrees",
-    ],
-    "3PA": [
-      "FG3A",
-      "fg3a",
-      "3PA",
-      "threePa",
-      "threesAttempted",
-      "threePointersAttempted",
-      "attemptedThrees",
-    ],
-    FTM: ["FTM", "ftm", "freeThrowsMade"],
-    FTA: ["FTA", "fta", "freeThrowsAttempted"],
-  };
-
-  const possibleKeys = statKeyMap[stat] || [stat];
-  return getFirstNumericValue(game, possibleKeys);
-}
-
-export function filterGames(games, filters) {
-  if (!games || games.length === 0) return [];
+  const thresholdFilters = Array.isArray(filters.thresholds)
+    ? filters.thresholds
+    : [];
 
   return games.filter((game) => {
-    // LOCATION
-    if (filters.location !== "all" && game.location !== filters.location) {
-      return false;
-    }
+    const gameLocation = String(game.location || "").toLowerCase();
+    const gameResult = String(game.result || "").toLowerCase();
+    const gameOpponent = String(game.opponent || "").toLowerCase();
 
-    // RESULT
-    if (filters.result !== "all" && game.result !== filters.result) {
-      return false;
-    }
+    const matchesLocation =
+      locations.length === 0 || locations.includes(gameLocation);
 
-    // OPPONENT
-    if (filters.opponent) {
-      const opp = filters.opponent.toLowerCase();
-      if (!game.opponent.toLowerCase().includes(opp)) {
-        return false;
-      }
-    }
+    const matchesResult = results.length === 0 || results.includes(gameResult);
 
-    // THRESHOLDS
-    for (const filter of filters.thresholds) {
-      const gameValue = game[filter.stat];
+    const matchesOpponent =
+      !opponentFilter || gameOpponent.includes(opponentFilter);
 
-      if (gameValue == null) return false;
+    const matchesAllThresholds = thresholdFilters.every((filter) =>
+      matchesThreshold(game, filter),
+    );
 
-      switch (filter.operator) {
-        case ">=":
-          if (!(gameValue >= filter.value)) return false;
-          break;
-        case "<=":
-          if (!(gameValue <= filter.value)) return false;
-          break;
-        case ">":
-          if (!(gameValue > filter.value)) return false;
-          break;
-        case "<":
-          if (!(gameValue < filter.value)) return false;
-          break;
-        case "=":
-          if (!(gameValue === filter.value)) return false;
-          break;
-        default:
-          return false;
-      }
-    }
-
-    return true;
+    return (
+      matchesLocation &&
+      matchesResult &&
+      matchesOpponent &&
+      matchesAllThresholds
+    );
   });
 }

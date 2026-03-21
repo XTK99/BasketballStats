@@ -13,12 +13,19 @@ import { filterGames } from "./utils/filterGames";
 import { calculateFilteredAverages } from "./utils/calculateFilteredAverages";
 
 const INITIAL_FILTERS = {
-  location: "all",
-  result: "all",
+  locations: ["home", "away"],
+  results: ["win", "loss"],
   opponent: "",
   thresholds: [],
 };
+function toggleFilterValue(values, target) {
+  if (values.includes(target)) {
+    if (values.length === 1) return values;
+    return values.filter((value) => value !== target);
+  }
 
+  return [...values, target];
+}
 function getThresholdStatKey(filter) {
   return (
     filter?.stat || filter?.selectedStat || filter?.key || filter?.field || ""
@@ -167,6 +174,33 @@ function App() {
     setTeamFilters((prev) => ({
       ...prev,
       thresholds: prev.thresholds.filter((_, index) => index !== indexToRemove),
+    }));
+  }
+  function togglePlayerLocation(location) {
+    setPlayerFilters((prev) => ({
+      ...prev,
+      locations: toggleFilterValue(prev.locations, location),
+    }));
+  }
+
+  function togglePlayerResult(result) {
+    setPlayerFilters((prev) => ({
+      ...prev,
+      results: toggleFilterValue(prev.results, result),
+    }));
+  }
+
+  function toggleTeamLocation(location) {
+    setTeamFilters((prev) => ({
+      ...prev,
+      locations: toggleFilterValue(prev.locations, location),
+    }));
+  }
+
+  function toggleTeamResult(result) {
+    setTeamFilters((prev) => ({
+      ...prev,
+      results: toggleFilterValue(prev.results, result),
     }));
   }
 
@@ -390,6 +424,13 @@ function App() {
       opponentFilter: teamMatchupOpponent,
     });
   }, [teamGames, teamSelectedStat, teamSelectedLine, teamMatchupOpponent]);
+  function clearPlayerFilters() {
+    setPlayerFilters(INITIAL_FILTERS);
+  }
+
+  function clearTeamFilters() {
+    setTeamFilters(INITIAL_FILTERS);
+  }
 
   return (
     <div className="app-shell">
@@ -452,6 +493,9 @@ function App() {
               isBoxScoreOpen={isBoxScoreOpen}
               setIsBoxScoreOpen={setIsBoxScoreOpen}
               boxScoreRef={boxScoreRef}
+              onToggleLocation={togglePlayerLocation}
+              onToggleResult={togglePlayerResult}
+              onClearFilters={clearPlayerFilters}
             />
           }
           teamView={
@@ -479,6 +523,9 @@ function App() {
               selectedLine={teamSelectedLine}
               propInsights={teamPropInsights}
               matchupSnapshot={teamMatchupSnapshot}
+              onToggleLocation={toggleTeamLocation}
+              onToggleResult={toggleTeamResult}
+              onClearFilters={clearTeamFilters}
             />
           }
         />

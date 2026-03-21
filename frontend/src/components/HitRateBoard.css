@@ -28,13 +28,16 @@
 
 .hit-rate-board-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
 }
 
 .hit-rate-board-card {
+  min-height: 165px;
+  min-width: 0;
   border-radius: 16px;
-  padding: 16px;
+  padding: 14px;
   border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.03);
   transition:

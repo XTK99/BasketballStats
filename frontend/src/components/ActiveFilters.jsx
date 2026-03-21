@@ -1,24 +1,29 @@
 import "./ActiveFilters.css";
 
 function ActiveFilters({
-  locationFilter,
-  resultFilter,
-  opponentFilter,
-  thresholdFilters,
+  locations = [],
+  results = [],
+  thresholdFilters = [],
   onRemoveThresholdFilter,
 }) {
   const normalFilters = [];
 
-  if (locationFilter !== "all") {
-    normalFilters.push({ label: `Location: ${locationFilter}` });
+  const allLocationsSelected =
+    locations.includes("home") && locations.includes("away");
+
+  const allResultsSelected =
+    results.includes("win") && results.includes("loss");
+
+  if (!allLocationsSelected) {
+    normalFilters.push({
+      label: `Location: ${locations.join(", ") || "none"}`,
+    });
   }
 
-  if (resultFilter !== "all") {
-    normalFilters.push({ label: `Result: ${resultFilter}` });
-  }
-
-  if (opponentFilter.trim()) {
-    normalFilters.push({ label: `Opponent: ${opponentFilter.trim()}` });
+  if (!allResultsSelected) {
+    normalFilters.push({
+      label: `Result: ${results.join(", ") || "none"}`,
+    });
   }
 
   const hasFilters = normalFilters.length > 0 || thresholdFilters.length > 0;
@@ -26,36 +31,26 @@ function ActiveFilters({
   if (!hasFilters) return null;
 
   return (
-    <div className="active-filters-panel">
-      <h3 className="panel-title">Active Filters</h3>
-
-      <div className="active-filters-list">
-        {normalFilters.map((filter) => (
-          <div key={filter.label} className="filter-pill">
-            <span className="filter-pill-label">{filter.label}</span>
-          </div>
+    <section className="active-filters-section">
+      <div className="active-filters">
+        {normalFilters.map((filter, index) => (
+          <span key={index} className="active-filter-pill">
+            {filter.label}
+          </span>
         ))}
 
         {thresholdFilters.map((filter, index) => (
-          <div
+          <button
             key={`${filter.stat}-${filter.operator}-${filter.value}-${index}`}
-            className="filter-pill"
+            type="button"
+            className="active-filter-pill removable"
+            onClick={() => onRemoveThresholdFilter(index)}
           >
-            <span className="filter-pill-label">
-              {filter.stat} {filter.operator} {filter.value}
-            </span>
-
-            <button
-              className="filter-pill-remove"
-              onClick={() => onRemoveThresholdFilter(index)}
-              aria-label={`Remove ${filter.stat} ${filter.operator} ${filter.value}`}
-            >
-              ×
-            </button>
-          </div>
+            {filter.stat} {filter.operator} {filter.value} ×
+          </button>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 

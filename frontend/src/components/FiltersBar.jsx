@@ -1,53 +1,62 @@
 import "./FiltersBar.css";
 
 function FiltersBar({
-  locationFilter,
-  setLocationFilter,
-  resultFilter,
-  setResultFilter,
-  opponentFilter,
-  setOpponentFilter,
+  locations = [],
+  results = [],
+  onToggleLocation,
+  onToggleResult,
+  onClearFilters,
 }) {
-  function handleClearFilters() {
-    setLocationFilter("all");
-    setResultFilter("all");
-    setOpponentFilter("");
-  }
-
   return (
     <div className="filters-bar">
       <h3 className="panel-title">Filters</h3>
 
       <div className="filters-controls">
-        <select
-          className="filters-select"
-          value={locationFilter}
-          onChange={(e) => setLocationFilter(e.target.value)}
+        <div className="filter-toggle-group">
+          <span className="filter-group-label">Location</span>
+
+          <button
+            type="button"
+            className={`filter-chip ${locations.includes("home") ? "active" : ""}`}
+            onClick={() => onToggleLocation("home")}
+          >
+            Home
+          </button>
+
+          <button
+            type="button"
+            className={`filter-chip ${locations.includes("away") ? "active" : ""}`}
+            onClick={() => onToggleLocation("away")}
+          >
+            Away
+          </button>
+        </div>
+
+        <div className="filter-toggle-group">
+          <span className="filter-group-label">Result</span>
+
+          <button
+            type="button"
+            className={`filter-chip ${results.includes("win") ? "active" : ""}`}
+            onClick={() => onToggleResult("win")}
+          >
+            Wins
+          </button>
+
+          <button
+            type="button"
+            className={`filter-chip ${results.includes("loss") ? "active" : ""}`}
+            onClick={() => onToggleResult("loss")}
+          >
+            Losses
+          </button>
+        </div>
+
+        <button
+          type="button"
+          className="filters-clear-button"
+          onClick={onClearFilters}
         >
-          <option value="all">All Locations</option>
-          <option value="home">Home</option>
-          <option value="away">Away</option>
-        </select>
-
-        <select
-          className="filters-select"
-          value={resultFilter}
-          onChange={(e) => setResultFilter(e.target.value)}
-        >
-          <option value="all">All Results</option>
-          <option value="win">Wins</option>
-          <option value="loss">Losses</option>
-        </select>
-
-        <input
-          className="filters-input"
-          type="text"
-          value={opponentFilter}
-          onChange={(e) => setOpponentFilter(e.target.value)}
-          placeholder="Filter by opponent (ex: DEN)"
-        />
-
-        <button className="filters-clear-button" onClick={handleClearFilters}>
           Clear Filters
         </button>
       </div>

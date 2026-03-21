@@ -45,9 +45,10 @@ button {
 }
 
 .app-shell {
-  max-width: 1440px;
+  max-width: 1680px;
+  width: min(1680px, calc(100vw - 32px));
   margin: 0 auto;
-  padding: 24px 20px 48px;
+  padding: 20px 16px 40px;
 }
 
 .app-header {

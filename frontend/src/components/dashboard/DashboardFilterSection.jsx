@@ -7,16 +7,18 @@ function DashboardFilterSection({
   filters,
   onUpdateFilter,
   onRemoveThresholdFilter,
+  onToggleLocation,
+  onToggleResult,
+  onClearFilters,
 }) {
   return (
     <section className="panel-card">
       <FiltersBar
-        locationFilter={filters.location}
-        setLocationFilter={(value) => onUpdateFilter("location", value)}
-        resultFilter={filters.result}
-        setResultFilter={(value) => onUpdateFilter("result", value)}
-        opponentFilter={filters.opponent}
-        setOpponentFilter={(value) => onUpdateFilter("opponent", value)}
+        locations={filters.locations}
+        results={filters.results}
+        onToggleLocation={onToggleLocation}
+        onToggleResult={onToggleResult}
+        onClearFilters={onClearFilters}
       />
 
       <ThresholdFilter
@@ -25,9 +27,8 @@ function DashboardFilterSection({
       />
 
       <ActiveFilters
-        locationFilter={filters.location}
-        resultFilter={filters.result}
-        opponentFilter={filters.opponent}
+        locations={filters.locations}
+        results={filters.results}
         thresholdFilters={filters.thresholds}
         onRemoveThresholdFilter={onRemoveThresholdFilter}
       />

@@ -2,7 +2,7 @@ import DashboardHeaderCard from "./DashboardHeaderCard";
 import DashboardFilterSection from "./DashboardFilterSection";
 import SearchBar from "../SearchBar";
 import SummaryCards from "../SummaryCards";
-import MatchupSnapshot from "../MatchupSnapshot";
+
 import PropEdgeCard from "../PropEdgeCard";
 import SplitsPanel from "../SplitsPanel";
 import StatSelector from "../StatSelector";
@@ -37,6 +37,9 @@ function PlayerDashboardView({
   filters,
   onUpdateFilter,
   onRemoveThresholdFilter,
+  onToggleLocation,
+  onToggleResult,
+  onClearFilters,
   averages,
   matchupOpponent,
   selectedStat,
@@ -82,16 +85,12 @@ function PlayerDashboardView({
             filters={filters}
             onUpdateFilter={onUpdateFilter}
             onRemoveThresholdFilter={onRemoveThresholdFilter}
+            onToggleLocation={onToggleLocation}
+            onToggleResult={onToggleResult}
+            onClearFilters={onClearFilters}
           />
 
           <SummaryCards averages={averages} />
-
-          <MatchupSnapshot
-            title="Matchup Snapshot"
-            opponent={matchupOpponent}
-            statLabel={STAT_LABEL_MAP[selectedStat] || selectedStat}
-            snapshot={matchupSnapshot}
-          />
 
           <PropEdgeCard
             title={title}
@@ -120,6 +119,7 @@ function PlayerDashboardView({
             setBoardStat={setBoardStat}
             mode="player"
           />
+
           {isBoxScoreOpen && (
             <BoxScorePanel
               boxScore={boxScore}
@@ -128,6 +128,7 @@ function PlayerDashboardView({
               selectedPlayerName={query}
             />
           )}
+
           <GameLogTable
             games={filteredGames}
             onSelectGame={onSelectGame}
@@ -151,6 +152,7 @@ function PlayerDashboardView({
 
                   <div className="selected-game-actions">
                     <button
+                      type="button"
                       className="collapse-button"
                       onClick={() => setIsBoxScoreOpen((prev) => !prev)}
                     >

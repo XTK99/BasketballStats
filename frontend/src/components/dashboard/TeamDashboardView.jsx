@@ -35,6 +35,9 @@ function TeamDashboardView({
   filters,
   onUpdateFilter,
   onRemoveThresholdFilter,
+  onToggleLocation,
+  onToggleResult,
+  onClearFilters,
   averages,
   matchupOpponent,
   selectedStat,
@@ -71,6 +74,9 @@ function TeamDashboardView({
             filters={filters}
             onUpdateFilter={onUpdateFilter}
             onRemoveThresholdFilter={onRemoveThresholdFilter}
+            onToggleLocation={onToggleLocation}
+            onToggleResult={onToggleResult}
+            onClearFilters={onClearFilters}
           />
 
           <SummaryCards averages={averages} />

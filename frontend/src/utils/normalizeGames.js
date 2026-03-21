@@ -188,6 +188,15 @@ export function normalizeGame(game) {
     0,
   );
 
+  const location =
+    matchupInfo.isHome === true
+      ? "home"
+      : matchupInfo.isHome === false
+        ? "away"
+        : "";
+
+  const result = wl === "W" ? "win" : wl === "L" ? "loss" : "";
+
   return {
     gameId: getValue(game, ["gameId", "GAME_ID", "Game_ID"], ""),
     gameDate: getValue(game, ["gameDate", "GAME_DATE", "date"], ""),
@@ -196,14 +205,9 @@ export function normalizeGame(game) {
     matchup,
     opponent: matchupInfo.opponent,
     isHome: matchupInfo.isHome,
-    location:
-      matchupInfo.isHome === true
-        ? "Home"
-        : matchupInfo.isHome === false
-          ? "Away"
-          : "Unknown",
+    location,
     wl,
-    result: wl,
+    result,
 
     minutes: getNumberValue(game, ["minutes", "MIN", "min"], 0),
     points: getNumberValue(game, ["points", "PTS", "pts"], 0),

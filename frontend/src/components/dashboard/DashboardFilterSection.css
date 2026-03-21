@@ -1,0 +1,11 @@
+.panel-card {
+  border-radius: 18px;
+}
+
+.panel-card .filters-bar {
+  margin-bottom: 14px;
+}
+
+.panel-card .active-filters-section {
+  margin-top: 14px;
+}
