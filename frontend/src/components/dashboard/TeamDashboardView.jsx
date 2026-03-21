@@ -109,6 +109,8 @@ function TeamDashboardView({
               games={filteredGames}
               selectedStat={selectedStat}
               mode="team"
+              onSelectGame={onSelectGame}
+              selectedGameId={selectedGameId}
             />
           </section>
 
