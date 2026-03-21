@@ -1,70 +1,61 @@
+import "./ActiveFilters.css";
+
 function ActiveFilters({
   locationFilter,
   resultFilter,
   opponentFilter,
   thresholdFilters,
-  onRemoveLocationFilter,
-  onRemoveResultFilter,
-  onRemoveOpponentFilter,
   onRemoveThresholdFilter,
 }) {
-  const filterChips = [];
+  const normalFilters = [];
 
   if (locationFilter !== "all") {
-    filterChips.push({
-      key: "location",
-      label: `Location: ${locationFilter}`,
-      onRemove: onRemoveLocationFilter,
-    });
+    normalFilters.push({ label: `Location: ${locationFilter}` });
   }
 
   if (resultFilter !== "all") {
-    filterChips.push({
-      key: "result",
-      label: `Result: ${resultFilter}`,
-      onRemove: onRemoveResultFilter,
-    });
+    normalFilters.push({ label: `Result: ${resultFilter}` });
   }
 
   if (opponentFilter.trim()) {
-    filterChips.push({
-      key: "opponent",
-      label: `Opponent: ${opponentFilter.toUpperCase()}`,
-      onRemove: onRemoveOpponentFilter,
-    });
+    normalFilters.push({ label: `Opponent: ${opponentFilter.trim()}` });
   }
 
-  thresholdFilters.forEach((filter, index) => {
-    filterChips.push({
-      key: `${filter.stat}-${filter.operator}-${filter.value}-${index}`,
-      label: `${filter.stat} ${filter.operator} ${filter.value}`,
-      onRemove: () => onRemoveThresholdFilter(index),
-    });
-  });
+  const hasFilters = normalFilters.length > 0 || thresholdFilters.length > 0;
 
-  if (filterChips.length === 0) {
-    return null;
-  }
+  if (!hasFilters) return null;
 
   return (
-    <section className="panel-card">
+    <div className="active-filters-panel">
       <h3 className="panel-title">Active Filters</h3>
 
-      <div className="active-filters">
-        {filterChips.map((chip) => (
-          <span key={chip.key} className="filter-pill">
-            {chip.label}
+      <div className="active-filters-list">
+        {normalFilters.map((filter) => (
+          <div key={filter.label} className="filter-pill">
+            <span className="filter-pill-label">{filter.label}</span>
+          </div>
+        ))}
+
+        {thresholdFilters.map((filter, index) => (
+          <div
+            key={`${filter.stat}-${filter.operator}-${filter.value}-${index}`}
+            className="filter-pill"
+          >
+            <span className="filter-pill-label">
+              {filter.stat} {filter.operator} {filter.value}
+            </span>
+
             <button
-              type="button"
               className="filter-pill-remove"
-              onClick={chip.onRemove}
+              onClick={() => onRemoveThresholdFilter(index)}
+              aria-label={`Remove ${filter.stat} ${filter.operator} ${filter.value}`}
             >
               ×
             </button>
-          </span>
+          </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }
 

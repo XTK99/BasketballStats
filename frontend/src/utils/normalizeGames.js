@@ -8,6 +8,12 @@ function getValue(obj, keys, fallback = 0) {
   return fallback;
 }
 
+function getNumberValue(obj, keys, fallback = 0) {
+  const value = getValue(obj, keys, fallback);
+  const num = Number(value);
+  return Number.isFinite(num) ? num : fallback;
+}
+
 function parseMatchup(matchup = "") {
   if (!matchup || typeof matchup !== "string") {
     return {
@@ -144,7 +150,45 @@ export function normalizeGame(game) {
   const estimatedGameStartTs = estimateGameStartTs(game);
   const finalGameStartTs = actualGameStartTs ?? estimatedGameStartTs;
 
-  const normalized = {
+  const wl = String(getValue(game, ["wl", "WL", "result"], "")).toUpperCase();
+
+  const fg3m = getNumberValue(
+    game,
+    [
+      "fg3m",
+      "FG3M",
+      "FG3_M",
+      "threePm",
+      "3PM",
+      "threesMade",
+      "threePointersMade",
+      "threePointsMade",
+      "fg3Made",
+      "fgm3",
+      "FGM3",
+      "threePointMade",
+      "three_point_made",
+    ],
+    0,
+  );
+
+  const fg3a = getNumberValue(
+    game,
+    [
+      "fg3a",
+      "FG3A",
+      "FG3_A",
+      "threePa",
+      "3PA",
+      "threesAttempted",
+      "threePointersAttempted",
+      "threePointsAttempted",
+      "fg3Attempted",
+    ],
+    0,
+  );
+
+  return {
     gameId: getValue(game, ["gameId", "GAME_ID", "Game_ID"], ""),
     gameDate: getValue(game, ["gameDate", "GAME_DATE", "date"], ""),
     gameStartTs: finalGameStartTs,
@@ -152,37 +196,48 @@ export function normalizeGame(game) {
     matchup,
     opponent: matchupInfo.opponent,
     isHome: matchupInfo.isHome,
-    wl: String(getValue(game, ["wl", "WL", "result"], "")).toUpperCase(),
+    location:
+      matchupInfo.isHome === true
+        ? "Home"
+        : matchupInfo.isHome === false
+          ? "Away"
+          : "Unknown",
+    wl,
+    result: wl,
 
-    minutes: getValue(game, ["minutes", "MIN", "min"], 0),
-    points: getValue(game, ["points", "PTS", "pts"], 0),
-    rebounds: getValue(game, ["rebounds", "REB", "reb"], 0),
-    assists: getValue(game, ["assists", "AST", "ast"], 0),
-    steals: getValue(game, ["steals", "STL", "stl"], 0),
-    blocks: getValue(game, ["blocks", "BLK", "blk"], 0),
-    turnovers: getValue(game, ["turnovers", "TOV", "tov"], 0),
+    minutes: getNumberValue(game, ["minutes", "MIN", "min"], 0),
+    points: getNumberValue(game, ["points", "PTS", "pts"], 0),
+    rebounds: getNumberValue(game, ["rebounds", "REB", "reb"], 0),
+    assists: getNumberValue(game, ["assists", "AST", "ast"], 0),
+    steals: getNumberValue(game, ["steals", "STL", "stl"], 0),
+    blocks: getNumberValue(game, ["blocks", "BLK", "blk"], 0),
+    turnovers: getNumberValue(game, ["turnovers", "TOV", "tov"], 0),
 
-    teamScore: getValue(
+    teamScore: getNumberValue(
       game,
       ["teamScore", "TEAM_SCORE", "score", "teamPts"],
-      null,
+      0,
     ),
 
-    opponentScore: getValue(
+    opponentScore: getNumberValue(
       game,
       ["opponentScore", "OPPONENT_SCORE", "oppScore", "opponentPts", "OPP_PTS"],
-      null,
+      0,
     ),
 
-    fgm: getValue(game, ["fgm", "FGM", "fieldGoalsMade", "madeFieldGoals"], 0),
+    fgm: getNumberValue(
+      game,
+      ["fgm", "FGM", "fieldGoalsMade", "madeFieldGoals"],
+      0,
+    ),
 
-    fga: getValue(
+    fga: getNumberValue(
       game,
       ["fga", "FGA", "fieldGoalsAttempted", "attemptedFieldGoals"],
       0,
     ),
 
-    fgPct: getValue(
+    fgPct: getNumberValue(
       game,
       [
         "fgPct",
@@ -195,39 +250,12 @@ export function normalizeGame(game) {
       0,
     ),
 
-    fg3m: getValue(
-      game,
-      [
-        "fg3m",
-        "FG3M",
-        "FG3_M",
-        "threePm",
-        "3PM",
-        "threesMade",
-        "threePointersMade",
-        "threePointsMade",
-        "fg3Made",
-      ],
-      0,
-    ),
+    fg3m,
+    fg3a,
+    threesMade: fg3m,
+    threesAttempted: fg3a,
 
-    fg3a: getValue(
-      game,
-      [
-        "fg3a",
-        "FG3A",
-        "FG3_A",
-        "threePa",
-        "3PA",
-        "threesAttempted",
-        "threePointersAttempted",
-        "threePointsAttempted",
-        "fg3Attempted",
-      ],
-      0,
-    ),
-
-    fg3Pct: getValue(
+    fg3Pct: getNumberValue(
       game,
       [
         "fg3Pct",
@@ -240,11 +268,11 @@ export function normalizeGame(game) {
       0,
     ),
 
-    ftm: getValue(game, ["ftm", "FTM", "freeThrowsMade"], 0),
+    ftm: getNumberValue(game, ["ftm", "FTM", "freeThrowsMade"], 0),
 
-    fta: getValue(game, ["fta", "FTA", "freeThrowsAttempted"], 0),
+    fta: getNumberValue(game, ["fta", "FTA", "freeThrowsAttempted"], 0),
 
-    ftPct: getValue(
+    ftPct: getNumberValue(
       game,
       [
         "ftPct",
@@ -257,11 +285,8 @@ export function normalizeGame(game) {
       0,
     ),
   };
-
-  return normalized;
 }
 
 export function normalizeGames(games = []) {
-  const normalizedGames = games.map(normalizeGame);
-  return normalizedGames;
+  return games.map(normalizeGame);
 }

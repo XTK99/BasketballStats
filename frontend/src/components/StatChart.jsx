@@ -47,21 +47,19 @@ function getTeamColor(teamAbbreviation) {
 }
 
 function getReadableTeamColor(teamAbbreviation) {
-  const darkTeams = new Set(["BKN", "DEN", "MIN", "NOP", "UTA", "WAS", "CLE"]);
+  const color = getTeamColor(teamAbbreviation);
 
-  if (darkTeams.has(teamAbbreviation)) {
-    return "#93c5fd";
+  const r = parseInt(color.slice(1, 3), 16);
+  const g = parseInt(color.slice(3, 5), 16);
+  const b = parseInt(color.slice(5, 7), 16);
+
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+  if (brightness < 120) {
+    return `rgb(${Math.min(r + 80, 255)}, ${Math.min(g + 80, 255)}, ${Math.min(b + 80, 255)})`;
   }
 
-  if (teamAbbreviation === "LAL") {
-    return "#facc15";
-  }
-
-  if (teamAbbreviation === "SAS") {
-    return "#e5e7eb";
-  }
-
-  return getTeamColor(teamAbbreviation);
+  return color;
 }
 
 function getResultColor(result) {
@@ -72,29 +70,63 @@ function getResultColor(result) {
 
 function getChartStatValue(game, stat) {
   const statKeyMap = {
+    minutes: ["minutes", "MIN", "min"],
     points: ["points", "PTS", "pts"],
     rebounds: ["rebounds", "REB", "reb"],
     assists: ["assists", "AST", "ast"],
     steals: ["steals", "STL", "stl"],
     blocks: ["blocks", "BLK", "blk"],
     turnovers: ["turnovers", "TOV", "tov"],
-    minutes: ["minutes", "MIN", "min"],
+
     FGM: ["fgm", "FGM"],
     FGA: ["fga", "FGA"],
     "3PM": ["fg3m", "FG3M", "3PM", "threePm"],
     "3PA": ["fg3a", "FG3A", "3PA", "threePa"],
     FTM: ["ftm", "FTM"],
     FTA: ["fta", "FTA"],
+
+    "FG%": ["fgPct", "fg_pct", "FG_PCT", "fgPercentage", "fieldGoalPct"],
+    "3P%": [
+      "fg3Pct",
+      "fg3_pct",
+      "FG3_PCT",
+      "fg3Percentage",
+      "threePtPct",
+      "threePointPct",
+    ],
+    "FT%": ["ftPct", "ft_pct", "FT_PCT", "ftPercentage", "freeThrowPct"],
+
+    fieldGoalPct: ["fieldGoalPct", "fgPct", "fg_pct", "FG_PCT", "fgPercentage"],
+    threePointPct: [
+      "threePointPct",
+      "fg3Pct",
+      "fg3_pct",
+      "FG3_PCT",
+      "fg3Percentage",
+      "threePtPct",
+    ],
+    freeThrowPct: ["freeThrowPct", "ftPct", "ft_pct", "FT_PCT", "ftPercentage"],
   };
+
+  const percentageStats = new Set([
+    "FG%",
+    "3P%",
+    "FT%",
+    "fieldGoalPct",
+    "threePointPct",
+    "freeThrowPct",
+  ]);
 
   const possibleKeys = statKeyMap[stat] || [stat];
 
   for (const key of possibleKeys) {
     const rawValue = game[key];
+
     if (rawValue !== undefined && rawValue !== null && rawValue !== "") {
       const numericValue = Number(rawValue);
+
       if (!Number.isNaN(numericValue)) {
-        return numericValue;
+        return percentageStats.has(stat) ? numericValue * 100 : numericValue;
       }
     }
   }
@@ -104,24 +136,39 @@ function getChartStatValue(game, stat) {
 
 function formatStatLabel(stat) {
   const labels = {
+    minutes: "Minutes",
     points: "Points",
     rebounds: "Rebounds",
     assists: "Assists",
     steals: "Steals",
     blocks: "Blocks",
     turnovers: "Turnovers",
-    minutes: "Minutes",
     FGM: "FGM",
     FGA: "FGA",
     "3PM": "3PM",
     "3PA": "3PA",
     FTM: "FTM",
     FTA: "FTA",
+    "FG%": "FG%",
+    "3P%": "3P%",
+    "FT%": "FT%",
+    fieldGoalPct: "FG%",
+    threePointPct: "3P%",
+    freeThrowPct: "FT%",
   };
 
   return labels[stat] || stat;
 }
-
+function getFirstNumber(game, keys) {
+  for (const key of keys) {
+    const value = game[key];
+    if (value !== undefined && value !== null && value !== "") {
+      const numericValue = Number(value);
+      if (!Number.isNaN(numericValue)) return numericValue;
+    }
+  }
+  return null;
+}
 function formatGameDate(dateString) {
   if (!dateString) return "";
 
@@ -164,17 +211,14 @@ function parseMatchupTeams(matchup = "") {
   return { awayTeam: "", homeTeam: "", separator: "" };
 }
 
-function formatGameScore(teamScore, opponentScore) {
-  if (
-    teamScore === null ||
-    teamScore === undefined ||
-    opponentScore === null ||
-    opponentScore === undefined
-  ) {
-    return "Score unavailable";
+function formatTooltipValue(stat, value) {
+  if (value == null) return "0";
+
+  if (["FG%", "3P%", "FT%"].includes(stat)) {
+    return `${value.toFixed(1)}%`;
   }
 
-  return `${teamScore} - ${opponentScore}`;
+  return value;
 }
 
 function CustomTooltip({ active, payload, selectedStat }) {
@@ -216,13 +260,6 @@ function CustomTooltip({ active, payload, selectedStat }) {
         </span>
       </div>
 
-      <div style={{ marginBottom: 6, fontSize: 14, color: "#cbd5e1" }}>
-        Score:{" "}
-        <span style={{ color: "#f8fafc", fontWeight: 600 }}>
-          {formatGameScore(point.teamScore, point.opponentScore)}
-        </span>
-      </div>
-
       {point.played === false ? (
         <div style={{ color: "#f8fafc", fontSize: 14 }}>
           {formatStatLabel(selectedStat)}:{" "}
@@ -232,7 +269,7 @@ function CustomTooltip({ active, payload, selectedStat }) {
         <div style={{ color: "#60a5fa", fontSize: 14 }}>
           {formatStatLabel(selectedStat)}:{" "}
           <span style={{ color: "#f8fafc", fontWeight: 600 }}>
-            {point.statValue}
+            {formatTooltipValue(selectedStat, point.statValue)}
           </span>
         </div>
       )}
@@ -257,8 +294,19 @@ function StatChart({
     played: game.played !== false,
     seasonGameNumber: game.seasonGameNumber || null,
     wl: game.wl || game.WL || "",
-    teamScore: game.teamScore ?? null,
-    opponentScore: game.opponentScore ?? null,
+    teamScore: getFirstNumber(game, [
+      "teamScore",
+      "teamPoints",
+      "pts",
+      "PTS",
+      "points",
+    ]),
+    opponentScore: getFirstNumber(game, [
+      "opponentScore",
+      "oppPoints",
+      "opponentPoints",
+      "oppPts",
+    ]),
   }));
 
   const showPropLine =

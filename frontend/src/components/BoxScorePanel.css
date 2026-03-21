@@ -1,0 +1,375 @@
+.boxscore-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.boxscore-game-summary {
+  display: grid;
+  grid-template-columns: 1fr 180px 1fr;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.boxscore-summary-team,
+.boxscore-summary-center,
+.boxscore-team-card {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.boxscore-summary-team {
+  position: relative;
+  padding: 18px;
+  overflow: hidden;
+}
+
+.boxscore-summary-team::before,
+.boxscore-team-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--team-accent, rgba(255, 255, 255, 0.18));
+}
+
+.boxscore-summary-team::after,
+.boxscore-team-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04),
+    transparent 40%
+  );
+}
+
+.boxscore-summary-winner {
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.boxscore-summary-team-name,
+.boxscore-summary-team-code,
+.boxscore-summary-score {
+  position: relative;
+  z-index: 1;
+}
+
+.boxscore-summary-team-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.boxscore-summary-team-code {
+  margin-top: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.boxscore-summary-score {
+  margin-top: 14px;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text);
+}
+
+.boxscore-summary-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 180px;
+  padding: 18px 20px;
+  text-align: center;
+}
+
+.boxscore-summary-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.boxscore-summary-scoreline {
+  margin-top: 8px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.boxscore-team-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.boxscore-team-header {
+  position: relative;
+  z-index: 1;
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.boxscore-team-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.boxscore-team-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.boxscore-team-code {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.boxscore-team-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.boxscore-stat-chip {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.boxscore-stat-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.boxscore-stat-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.boxscore-table-scroll {
+  position: relative;
+  z-index: 1;
+  overflow-x: auto;
+}
+
+.boxscore-table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+}
+
+.boxscore-table thead th {
+  background: rgba(15, 23, 42, 0.96);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
+
+.boxscore-table tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+.boxscore-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.boxscore-player-cell {
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.boxscore-player-name {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.boxscore-player-comment {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.selected-player-row {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 215, 90, 0.18) 0%,
+    rgba(255, 215, 90, 0.08) 35%,
+    transparent 80%
+  );
+}
+
+.selected-player-row td:first-child {
+  box-shadow: inset 3px 0 0 #ffd54f;
+}
+
+.selected-player-row .boxscore-player-name {
+  color: #ffe28a;
+  font-weight: 800;
+}
+
+.selected-player-row .boxscore-player-cell::after {
+  content: "SEARCHED";
+  display: inline-block;
+  width: fit-content;
+  margin-top: 4px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #ffe28a;
+  background: rgba(255, 215, 90, 0.12);
+  border: 1px solid rgba(255, 215, 90, 0.2);
+}
+
+.boxscore-dnp-row {
+  opacity: 0.72;
+}
+
+.boxscore-dnp-row td {
+  color: var(--text-muted);
+}
+
+.team-miami-heat {
+  --team-accent: #98002e;
+}
+
+.team-los-angeles-lakers {
+  --team-accent: #552583;
+}
+
+.team-boston-celtics {
+  --team-accent: #007a33;
+}
+
+.team-golden-state-warriors {
+  --team-accent: #1d428a;
+}
+
+.team-phoenix-suns {
+  --team-accent: #e56020;
+}
+
+.team-denver-nuggets {
+  --team-accent: #0e2240;
+}
+
+.team-houston-rockets {
+  --team-accent: #ce1141;
+}
+
+.team-dallas-mavericks {
+  --team-accent: #00538c;
+}
+
+.team-milwaukee-bucks {
+  --team-accent: #00471b;
+}
+
+.team-new-york-knicks {
+  --team-accent: #f58426;
+}
+
+.team-philadelphia-76ers {
+  --team-accent: #006bb6;
+}
+
+.team-minnesota-timberwolves {
+  --team-accent: #0c2340;
+}
+
+.team-sacramento-kings {
+  --team-accent: #5a2d81;
+}
+
+.team-cleveland-cavaliers {
+  --team-accent: #6f263d;
+}
+
+.team-oklahoma-city-thunder {
+  --team-accent: #007ac1;
+}
+
+@media (max-width: 900px) {
+  .boxscore-game-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .boxscore-summary-center {
+    min-width: unset;
+  }
+
+  .boxscore-team-stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .boxscore-team-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .boxscore-player-cell {
+    min-width: 150px;
+  }
+}
+.viewed-player-card {
+  padding: 16px 18px;
+}
+
+.viewed-player-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.viewed-player-subtitle {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.viewed-player-badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 215, 90, 0.25);
+  background: rgba(255, 215, 90, 0.12);
+  color: #ffe28a;
+  font-size: 0.82rem;
+  font-weight: 700;
+}

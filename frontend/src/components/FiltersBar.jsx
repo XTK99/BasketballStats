@@ -1,3 +1,5 @@
+import "./FiltersBar.css";
+
 function FiltersBar({
   locationFilter,
   setLocationFilter,
@@ -5,15 +7,20 @@ function FiltersBar({
   setResultFilter,
   opponentFilter,
   setOpponentFilter,
-  clearFilters,
 }) {
+  function handleClearFilters() {
+    setLocationFilter("all");
+    setResultFilter("all");
+    setOpponentFilter("");
+  }
+
   return (
-    <section className="panel-card">
+    <div className="filters-bar">
       <h3 className="panel-title">Filters</h3>
 
-      <div className="filters-row">
+      <div className="filters-controls">
         <select
-          className="search-select"
+          className="filters-select"
           value={locationFilter}
           onChange={(e) => setLocationFilter(e.target.value)}
         >
@@ -23,28 +30,28 @@ function FiltersBar({
         </select>
 
         <select
-          className="search-select"
+          className="filters-select"
           value={resultFilter}
           onChange={(e) => setResultFilter(e.target.value)}
         >
           <option value="all">All Results</option>
-          <option value="W">Wins</option>
-          <option value="L">Losses</option>
+          <option value="win">Wins</option>
+          <option value="loss">Losses</option>
         </select>
 
         <input
-          className="search-input"
+          className="filters-input"
           type="text"
           value={opponentFilter}
           onChange={(e) => setOpponentFilter(e.target.value)}
           placeholder="Filter by opponent (ex: DEN)"
         />
 
-        <button className="secondary-button" onClick={clearFilters}>
+        <button className="filters-clear-button" onClick={handleClearFilters}>
           Clear Filters
         </button>
       </div>
-    </section>
+    </div>
   );
 }
 

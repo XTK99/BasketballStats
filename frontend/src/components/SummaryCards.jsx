@@ -1,3 +1,5 @@
+import "./SummaryCards.css";
+
 function SummaryCards({ averages }) {
   if (!averages) return null;
 
@@ -8,6 +10,7 @@ function SummaryCards({ averages }) {
     { label: "STL", value: averages.steals },
     { label: "BLK", value: averages.blocks },
     { label: "TOV", value: averages.turnovers },
+    { label: "3PM", value: averages.threesMade },
     { label: "MIN", value: averages.minutes },
   ];
 
@@ -16,7 +19,7 @@ function SummaryCards({ averages }) {
       {cards.map((card) => (
         <div key={card.label} className="summary-card">
           <div className="summary-label">{card.label}</div>
-          <div className="summary-value">{card.value ?? 0}</div>
+          <div className="summary-value">{card.value ?? "0.0"}</div>
         </div>
       ))}
     </section>

@@ -132,44 +132,52 @@ function getGameStatValue(game, stat) {
   return getFirstNumericValue(game, possibleKeys);
 }
 
-export function filterGames(
-  games,
-  locationFilter,
-  resultFilter,
-  opponentFilter,
-  thresholdFilters = [],
-) {
-  if (!Array.isArray(games)) return [];
+export function filterGames(games, filters) {
+  if (!games || games.length === 0) return [];
 
   return games.filter((game) => {
-    const rawMatchup = getNormalizedMatchup(game);
-    const matchup = rawMatchup.toLowerCase();
-    const wl = getNormalizedResult(game);
-
-    const isAway = matchup.includes("@");
-    const isHome = matchup.includes("vs");
-
-    if (locationFilter === "home" && !isHome) return false;
-    if (locationFilter === "away" && !isAway) return false;
-
-    if (resultFilter !== "all" && wl !== resultFilter) return false;
-
-    if (opponentFilter.trim() !== "") {
-      const search = opponentFilter.trim().toLowerCase();
-      const opponentSearchText = getOpponentSearchText(rawMatchup);
-
-      if (!opponentSearchText.includes(search)) return false;
+    // LOCATION
+    if (filters.location !== "all" && game.location !== filters.location) {
+      return false;
     }
 
-    for (const filter of thresholdFilters) {
-      const value = getGameStatValue(game, filter.stat);
+    // RESULT
+    if (filters.result !== "all" && game.result !== filters.result) {
+      return false;
+    }
 
-      if (Number.isNaN(value)) {
+    // OPPONENT
+    if (filters.opponent) {
+      const opp = filters.opponent.toLowerCase();
+      if (!game.opponent.toLowerCase().includes(opp)) {
         return false;
       }
+    }
 
-      if (!compareValue(value, filter.operator, filter.value)) {
-        return false;
+    // THRESHOLDS
+    for (const filter of filters.thresholds) {
+      const gameValue = game[filter.stat];
+
+      if (gameValue == null) return false;
+
+      switch (filter.operator) {
+        case ">=":
+          if (!(gameValue >= filter.value)) return false;
+          break;
+        case "<=":
+          if (!(gameValue <= filter.value)) return false;
+          break;
+        case ">":
+          if (!(gameValue > filter.value)) return false;
+          break;
+        case "<":
+          if (!(gameValue < filter.value)) return false;
+          break;
+        case "=":
+          if (!(gameValue === filter.value)) return false;
+          break;
+        default:
+          return false;
       }
     }
 

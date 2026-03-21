@@ -1,0 +1,85 @@
+.threshold-filter {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.panel-title {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.threshold-controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.threshold-select,
+.threshold-input,
+.threshold-button {
+  min-height: 42px;
+  border-radius: 10px;
+  font: inherit;
+}
+
+.threshold-select,
+.threshold-input {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  padding: 10px 12px;
+}
+
+.threshold-select {
+  min-width: 140px;
+}
+
+.threshold-operator {
+  min-width: 90px;
+}
+
+.threshold-input {
+  min-width: 120px;
+}
+
+.threshold-input::placeholder {
+  color: var(--text-muted);
+}
+
+.threshold-button {
+  padding: 10px 16px;
+  border: 1px solid rgba(96, 165, 250, 0.4);
+  background: rgba(96, 165, 250, 0.18);
+  color: var(--text);
+  font-weight: 600;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.threshold-button:hover {
+  background: rgba(96, 165, 250, 0.28);
+  border-color: rgba(96, 165, 250, 0.55);
+}
+
+.threshold-select:focus,
+.threshold-input:focus {
+  outline: none;
+  border-color: rgba(96, 165, 250, 0.5);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.12);
+}
+
+@media (max-width: 768px) {
+  .threshold-controls {
+    flex-direction: column;
+  }
+
+  .threshold-select,
+  .threshold-input,
+  .threshold-button {
+    width: 100%;
+  }
+}

@@ -1,20 +1,17 @@
+import "./SearchBar.css";
+
 function SearchBar({
   mode,
   searchValue,
   setSearchValue,
+  season,
+  setSeason,
   last,
   setLast,
   onSearch,
-  loading,
-  onUseFullSeason,
 }) {
-  function handleSubmit(event) {
-    event.preventDefault();
-    onSearch();
-  }
-
   return (
-    <form className="search-row" onSubmit={handleSubmit}>
+    <div className="searchbar">
       <input
         className="search-input"
         type="text"
@@ -23,33 +20,30 @@ function SearchBar({
         placeholder={mode === "player" ? "Search player..." : "Search team..."}
       />
 
-      <div className="last-games-group">
-        <label className="last-games-label" htmlFor="last-games-input">
-          Last
-        </label>
-        <input
-          id="last-games-input"
-          className="search-number last-games-input"
-          type="number"
-          min="1"
-          value={last}
-          onChange={(e) => setLast(Number(e.target.value) || 1)}
-        />
-      </div>
-
-      <button
-        type="button"
-        className="secondary-button full-season-button"
-        onClick={onUseFullSeason}
-        disabled={loading}
+      <select
+        className="search-select"
+        value={season}
+        onChange={(e) => setSeason(e.target.value)}
       >
-        Full Season
-      </button>
+        <option value="2025-26">2025-26</option>
+        <option value="2024-25">2024-25</option>
+      </select>
 
-      <button type="submit" className="search-button" disabled={loading}>
-        {loading ? "Loading..." : "Search"}
+      <select
+        className="search-select"
+        value={last}
+        onChange={(e) => setLast(Number(e.target.value))}
+      >
+        <option value={5}>Last 5</option>
+        <option value={10}>Last 10</option>
+        <option value={20}>Last 20</option>
+        <option value={82}>Full Season</option>
+      </select>
+
+      <button className="search-button" onClick={onSearch}>
+        Search
       </button>
-    </form>
+    </div>
   );
 }
 

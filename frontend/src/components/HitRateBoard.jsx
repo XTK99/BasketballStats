@@ -1,106 +1,186 @@
-function formatStatLabel(stat) {
-  const labels = {
-    points: "Points",
-    rebounds: "Rebounds",
-    assists: "Assists",
-    steals: "Steals",
-    blocks: "Blocks",
-    turnovers: "Turnovers",
-    FGM: "FGM",
-    FGA: "FGA",
-    "3PM": "3PM",
-    "3PA": "3PA",
-    FTM: "FTM",
-    FTA: "FTA",
+import { useMemo } from "react";
+import "./HitRateBoard.css";
+
+const PLAYER_THRESHOLDS = {
+  points: [10, 15, 20, 25, 30],
+  rebounds: [4, 6, 8, 10, 12],
+  assists: [3, 5, 7, 9, 11],
+  steals: [1, 2, 3, 4, 5],
+  blocks: [1, 2, 3, 4, 5],
+  turnovers: [2, 3, 4, 5, 6],
+  minutes: [20, 25, 30, 35, 40],
+  threesMade: [1, 2, 3, 4, 5],
+};
+
+const TEAM_THRESHOLDS = {
+  points: [100, 110, 120, 130, 140],
+  rebounds: [35, 40, 45, 50, 55],
+  assists: [20, 25, 30, 35, 40],
+  steals: [5, 7, 9, 11, 13],
+  blocks: [3, 5, 7, 9, 11],
+  turnovers: [8, 10, 12, 14, 16],
+  minutes: [220, 230, 240, 250, 260],
+  threesMade: [8, 10, 12, 14, 16],
+};
+
+const STAT_LABELS = {
+  points: "Points",
+  rebounds: "Rebounds",
+  assists: "Assists",
+  steals: "Steals",
+  blocks: "Blocks",
+  turnovers: "Turnovers",
+  minutes: "Minutes",
+  threesMade: "3PM",
+};
+
+function getThresholdMap(mode) {
+  return mode === "team" ? TEAM_THRESHOLDS : PLAYER_THRESHOLDS;
+}
+
+function getTierClass(percent) {
+  if (percent >= 80) return "hit-rate-board-card-elite";
+  if (percent >= 65) return "hit-rate-board-card-strong";
+  if (percent >= 45) return "hit-rate-board-card-coinflip";
+  if (percent >= 25) return "hit-rate-board-card-weak";
+  return "hit-rate-board-card-fade";
+}
+
+function getStatValue(game, statKey) {
+  const statAliases = {
+    points: ["points", "PTS"],
+    rebounds: ["rebounds", "REB"],
+    assists: ["assists", "AST"],
+    steals: ["steals", "STL"],
+    blocks: ["blocks", "BLK"],
+    turnovers: ["turnovers", "TOV"],
+    minutes: ["minutes", "MIN"],
+    threesMade: ["threesMade", "threes", "fg3m", "FG3M", "threePointersMade"],
   };
 
-  return labels[stat] || stat;
+  const candidateKeys = statAliases[statKey] || [statKey];
+
+  for (const key of candidateKeys) {
+    const value = Number(game?.[key]);
+    if (Number.isFinite(value)) return value;
+  }
+
+  return null;
 }
 
-function getHitRateTier(percentage) {
-  if (percentage >= 70) return "strong";
-  if (percentage >= 40) return "medium";
-  return "weak";
+function buildHitRateData(games, statKey, threshold) {
+  const validValues = games
+    .map((game) => getStatValue(game, statKey))
+    .filter((value) => value !== null);
+
+  const total = validValues.length;
+  const hits = validValues.filter((value) => value >= threshold).length;
+  const misses = total - hits;
+  const hitRate = total ? (hits / total) * 100 : 0;
+
+  const last5 = validValues.slice(0, 5);
+  const last10 = validValues.slice(0, 10);
+
+  const last5Hits = last5.filter((value) => value >= threshold).length;
+  const last10Hits = last10.filter((value) => value >= threshold).length;
+
+  return {
+    threshold,
+    total,
+    hits,
+    misses,
+    hitRate,
+    last5Hits,
+    last5Total: last5.length,
+    last10Hits,
+    last10Total: last10.length,
+  };
 }
 
-function HitRateBoard({ title, season, stat, setStat, boardData, gameCount }) {
+function HitRateBoard({
+  games = [],
+  mode = "player",
+  selectedStat = "points",
+  boardStat,
+  setBoardStat,
+}) {
+  const activeStat = boardStat || selectedStat;
+  const thresholdMap = getThresholdMap(mode);
+  const statOptions = Object.keys(thresholdMap);
+
+  const boardData = useMemo(() => {
+    const thresholds = thresholdMap[activeStat] || [];
+    return thresholds.map((threshold) =>
+      buildHitRateData(games, activeStat, threshold),
+    );
+  }, [games, activeStat, thresholdMap]);
+
+  const statLabel = STAT_LABELS[activeStat] || activeStat;
+  const title =
+    mode === "team"
+      ? `${statLabel} Team Hit Rate Board`
+      : `${statLabel} Hit Rate Board`;
+
   return (
     <section className="panel-card">
       <div className="hit-rate-board-topbar">
-        <div className="hit-rate-board-header">
-          <h3 className="panel-title hit-rate-board-title">
-            {formatStatLabel(stat)} Hit Rate Board
-          </h3>
-          <p className="results-meta">
-            {title} • Season {season} • {gameCount} games
-          </p>
+        <div>
+          <h3 className="panel-title hit-rate-board-title">{title}</h3>
+          <div className="results-meta">{games.length} games</div>
         </div>
 
-        <div className="hit-rate-board-controls">
-          <label className="hit-rate-board-select-label" htmlFor="board-stat">
-            Stat
-          </label>
-          <select
-            id="board-stat"
-            className="hit-rate-board-select"
-            value={stat}
-            onChange={(e) => setStat(e.target.value)}
-          >
-            <option value="points">Points</option>
-            <option value="rebounds">Rebounds</option>
-            <option value="assists">Assists</option>
-            <option value="steals">Steals</option>
-            <option value="blocks">Blocks</option>
-            <option value="turnovers">Turnovers</option>
-            <option value="FGM">FGM</option>
-            <option value="FGA">FGA</option>
-            <option value="3PM">3PM</option>
-            <option value="3PA">3PA</option>
-          </select>
-        </div>
+        <select
+          value={activeStat}
+          onChange={(event) => setBoardStat(event.target.value)}
+          className="hit-rate-board-select"
+        >
+          {statOptions.map((stat) => (
+            <option key={stat} value={stat}>
+              {STAT_LABELS[stat] || stat}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="hit-rate-board-grid">
-        {boardData.map((item) => {
-          const tier = getHitRateTier(item.percentage);
+        {boardData.map((item) => (
+          <article
+            key={`${activeStat}-${item.threshold}`}
+            className={`hit-rate-board-card ${getTierClass(item.hitRate)}`}
+          >
+            <div className="hit-rate-board-line">
+              {statLabel.toUpperCase()} {item.threshold}+
+            </div>
 
-          return (
-            <div
-              key={item.line}
-              className={`hit-rate-board-card hit-rate-board-card-${tier}`}
-            >
-              <div className="hit-rate-board-line">
-                {formatStatLabel(stat).toUpperCase()} {item.line}+
+            <div className="hit-rate-board-rate">
+              {Math.round(item.hitRate)}%
+            </div>
+
+            <div className="hit-rate-board-detail">
+              {item.hits} / {item.total}
+            </div>
+
+            <div className="hit-rate-board-subdetail">
+              Misses: {item.misses}
+            </div>
+
+            <div className="hit-rate-board-splits">
+              <div className="hit-rate-board-split">
+                <span className="hit-rate-board-split-label">Last 5</span>
+                <span className="hit-rate-board-split-value">
+                  {item.last5Hits} / {item.last5Total}
+                </span>
               </div>
 
-              <div className="hit-rate-board-rate">{item.percentage}%</div>
-
-              <div className="hit-rate-board-detail">
-                {item.hits} / {item.total}
-              </div>
-
-              <div className="hit-rate-board-subdetail">
-                Misses: {item.misses}
-              </div>
-
-              <div className="hit-rate-board-splits">
-                <div className="hit-rate-board-split">
-                  <span className="hit-rate-board-split-label">Last 5</span>
-                  <span className="hit-rate-board-split-value">
-                    {item.last5.hits} / {item.last5.total}
-                  </span>
-                </div>
-
-                <div className="hit-rate-board-split">
-                  <span className="hit-rate-board-split-label">Last 10</span>
-                  <span className="hit-rate-board-split-value">
-                    {item.last10.hits} / {item.last10.total}
-                  </span>
-                </div>
+              <div className="hit-rate-board-split">
+                <span className="hit-rate-board-split-label">Last 10</span>
+                <span className="hit-rate-board-split-value">
+                  {item.last10Hits} / {item.last10Total}
+                </span>
               </div>
             </div>
-          );
-        })}
+          </article>
+        ))}
       </div>
     </section>
   );

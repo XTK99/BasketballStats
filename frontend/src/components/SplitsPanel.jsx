@@ -1,57 +1,43 @@
-function SplitCard({ title, split }) {
+import "./SplitsPanel.css";
+
+function getAveragePoints(games) {
+  if (!games.length) return "-";
+
+  const total = games.reduce((sum, game) => sum + (game.points || 0), 0);
+  return (total / games.length).toFixed(1);
+}
+
+function SplitCard({ label, games }) {
   return (
     <div className="split-card">
-      <div className="split-card-header">
-        <span className="split-card-title">{title}</span>
-        <span className="split-card-count">{split.gameCount} games</span>
-      </div>
-
-      <div className="split-card-grid">
-        <div className="split-stat">
-          <span className="split-stat-label">PTS</span>
-          <span className="split-stat-value">{split.points}</span>
-        </div>
-        <div className="split-stat">
-          <span className="split-stat-label">REB</span>
-          <span className="split-stat-value">{split.rebounds}</span>
-        </div>
-        <div className="split-stat">
-          <span className="split-stat-label">AST</span>
-          <span className="split-stat-value">{split.assists}</span>
-        </div>
-        <div className="split-stat">
-          <span className="split-stat-label">STL</span>
-          <span className="split-stat-value">{split.steals}</span>
-        </div>
-        <div className="split-stat">
-          <span className="split-stat-label">BLK</span>
-          <span className="split-stat-value">{split.blocks}</span>
-        </div>
-        <div className="split-stat">
-          <span className="split-stat-label">TOV</span>
-          <span className="split-stat-value">{split.turnovers}</span>
-        </div>
-        <div className="split-stat">
-          <span className="split-stat-label">MIN</span>
-          <span className="split-stat-value">{split.minutes}</span>
-        </div>
-      </div>
+      <div className="split-card-label">{label}</div>
+      <div className="split-card-value">{getAveragePoints(games)} PTS</div>
+      <div className="split-card-subtext">{games.length} games</div>
     </div>
   );
 }
 
-function SplitsPanel({ splits }) {
-  if (!splits) return null;
+function SplitsPanel({ games }) {
+  if (!games || games.length === 0) return null;
+
+  const homeGames = games.filter((game) => game.matchup?.includes("vs."));
+  const awayGames = games.filter((game) => game.matchup?.includes("@"));
+
+  const winGames = games.filter((game) => game.wl === "W");
+  const lossGames = games.filter((game) => game.wl === "L");
 
   return (
     <section className="panel-card">
-      <h3 className="panel-title">Splits</h3>
+      <div className="splits-header">
+        <h3 className="panel-title">Splits</h3>
+        <span className="splits-subtitle">Average points by situation</span>
+      </div>
 
       <div className="splits-grid">
-        <SplitCard title="Home" split={splits.home} />
-        <SplitCard title="Away" split={splits.away} />
-        <SplitCard title="Wins" split={splits.wins} />
-        <SplitCard title="Losses" split={splits.losses} />
+        <SplitCard label="Home" games={homeGames} />
+        <SplitCard label="Away" games={awayGames} />
+        <SplitCard label="Wins" games={winGames} />
+        <SplitCard label="Losses" games={lossGames} />
       </div>
     </section>
   );

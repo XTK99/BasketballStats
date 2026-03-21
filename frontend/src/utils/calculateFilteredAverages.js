@@ -10,6 +10,7 @@ export function calculateFilteredAverages(games) {
       acc.blocks += Number(game.blocks) || 0;
       acc.turnovers += Number(game.turnovers) || 0;
       acc.minutes += Number(game.minutes) || 0;
+      acc.threesMade += Number(game.threesMade) || 0;
       return acc;
     },
     {
@@ -20,6 +21,7 @@ export function calculateFilteredAverages(games) {
       blocks: 0,
       turnovers: 0,
       minutes: 0,
+      threesMade: 0,
     },
   );
 
@@ -33,5 +35,6 @@ export function calculateFilteredAverages(games) {
     blocks: (totals.blocks / count).toFixed(1),
     turnovers: (totals.turnovers / count).toFixed(1),
     minutes: (totals.minutes / count).toFixed(1),
+    threesMade: (totals.threesMade / count).toFixed(1),
   };
 }

@@ -1,34 +1,18 @@
-function ModeToggle({
-  mode,
-  setMode,
-  setData,
-  setError,
-  setSelectedGame,
-  setBoxScore,
-}) {
-  function handleModeChange(nextMode) {
-    setMode(nextMode);
+import "./ModeToggle.css";
 
-    if (setData) setData(null);
-    if (setError) setError("");
-    if (setSelectedGame) setSelectedGame(null);
-    if (setBoxScore) setBoxScore(null);
-  }
-
+function ModeToggle({ mode, setMode }) {
   return (
     <div className="mode-toggle">
       <button
-        type="button"
-        className={mode === "player" ? "mode-button active" : "mode-button"}
-        onClick={() => handleModeChange("player")}
+        className={`mode-toggle-button ${mode === "player" ? "active" : ""}`}
+        onClick={() => setMode("player")}
       >
         Player
       </button>
 
       <button
-        type="button"
-        className={mode === "team" ? "mode-button active" : "mode-button"}
-        onClick={() => handleModeChange("team")}
+        className={`mode-toggle-button ${mode === "team" ? "active" : ""}`}
+        onClick={() => setMode("team")}
       >
         Team
       </button>
