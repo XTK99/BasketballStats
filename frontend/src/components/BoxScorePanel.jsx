@@ -55,6 +55,7 @@ function BoxScorePanel({
   loading = false,
   error = "",
   selectedPlayerName = "",
+  onSelectPlayer,
 }) {
   if (loading) {
     return (
@@ -234,6 +235,7 @@ function BoxScorePanel({
                     );
 
                     const didNotPlay = Boolean(player?.COMMENT);
+                    const playerName = player?.PLAYER_NAME || "Unknown Player";
 
                     return (
                       <tr
@@ -246,9 +248,16 @@ function BoxScorePanel({
                           .join(" ")}
                       >
                         <td className="boxscore-player-cell">
-                          <span className="boxscore-player-name">
-                            {player?.PLAYER_NAME || "Unknown Player"}
-                          </span>
+                          <button
+                            type="button"
+                            className="boxscore-player-button"
+                            onClick={() => onSelectPlayer?.(playerName)}
+                            disabled={!player?.PLAYER_NAME}
+                          >
+                            <span className="boxscore-player-name">
+                              {playerName}
+                            </span>
+                          </button>
 
                           {player?.COMMENT ? (
                             <span className="boxscore-player-comment">

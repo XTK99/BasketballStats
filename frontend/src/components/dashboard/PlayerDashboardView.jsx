@@ -47,6 +47,7 @@ function PlayerDashboardView({
   selectedGame,
   selectedGameId,
   onSelectGame,
+  onSelectPlayerFromBoxScore,
   boxScore,
   boxScoreLoading,
   boxScoreError,
@@ -151,6 +152,7 @@ function PlayerDashboardView({
               loading={boxScoreLoading}
               error={boxScoreError}
               selectedPlayerName={query}
+              onSelectPlayer={onSelectPlayerFromBoxScore}
             />
           )}
 
