@@ -50,12 +50,61 @@ function isPlayerMatch(playerName, selectedPlayerName) {
   return normalizedPlayer.includes(normalizedSearch);
 }
 
+function getFullTeamName(team) {
+  const city = String(team?.TEAM_CITY || "").trim();
+  const name = String(team?.TEAM_NAME || "").trim();
+  const fullName = `${city} ${name}`.trim();
+
+  if (fullName) return fullName;
+  return String(team?.TEAM_ABBREVIATION || "").trim();
+}
+
+function TeamSummaryCard({ team, score, isWinner, sideClass, onSelectTeam }) {
+  const teamName = getFullTeamName(team);
+  const isClickable = Boolean(teamName);
+
+  const className = [
+    "boxscore-summary-team",
+    sideClass,
+    isWinner ? "boxscore-summary-winner" : "",
+    `team-${slugTeamName(team)}`,
+    isClickable ? "boxscore-summary-team-button" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const content = (
+    <>
+      <div className="boxscore-summary-team-name">{teamName}</div>
+      <div className="boxscore-summary-team-code">
+        {team?.TEAM_ABBREVIATION}
+      </div>
+      <div className="boxscore-summary-score">{score}</div>
+    </>
+  );
+
+  if (!isClickable) {
+    return <div className={className}>{content}</div>;
+  }
+
+  return (
+    <button
+      type="button"
+      className={className}
+      onClick={() => onSelectTeam?.(teamName)}
+    >
+      {content}
+    </button>
+  );
+}
+
 function BoxScorePanel({
   boxScore,
   loading = false,
   error = "",
   selectedPlayerName = "",
   onSelectPlayer,
+  onSelectTeam,
 }) {
   if (loading) {
     return (
@@ -91,26 +140,16 @@ function BoxScorePanel({
   const awayWon = awayPoints > homePoints;
   const homeWon = homePoints > awayPoints;
 
-  const matchedPlayer = players.find((player) =>
-    isPlayerMatch(player?.PLAYER_NAME, selectedPlayerName),
-  );
-
   return (
     <div className="boxscore-panel">
       <div className="boxscore-game-summary">
-        <div
-          className={`boxscore-summary-team boxscore-summary-away ${
-            awayWon ? "boxscore-summary-winner" : ""
-          } team-${slugTeamName(awayTeam)}`}
-        >
-          <div className="boxscore-summary-team-name">
-            {awayTeam?.TEAM_CITY} {awayTeam?.TEAM_NAME}
-          </div>
-          <div className="boxscore-summary-team-code">
-            {awayTeam?.TEAM_ABBREVIATION}
-          </div>
-          <div className="boxscore-summary-score">{awayPoints}</div>
-        </div>
+        <TeamSummaryCard
+          team={awayTeam}
+          score={awayPoints}
+          isWinner={awayWon}
+          sideClass="boxscore-summary-away"
+          onSelectTeam={onSelectTeam}
+        />
 
         <div className="boxscore-summary-center">
           <div className="boxscore-summary-label">Final Score</div>
@@ -119,19 +158,13 @@ function BoxScorePanel({
           </div>
         </div>
 
-        <div
-          className={`boxscore-summary-team boxscore-summary-home ${
-            homeWon ? "boxscore-summary-winner" : ""
-          } team-${slugTeamName(homeTeam)}`}
-        >
-          <div className="boxscore-summary-team-name">
-            {homeTeam?.TEAM_CITY} {homeTeam?.TEAM_NAME}
-          </div>
-          <div className="boxscore-summary-team-code">
-            {homeTeam?.TEAM_ABBREVIATION}
-          </div>
-          <div className="boxscore-summary-score">{homePoints}</div>
-        </div>
+        <TeamSummaryCard
+          team={homeTeam}
+          score={homePoints}
+          isWinner={homeWon}
+          sideClass="boxscore-summary-home"
+          onSelectTeam={onSelectTeam}
+        />
       </div>
 
       {teams.map((team, index) => {
@@ -141,6 +174,8 @@ function BoxScorePanel({
 
         const teamClass = index === 0 ? "team-card-away" : "team-card-home";
         const teamSlugClass = `team-${slugTeamName(team)}`;
+        const teamName = getFullTeamName(team);
+        const isTeamClickable = Boolean(teamName);
 
         return (
           <section
@@ -149,12 +184,25 @@ function BoxScorePanel({
           >
             <div className="boxscore-team-header">
               <div className="boxscore-team-title-row">
-                <h4 className="boxscore-team-title">
-                  {team?.TEAM_CITY} {team?.TEAM_NAME}
-                </h4>
-                <span className="boxscore-team-code">
-                  {team?.TEAM_ABBREVIATION}
-                </span>
+                {isTeamClickable ? (
+                  <button
+                    type="button"
+                    className="boxscore-team-title-button"
+                    onClick={() => onSelectTeam?.(teamName)}
+                  >
+                    <h4 className="boxscore-team-title">{teamName}</h4>
+                    <span className="boxscore-team-code">
+                      {team?.TEAM_ABBREVIATION}
+                    </span>
+                  </button>
+                ) : (
+                  <>
+                    <h4 className="boxscore-team-title">{teamName}</h4>
+                    <span className="boxscore-team-code">
+                      {team?.TEAM_ABBREVIATION}
+                    </span>
+                  </>
+                )}
               </div>
 
               <div className="boxscore-team-stats-grid">

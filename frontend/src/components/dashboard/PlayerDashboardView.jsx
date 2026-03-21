@@ -54,6 +54,7 @@ function PlayerDashboardView({
   isBoxScoreOpen,
   setIsBoxScoreOpen,
   boxScoreRef,
+  onSelectTeamFromBoxScore,
 }) {
   return (
     <div className="section-stack">
@@ -153,6 +154,7 @@ function PlayerDashboardView({
               error={boxScoreError}
               selectedPlayerName={query}
               onSelectPlayer={onSelectPlayerFromBoxScore}
+              onSelectTeam={onSelectTeamFromBoxScore}
             />
           )}
 

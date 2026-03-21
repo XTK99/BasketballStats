@@ -54,6 +54,7 @@ function TeamDashboardView({
   setIsBoxScoreOpen,
   boxScoreRef,
   onSelectPlayerFromBoxScore,
+  onSelectTeamFromBoxScore,
 }) {
   return (
     <div className="section-stack">
@@ -153,6 +154,7 @@ function TeamDashboardView({
               error={boxScoreError}
               selectedPlayerName=""
               onSelectPlayer={onSelectPlayerFromBoxScore}
+              onSelectTeam={onSelectTeamFromBoxScore}
             />
           )}
 

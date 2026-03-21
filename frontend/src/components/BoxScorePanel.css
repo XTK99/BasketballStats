@@ -122,10 +122,59 @@
 
 .boxscore-team-title-row {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
   gap: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
+}
+
+.boxscore-team-title-button {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.boxscore-team-title-button:hover .boxscore-team-title {
+  opacity: 0.9;
+}
+
+.boxscore-team-title-button:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.8);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.boxscore-team-title {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: #f8fafc;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.boxscore-team-code {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: rgba(226, 232, 240, 0.6);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .boxscore-team-title {

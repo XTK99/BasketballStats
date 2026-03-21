@@ -204,7 +204,45 @@ function App() {
   async function handlePlayerSearch() {
     await loadPlayerDashboard(playerQuery);
   }
+  async function handleSelectTeamFromBoxScore(teamName) {
+    if (!teamName) return;
 
+    setActiveDashboardView("team");
+    skipNextTeamAutoSearchRef.current = true;
+    setTeamQuery(teamName);
+    await handleTeamSearchFromValue(teamName);
+  }
+
+  async function handleTeamSearchFromValue(teamName) {
+    const trimmedQuery = String(teamName || "").trim();
+
+    if (!trimmedQuery) {
+      setTeamGames([]);
+      setTeamTitle("Team");
+      setTeamError("");
+      return;
+    }
+
+    try {
+      setTeamLoading(true);
+      setTeamError("");
+
+      const teamResponse = await getTeamGames(trimmedQuery, last, season);
+      const normalizedTeamGames = normalizeGames(
+        teamResponse?.games || [],
+        "team",
+      );
+
+      setTeamGames(normalizedTeamGames);
+      setTeamTitle(teamResponse?.teamName || trimmedQuery);
+    } catch (err) {
+      console.error(err);
+      setTeamError("Failed to load team dashboard.");
+      setTeamGames([]);
+    } finally {
+      setTeamLoading(false);
+    }
+  }
   async function handleSelectPlayerFromBoxScore(playerName) {
     if (!playerName) return;
 
@@ -522,6 +560,7 @@ function App() {
               onToggleResult={togglePlayerResult}
               onClearFilters={clearPlayerFilters}
               onSelectPlayerFromBoxScore={handleSelectPlayerFromBoxScore}
+              onSelectTeamFromBoxScore={handleSelectTeamFromBoxScore}
             />
           }
           teamView={
@@ -557,6 +596,7 @@ function App() {
               setIsBoxScoreOpen={setIsBoxScoreOpen}
               boxScoreRef={boxScoreRef}
               onSelectPlayerFromBoxScore={handleSelectPlayerFromBoxScore}
+              onSelectTeamFromBoxScore={handleSelectTeamFromBoxScore}
             />
           }
         />
