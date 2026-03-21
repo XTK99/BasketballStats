@@ -5,21 +5,23 @@ async function fetchJson(url, fallbackMessage) {
   const contentType = response.headers.get("content-type") || "";
 
   if (!response.ok) {
-    const errorData = contentType.includes("application/json")
-      ? await response.json().catch(() => ({}))
-      : {};
-    throw new Error(errorData.error || fallbackMessage);
-  }
-
-  if (!contentType.includes("application/json")) {
-    const text = await response.text();
-    console.error("Expected JSON but got:", text.slice(0, 300));
-    throw new Error("API did not return JSON.");
+    let message = fallbackMessage;
+    if (contentType.includes("application/json")) {
+      const errorData = await response.json();
+      message = errorData.error || message;
+    }
+    throw new Error(message);
   }
 
   return response.json();
 }
 
+export async function searchPlayers(query, season = "2025-26") {
+  return fetchJson(
+    `${API_BASE}/api/nba/player-search?q=${encodeURIComponent(query)}&season=${encodeURIComponent(season)}`,
+    "Failed to search players",
+  );
+}
 export async function getPlayerGames(
   playerName,
   gameCount = 5,

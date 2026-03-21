@@ -66,18 +66,26 @@ button {
   font-size: 0.98rem;
 }
 
+.section-stack {
+  display: grid;
+  gap: 20px;
+}
+
 .panel-card {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   backdrop-filter: blur(12px);
   padding: 18px;
+  overflow: visible;
 }
 
-.section-stack {
-  display: grid;
-  gap: 20px;
+.search-panel {
+  z-index: 200;
 }
 
 .view-toggle-row {
@@ -111,22 +119,15 @@ button {
   color: #fca5a5;
 }
 
-@media (max-width: 768px) {
-  .app-shell {
-    padding: 18px 14px 36px;
-  }
-
-  .app-title {
-    font-size: 1.6rem;
-  }
-}
 .panel-card > .mode-toggle {
   margin-bottom: 12px;
 }
+
 select option {
   background-color: #0b1426;
   color: #f5f7fa;
 }
+
 .prop-edge-card {
   display: grid;
   gap: 16px;
@@ -194,9 +195,150 @@ select option {
   color: var(--text-muted);
 }
 
+.matchup-snapshot-card {
+  display: grid;
+  gap: 16px;
+}
+
+.matchup-snapshot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.matchup-snapshot-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.matchup-snapshot-subtitle {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.matchup-snapshot-badge,
+.matchup-snapshot-edge-badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.matchup-snapshot-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.matchup-snapshot-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.matchup-snapshot-label {
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.matchup-snapshot-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.matchup-snapshot-meta {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.matchup-edge-strong-positive .matchup-snapshot-edge-badge {
+  border-color: rgba(34, 197, 94, 0.45);
+  background: rgba(34, 197, 94, 0.16);
+  color: #86efac;
+}
+
+.matchup-edge-positive .matchup-snapshot-edge-badge {
+  border-color: rgba(16, 185, 129, 0.45);
+  background: rgba(16, 185, 129, 0.16);
+  color: #6ee7b7;
+}
+
+.matchup-edge-neutral .matchup-snapshot-edge-badge {
+  border-color: rgba(148, 163, 184, 0.35);
+  background: rgba(148, 163, 184, 0.12);
+  color: #cbd5e1;
+}
+
+.matchup-edge-negative .matchup-snapshot-edge-badge {
+  border-color: rgba(249, 115, 22, 0.45);
+  background: rgba(249, 115, 22, 0.16);
+  color: #fdba74;
+}
+
+.matchup-edge-strong-negative .matchup-snapshot-edge-badge {
+  border-color: rgba(239, 68, 68, 0.45);
+  background: rgba(239, 68, 68, 0.16);
+  color: #fca5a5;
+}
+
+.matchup-snapshot-confidence-badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.confidence-high {
+  border-color: rgba(34, 197, 94, 0.45);
+  background: rgba(34, 197, 94, 0.16);
+  color: #86efac;
+}
+
+.confidence-medium {
+  border-color: rgba(234, 179, 8, 0.45);
+  background: rgba(234, 179, 8, 0.16);
+  color: #fde68a;
+}
+
+.confidence-low {
+  border-color: rgba(239, 68, 68, 0.45);
+  background: rgba(239, 68, 68, 0.16);
+  color: #fca5a5;
+}
+
 @media (max-width: 1100px) {
   .prop-edge-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .matchup-snapshot-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    padding: 18px 14px 36px;
+  }
+
+  .app-title {
+    font-size: 1.6rem;
   }
 }
 
@@ -207,5 +349,9 @@ select option {
 
   .prop-edge-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .matchup-snapshot-grid {
+    grid-template-columns: 1fr;
   }
 }

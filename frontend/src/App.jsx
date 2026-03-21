@@ -17,7 +17,8 @@ import HitRateBoard from "./components/HitRateBoard";
 import GameLogTable from "./components/GameLogTable";
 import BoxScorePanel from "./components/BoxScorePanel";
 import BettingSimulator from "./components/BettingSimulator";
-
+import MatchupSnapshot from "./components/MatchupSnapshot";
+import { calculateMatchupSnapshot } from "./utils/calculateMatchupSnapshot";
 import { normalizeGames } from "./utils/normalizeGames";
 import { filterGames } from "./utils/filterGames";
 import { calculateFilteredAverages } from "./utils/calculateFilteredAverages";
@@ -184,6 +185,15 @@ function App() {
       line: selectedLine,
     });
   }, [filteredGames, selectedStat, selectedLine]);
+  const matchupOpponent = filters.opponent || selectedGame?.opponent || "";
+  const matchupSnapshot = useMemo(() => {
+    return calculateMatchupSnapshot({
+      games,
+      statKey: selectedStat,
+      line: selectedLine,
+      opponentFilter: matchupOpponent,
+    });
+  }, [games, selectedStat, selectedLine, matchupOpponent]);
 
   const showDashboard = !loading && !error && viewMode === "dashboard";
   const showSimulator = !loading && !error && viewMode === "simulator";
@@ -195,7 +205,7 @@ function App() {
         <p className="app-subtitle">App is rendering.</p>
       </header>
 
-      <section className="panel-card">
+      <section className="panel-card search-panel">
         <ModeToggle mode={mode} setMode={setMode} />
         <SearchBar
           mode={mode}
@@ -255,6 +265,12 @@ function App() {
           </section>
 
           <SummaryCards averages={averages} />
+          <MatchupSnapshot
+            title="Matchup Snapshot"
+            opponent={matchupOpponent}
+            statLabel={STAT_LABEL_MAP[selectedStat] || selectedStat}
+            snapshot={matchupSnapshot}
+          />
 
           <PropEdgeCard
             title={title}
