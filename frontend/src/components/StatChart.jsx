@@ -77,14 +77,12 @@ function getChartStatValue(game, stat) {
     steals: ["steals", "STL", "stl"],
     blocks: ["blocks", "BLK", "blk"],
     turnovers: ["turnovers", "TOV", "tov"],
-
     FGM: ["fgm", "FGM"],
     FGA: ["fga", "FGA"],
     "3PM": ["fg3m", "FG3M", "3PM", "threePm"],
     "3PA": ["fg3a", "FG3A", "3PA", "threePa"],
     FTM: ["ftm", "FTM"],
     FTA: ["fta", "FTA"],
-
     "FG%": ["fgPct", "fg_pct", "FG_PCT", "fgPercentage", "fieldGoalPct"],
     "3P%": [
       "fg3Pct",
@@ -95,7 +93,6 @@ function getChartStatValue(game, stat) {
       "threePointPct",
     ],
     "FT%": ["ftPct", "ft_pct", "FT_PCT", "ftPercentage", "freeThrowPct"],
-
     fieldGoalPct: ["fieldGoalPct", "fgPct", "fg_pct", "FG_PCT", "fgPercentage"],
     threePointPct: [
       "threePointPct",
@@ -278,6 +275,7 @@ function CustomTooltip({ active, payload, selectedStat }) {
     </div>
   );
 }
+
 function CustomDot(props) {
   const { cx, cy, payload, onSelectGame, selectedGameId } = props;
 
@@ -298,52 +296,44 @@ function CustomDot(props) {
     />
   );
 }
+
 function StatChart({
   games,
   selectedStat,
   hitRateStat,
   hitRateLine,
-  includeMissedGamesInChart,
-  setIncludeMissedGamesInChart,
   mode,
   onSelectGame,
   selectedGameId,
 }) {
-  const chartData = [...games]
-    .reverse()
-    .filter((game) => {
-      if (mode !== "player") return true;
-      if (includeMissedGamesInChart) return true;
-      return game.played !== false;
-    })
-    .map((game) => {
-      const played = game.played !== false;
+  const chartData = [...games].reverse().map((game) => {
+    const played = game.played !== false;
 
-      return {
-        gameId: game.gameId || game.GAME_ID || "",
-        originalGame: game,
-        xLabel: formatGameDate(game.gameDate),
-        fullDate: game.gameDate || "",
-        statValue: played ? (getChartStatValue(game, selectedStat) ?? 0) : 0,
-        matchup: game.matchup || game.MATCHUP || "",
-        played,
-        seasonGameNumber: game.seasonGameNumber || null,
-        wl: game.wl || game.WL || "",
-        teamScore: getFirstNumber(game, [
-          "teamScore",
-          "teamPoints",
-          "pts",
-          "PTS",
-          "points",
-        ]),
-        opponentScore: getFirstNumber(game, [
-          "opponentScore",
-          "oppPoints",
-          "opponentPoints",
-          "oppPts",
-        ]),
-      };
-    });
+    return {
+      gameId: game.gameId || game.GAME_ID || "",
+      originalGame: game,
+      xLabel: formatGameDate(game.gameDate),
+      fullDate: game.gameDate || "",
+      statValue: played ? (getChartStatValue(game, selectedStat) ?? 0) : 0,
+      matchup: game.matchup || game.MATCHUP || "",
+      played,
+      seasonGameNumber: game.seasonGameNumber || null,
+      wl: game.wl || game.WL || "",
+      teamScore: getFirstNumber(game, [
+        "teamScore",
+        "teamPoints",
+        "pts",
+        "PTS",
+        "points",
+      ]),
+      opponentScore: getFirstNumber(game, [
+        "opponentScore",
+        "oppPoints",
+        "opponentPoints",
+        "oppPts",
+      ]),
+    };
+  });
 
   const showPropLine =
     selectedStat === hitRateStat &&
@@ -361,27 +351,6 @@ function StatChart({
           </h3>
           <p className="chart-subtitle">Season game-by-game performance</p>
         </div>
-
-        {mode === "player" && (
-          <label
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              color: "#cbd5e1",
-              fontSize: 14,
-            }}
-          >
-            <input
-              type="checkbox"
-              checked={includeMissedGamesInChart}
-              onChange={(event) =>
-                setIncludeMissedGamesInChart(event.target.checked)
-              }
-            />
-            Include missed games as 0
-          </label>
-        )}
       </div>
 
       <ResponsiveContainer width="100%" height={340}>
@@ -436,4 +405,5 @@ function StatChart({
     </div>
   );
 }
+
 export default StatChart;

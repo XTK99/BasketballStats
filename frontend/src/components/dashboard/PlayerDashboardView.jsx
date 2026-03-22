@@ -173,7 +173,6 @@ function PlayerDashboardView({
               selectedStat={selectedStat}
               setSelectedStat={setSelectedStat}
             />
-
             <StatChart
               games={filteredGames}
               selectedStat={selectedStat}
