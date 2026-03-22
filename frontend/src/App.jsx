@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
-
+import { useTeamDashboard } from "./hooks/useTeamDashboard";
 import { getPlayerGames, getTeamGames, getBoxScore } from "./api/nbaApi";
 import BettingSimulator from "./components/BettingSimulator";
 import DashboardCarousel from "./components/dashboard/DashboardCarousel";
@@ -8,10 +8,6 @@ import PlayerDashboardView from "./components/dashboard/PlayerDashboardView";
 import TeamDashboardView from "./components/dashboard/TeamDashboardView";
 import { usePlayerDashboard } from "./hooks/usePlayerDashboard";
 import { normalizeGames } from "./utils/normalizeGames";
-import { filterGames } from "./utils/filterGames";
-import { calculateFilteredAverages } from "./utils/calculateFilteredAverages";
-import { calculatePropInsights } from "./utils/calculatePropInsights";
-import { calculateMatchupSnapshot } from "./utils/calculateMatchupSnapshot";
 
 const INITIAL_FILTERS = {
   locations: ["home", "away"],
@@ -27,24 +23,6 @@ function toggleFilterValue(values, target) {
   }
 
   return [...values, target];
-}
-
-function getThresholdStatKey(filter) {
-  return (
-    filter?.stat || filter?.selectedStat || filter?.key || filter?.field || ""
-  );
-}
-
-function getThresholdValue(filter) {
-  const rawValue =
-    filter?.value ??
-    filter?.line ??
-    filter?.threshold ??
-    filter?.target ??
-    null;
-
-  const num = Number(rawValue);
-  return Number.isFinite(num) ? num : NaN;
 }
 
 function deriveTeamQuery(playerResponse, normalizedPlayerGames) {
@@ -461,6 +439,11 @@ function App() {
       setTeamLoading(false);
     }
   }
+  const teamDashboard = useTeamDashboard({
+    teamGames,
+    filters: teamFilters,
+    selectedStat: teamSelectedStat,
+  });
 
   const playerDashboard = usePlayerDashboard({
     playerGames,
@@ -470,49 +453,6 @@ function App() {
     includeMissedGames,
     selectedGame,
   });
-
-  const filteredTeamGames = useMemo(
-    () => filterGames(teamGames, teamFilters),
-    [teamGames, teamFilters],
-  );
-
-  const teamAverages = useMemo(
-    () => calculateFilteredAverages(filteredTeamGames),
-    [filteredTeamGames],
-  );
-
-  const activeTeamStatThreshold = useMemo(() => {
-    return teamFilters.thresholds.find((filter) => {
-      const filterStatKey = String(getThresholdStatKey(filter)).toLowerCase();
-      return filterStatKey === String(teamSelectedStat).toLowerCase();
-    });
-  }, [teamFilters.thresholds, teamSelectedStat]);
-
-  const teamSelectedLine = useMemo(() => {
-    if (!activeTeamStatThreshold) return NaN;
-    return getThresholdValue(activeTeamStatThreshold);
-  }, [activeTeamStatThreshold]);
-
-  const teamPropInsights = useMemo(() => {
-    if (!Number.isFinite(teamSelectedLine)) return null;
-
-    return calculatePropInsights({
-      games: filteredTeamGames,
-      statKey: teamSelectedStat,
-      line: teamSelectedLine,
-    });
-  }, [filteredTeamGames, teamSelectedStat, teamSelectedLine]);
-
-  const teamMatchupOpponent = teamFilters.opponent || "";
-
-  const teamMatchupSnapshot = useMemo(() => {
-    return calculateMatchupSnapshot({
-      games: teamGames,
-      statKey: teamSelectedStat,
-      line: teamSelectedLine,
-      opponentFilter: teamMatchupOpponent,
-    });
-  }, [teamGames, teamSelectedStat, teamSelectedLine, teamMatchupOpponent]);
 
   function clearPlayerFilters() {
     setPlayerFilters(INITIAL_FILTERS);
@@ -651,11 +591,12 @@ function App() {
               onToggleLocation={toggleTeamLocation}
               onToggleResult={toggleTeamResult}
               onClearFilters={clearTeamFilters}
-              averages={teamAverages}
+              averages={teamDashboard.averages}
               selectedStat={teamSelectedStat}
               setSelectedStat={setTeamSelectedStat}
-              filteredGames={filteredTeamGames}
-              propInsights={teamPropInsights}
+              filteredGames={teamDashboard.filteredGames}
+              propInsights={teamDashboard.propInsights}
+              matchupSnapshot={teamDashboard.matchupSnapshot}
               selectedGame={selectedGame}
               selectedGameId={selectedGameId}
               onSelectGame={handleSelectGame}
