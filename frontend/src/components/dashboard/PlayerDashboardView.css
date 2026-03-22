@@ -1,0 +1,89 @@
+.player-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.games-played-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  padding: 10px 14px;
+  border-radius: 12px;
+
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+}
+
+.games-played-main {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.games-played-value {
+  font-size: 1.4rem;
+  color: #93c5fd;
+  line-height: 1;
+}
+
+.games-sample-value {
+  font-size: 1rem;
+  color: rgba(226, 232, 240, 0.5);
+}
+
+.games-played-divider {
+  font-size: 0.9rem;
+  color: rgba(148, 163, 184, 0.4);
+}
+
+.games-played-label {
+  margin-top: 2px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.75);
+}
+.games-played-hit-meta {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.games-played-hit-main {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #f8fafc;
+  line-height: 1.1;
+}
+
+.games-played-hit-sub {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  line-height: 1.1;
+}
+
+.games-played-hit-sub.muted {
+  color: rgba(203, 213, 225, 0.68);
+}
+.player-status-row {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.missed-chip .games-played-main {
+  justify-content: center;
+}
+
+.missed-chip .games-played-value {
+  min-width: 0;
+}

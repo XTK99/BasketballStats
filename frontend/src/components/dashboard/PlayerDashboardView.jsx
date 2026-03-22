@@ -11,17 +11,6 @@ import GameLogTable from "../GameLogTable";
 import BoxScorePanel from "../BoxScorePanel";
 import "./PlayerDashboardView.css";
 
-const STAT_LABEL_MAP = {
-  points: "Points",
-  rebounds: "Rebounds",
-  assists: "Assists",
-  steals: "Steals",
-  blocks: "Blocks",
-  turnovers: "Turnovers",
-  minutes: "Minutes",
-  threesMade: "3PM",
-};
-
 function PlayerDashboardView({
   title,
   loading,
@@ -42,7 +31,15 @@ function PlayerDashboardView({
   averages,
   selectedStat,
   setSelectedStat,
+  allGames,
   filteredGames,
+  includeMissedGames,
+  setIncludeMissedGames,
+  playedGamesCount,
+  sampleGamesCount,
+  hitsPlayedCount,
+  hitsSampleCount,
+  selectedLine,
   propInsights,
   selectedGame,
   selectedGameId,
@@ -57,23 +54,73 @@ function PlayerDashboardView({
   onSelectTeamFromBoxScore,
   hitRateStat,
   hitRateLine,
-  includeMissedGamesInChart,
-  setIncludeMissedGamesInChart,
+  seasonPlayedCount,
+  seasonMissedCount,
 }) {
+  const safePlayedGamesCount = Number.isFinite(playedGamesCount)
+    ? playedGamesCount
+    : 0;
+
+  const safeSampleGamesCount = Number.isFinite(sampleGamesCount)
+    ? sampleGamesCount
+    : 0;
+
+  const safeSeasonPlayedCount = Number.isFinite(seasonPlayedCount)
+    ? seasonPlayedCount
+    : 0;
+
+  const safeSeasonMissedCount = Number.isFinite(seasonMissedCount)
+    ? seasonMissedCount
+    : 0;
+
+  const safeHitsPlayedCount = Number.isFinite(hitsPlayedCount)
+    ? hitsPlayedCount
+    : 0;
+
+  const safeHitsSampleCount = Number.isFinite(hitsSampleCount)
+    ? hitsSampleCount
+    : 0;
+
   return (
     <div className="section-stack">
       <DashboardHeaderCard heading="Player Dashboard" title={title}>
-        <SearchBar
-          mode="player"
-          searchValue={query}
-          setSearchValue={setQuery}
-          season={season}
-          setSeason={setSeason}
-          last={last}
-          setLast={setLast}
-          onSearch={onSearch}
-          showSearchButton={false}
-        />
+        <div className="player-header-row">
+          <SearchBar
+            mode="player"
+            searchValue={query}
+            setSearchValue={setQuery}
+            season={season}
+            setSeason={setSeason}
+            last={last}
+            setLast={setLast}
+            onSearch={onSearch}
+            showSearchButton={false}
+          />
+
+          <div className="player-status-row">
+            <div className="games-played-chip">
+              <div className="games-played-main">
+                <span className="games-played-value">
+                  {safeHitsPlayedCount}
+                </span>
+                <span className="games-played-divider">/</span>
+                <span className="games-sample-value">
+                  {safeSeasonPlayedCount}
+                </span>
+              </div>
+              <div className="games-played-label">Hits</div>
+            </div>
+
+            <div className="games-played-chip missed-chip">
+              <div className="games-played-main">
+                <span className="games-played-value">
+                  {safeSeasonMissedCount}
+                </span>
+              </div>
+              <div className="games-played-label">Missed</div>
+            </div>
+          </div>
+        </div>
       </DashboardHeaderCard>
 
       {loading && <p className="status-message">Loading player dashboard...</p>}
@@ -98,17 +145,35 @@ function PlayerDashboardView({
 
           <PropEdgeCard
             title={title}
-            statLabel={STAT_LABEL_MAP[selectedStat] || selectedStat}
+            selectedStat={selectedStat}
+            selectedLine={selectedLine}
             insights={propInsights}
+            playedGamesCount={safePlayedGamesCount}
+            sampleGamesCount={safeSampleGamesCount}
+            hitsPlayedCount={safeHitsPlayedCount}
+            hitsSampleCount={safeHitsSampleCount}
           />
 
           <SplitsPanel games={filteredGames} selectedStat={selectedStat} />
 
           <section className="panel-card">
+            <div style={{ marginBottom: "10px" }}>
+              <label style={{ fontSize: "0.85rem", opacity: 0.8 }}>
+                <input
+                  type="checkbox"
+                  checked={includeMissedGames}
+                  onChange={(e) => setIncludeMissedGames(e.target.checked)}
+                  style={{ marginRight: "6px" }}
+                />
+                Include missed games as 0
+              </label>
+            </div>
+
             <StatSelector
               selectedStat={selectedStat}
               setSelectedStat={setSelectedStat}
             />
+
             <StatChart
               games={filteredGames}
               selectedStat={selectedStat}
@@ -117,8 +182,6 @@ function PlayerDashboardView({
               selectedGameId={selectedGameId}
               hitRateStat={hitRateStat}
               hitRateLine={hitRateLine}
-              includeMissedGamesInChart={includeMissedGamesInChart}
-              setIncludeMissedGamesInChart={setIncludeMissedGamesInChart}
             />
           </section>
 

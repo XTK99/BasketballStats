@@ -15,8 +15,62 @@ function formatSplit(split) {
   return `${split.label}: ${split.hits} / ${split.games}`;
 }
 
-function PropEdgeCard({ title, statLabel, insights }) {
+function formatStatLabel(stat) {
+  const text = String(stat || "").trim();
+  if (!text) return "Stat";
+
+  const labels = {
+    points: "Points",
+    rebounds: "Rebounds",
+    assists: "Assists",
+    steals: "Steals",
+    blocks: "Blocks",
+    turnovers: "Turnovers",
+    threes: "3PM",
+    threepm: "3PM",
+    "3pm": "3PM",
+    minutes: "Minutes",
+  };
+
+  return (
+    labels[text.toLowerCase()] || text.charAt(0).toUpperCase() + text.slice(1)
+  );
+}
+
+function PropEdgeCard({
+  title,
+  selectedStat,
+  selectedLine,
+  insights,
+  playedGamesCount = 0,
+  sampleGamesCount = 0,
+  hitsPlayedCount = 0,
+  hitsSampleCount = 0,
+}) {
   if (!insights) return null;
+
+  const statLabel = formatStatLabel(selectedStat);
+
+  const safePlayedGamesCount = Number.isFinite(playedGamesCount)
+    ? playedGamesCount
+    : 0;
+
+  const safeSampleGamesCount = Number.isFinite(sampleGamesCount)
+    ? sampleGamesCount
+    : 0;
+
+  const safeHitsPlayedCount = Number.isFinite(hitsPlayedCount)
+    ? hitsPlayedCount
+    : 0;
+
+  const safeHitsSampleCount = Number.isFinite(hitsSampleCount)
+    ? hitsSampleCount
+    : 0;
+
+  const playedHitRate =
+    safePlayedGamesCount > 0
+      ? (safeHitsPlayedCount / safePlayedGamesCount) * 100
+      : 0;
 
   return (
     <section className="panel-card prop-edge-card">
@@ -24,12 +78,16 @@ function PropEdgeCard({ title, statLabel, insights }) {
         <div>
           <h3 className="panel-title">Prop Edge</h3>
           <p className="prop-edge-subtitle">
-            {title} • Over {insights.line} {statLabel}
+            {title} • Over{" "}
+            {Number.isFinite(Number(selectedLine))
+              ? selectedLine
+              : insights.line}{" "}
+            {statLabel}
           </p>
         </div>
 
         <span className="prop-edge-badge">
-          Sample: {insights.totalGames} games
+          Sample: {playedGamesCount} games
         </span>
       </div>
 
@@ -37,10 +95,13 @@ function PropEdgeCard({ title, statLabel, insights }) {
         <div className="prop-edge-item">
           <span className="prop-edge-label">Hit Rate</span>
           <span className="prop-edge-value">
-            {formatPercent(insights.hitRate)}
+            {formatPercent(playedHitRate)}
           </span>
           <span className="prop-edge-meta">
-            {insights.totalHits} / {insights.totalGames}
+            {safeHitsPlayedCount} / {safePlayedGamesCount} played
+          </span>
+          <span className="prop-edge-meta">
+            {safeHitsSampleCount} / {safeSampleGamesCount} season
           </span>
         </div>
 
@@ -61,20 +122,20 @@ function PropEdgeCard({ title, statLabel, insights }) {
         <div className="prop-edge-item">
           <span className="prop-edge-label">Last 5</span>
           <span className="prop-edge-value">
-            {insights.last5.hits} / {insights.last5.games}
+            {insights.last5?.hits ?? 0} / {insights.last5?.games ?? 0}
           </span>
           <span className="prop-edge-meta">
-            {formatPercent(insights.last5.hitRate)}
+            {formatPercent(insights.last5?.hitRate ?? 0)}
           </span>
         </div>
 
         <div className="prop-edge-item">
           <span className="prop-edge-label">Last 10</span>
           <span className="prop-edge-value">
-            {insights.last10.hits} / {insights.last10.games}
+            {insights.last10?.hits ?? 0} / {insights.last10?.games ?? 0}
           </span>
           <span className="prop-edge-meta">
-            {formatPercent(insights.last10.hitRate)}
+            {formatPercent(insights.last10?.hitRate ?? 0)}
           </span>
         </div>
 

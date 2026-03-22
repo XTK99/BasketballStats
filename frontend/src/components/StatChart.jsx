@@ -309,30 +309,41 @@ function StatChart({
   onSelectGame,
   selectedGameId,
 }) {
-  const chartData = [...games].reverse().map((game) => ({
-    gameId: game.gameId || game.GAME_ID || "",
-    originalGame: game,
-    xLabel: formatGameDate(game.gameDate),
-    fullDate: game.gameDate || "",
-    statValue: getChartStatValue(game, selectedStat) ?? 0,
-    matchup: game.matchup || game.MATCHUP || "",
-    played: game.played !== false,
-    seasonGameNumber: game.seasonGameNumber || null,
-    wl: game.wl || game.WL || "",
-    teamScore: getFirstNumber(game, [
-      "teamScore",
-      "teamPoints",
-      "pts",
-      "PTS",
-      "points",
-    ]),
-    opponentScore: getFirstNumber(game, [
-      "opponentScore",
-      "oppPoints",
-      "opponentPoints",
-      "oppPts",
-    ]),
-  }));
+  const chartData = [...games]
+    .reverse()
+    .filter((game) => {
+      if (mode !== "player") return true;
+      if (includeMissedGamesInChart) return true;
+      return game.played !== false;
+    })
+    .map((game) => {
+      const played = game.played !== false;
+
+      return {
+        gameId: game.gameId || game.GAME_ID || "",
+        originalGame: game,
+        xLabel: formatGameDate(game.gameDate),
+        fullDate: game.gameDate || "",
+        statValue: played ? (getChartStatValue(game, selectedStat) ?? 0) : 0,
+        matchup: game.matchup || game.MATCHUP || "",
+        played,
+        seasonGameNumber: game.seasonGameNumber || null,
+        wl: game.wl || game.WL || "",
+        teamScore: getFirstNumber(game, [
+          "teamScore",
+          "teamPoints",
+          "pts",
+          "PTS",
+          "points",
+        ]),
+        opponentScore: getFirstNumber(game, [
+          "opponentScore",
+          "oppPoints",
+          "opponentPoints",
+          "oppPts",
+        ]),
+      };
+    });
 
   const showPropLine =
     selectedStat === hitRateStat &&
@@ -425,5 +436,4 @@ function StatChart({
     </div>
   );
 }
-
 export default StatChart;
