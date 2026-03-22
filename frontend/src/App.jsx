@@ -6,11 +6,12 @@ import BettingSimulator from "./components/BettingSimulator";
 import DashboardCarousel from "./components/dashboard/DashboardCarousel";
 import PlayerDashboardView from "./components/dashboard/PlayerDashboardView";
 import TeamDashboardView from "./components/dashboard/TeamDashboardView";
-import { calculatePropInsights } from "./utils/calculatePropInsights";
-import { calculateMatchupSnapshot } from "./utils/calculateMatchupSnapshot";
+import { usePlayerDashboard } from "./hooks/usePlayerDashboard";
 import { normalizeGames } from "./utils/normalizeGames";
 import { filterGames } from "./utils/filterGames";
 import { calculateFilteredAverages } from "./utils/calculateFilteredAverages";
+import { calculatePropInsights } from "./utils/calculatePropInsights";
+import { calculateMatchupSnapshot } from "./utils/calculateMatchupSnapshot";
 
 const INITIAL_FILTERS = {
   locations: ["home", "away"],
@@ -18,6 +19,7 @@ const INITIAL_FILTERS = {
   opponent: "",
   thresholds: [],
 };
+
 function toggleFilterValue(values, target) {
   if (values.includes(target)) {
     if (values.length === 1) return values;
@@ -26,6 +28,7 @@ function toggleFilterValue(values, target) {
 
   return [...values, target];
 }
+
 function getThresholdStatKey(filter) {
   return (
     filter?.stat || filter?.selectedStat || filter?.key || filter?.field || ""
@@ -43,11 +46,7 @@ function getThresholdValue(filter) {
   const num = Number(rawValue);
   return Number.isFinite(num) ? num : NaN;
 }
-function normalizeOpponentValue(value) {
-  return String(value || "")
-    .trim()
-    .toLowerCase();
-}
+
 function deriveTeamQuery(playerResponse, normalizedPlayerGames) {
   const directTeam =
     playerResponse?.teamName ||
@@ -73,52 +72,7 @@ function deriveTeamQuery(playerResponse, normalizedPlayerGames) {
 
   return "";
 }
-function buildPlayerSeasonGames(teamGames, playerGames) {
-  const playerGameMap = new Map();
 
-  for (const game of playerGames) {
-    const gameId = game?.gameId || game?.GAME_ID;
-    if (gameId) {
-      playerGameMap.set(gameId, game);
-    }
-  }
-
-  return teamGames.map((teamGame) => {
-    const gameId = teamGame?.gameId || teamGame?.GAME_ID;
-    const matchingPlayerGame = gameId ? playerGameMap.get(gameId) : null;
-
-    if (matchingPlayerGame) {
-      return {
-        ...teamGame,
-        ...matchingPlayerGame,
-        played: true,
-      };
-    }
-
-    return {
-      ...teamGame,
-      gameId,
-      played: false,
-      minutes: 0,
-      MIN: 0,
-      points: 0,
-      PTS: 0,
-      rebounds: 0,
-      REB: 0,
-      assists: 0,
-      AST: 0,
-      steals: 0,
-      STL: 0,
-      blocks: 0,
-      BLK: 0,
-      turnovers: 0,
-      TOV: 0,
-      threesMade: 0,
-      FG3M: 0,
-      fg3m: 0,
-    };
-  });
-}
 function App() {
   const [viewMode, setViewMode] = useState("dashboard");
   const [activeDashboardView, setActiveDashboardView] = useState("player");
@@ -154,6 +108,7 @@ function App() {
   const [boxScoreError, setBoxScoreError] = useState("");
   const [isBoxScoreOpen, setIsBoxScoreOpen] = useState(true);
   const [includeMissedGames, setIncludeMissedGames] = useState(false);
+
   const boxScoreRef = useRef(null);
   const skipNextTeamAutoSearchRef = useRef(false);
 
@@ -200,32 +155,7 @@ function App() {
 
     return () => clearTimeout(timeoutId);
   }, [teamQuery, season, last, activeDashboardView]);
-  function getGameMinutes(game) {
-    const rawMinutes =
-      game?.MIN ??
-      game?.minutes ??
-      game?.min ??
-      game?.Minutes ??
-      game?.playerMinutes ??
-      0;
 
-    if (typeof rawMinutes === "number") {
-      return Number.isFinite(rawMinutes) ? rawMinutes : 0;
-    }
-
-    const text = String(rawMinutes).trim();
-    if (!text) return 0;
-
-    if (text.includes(":")) {
-      const [mins, secs] = text.split(":");
-      const minuteValue = Number(mins) || 0;
-      const secondValue = Number(secs) || 0;
-      return minuteValue + secondValue / 60;
-    }
-
-    const numericValue = Number(text);
-    return Number.isFinite(numericValue) ? numericValue : 0;
-  }
   function updatePlayerFilter(key, value) {
     setPlayerFilters((prev) => ({ ...prev, [key]: value }));
   }
@@ -247,6 +177,7 @@ function App() {
       thresholds: prev.thresholds.filter((_, index) => index !== indexToRemove),
     }));
   }
+
   function togglePlayerLocation(location) {
     setPlayerFilters((prev) => ({
       ...prev,
@@ -499,6 +430,7 @@ function App() {
       setTeamLoading(false);
     }
   }
+
   async function handleTeamSearch() {
     const trimmedQuery = teamQuery.trim();
 
@@ -529,65 +461,25 @@ function App() {
       setTeamLoading(false);
     }
   }
-  const playerSeasonGames = useMemo(() => {
-    return buildPlayerSeasonGames(teamGames, playerGames);
-  }, [teamGames, playerGames]);
 
-  const filteredPlayerGames = useMemo(
-    () => filterGames(playerSeasonGames, playerFilters),
-    [playerSeasonGames, playerFilters],
-  );
-  const playedPlayerGames = useMemo(() => {
-    return filteredPlayerGames.filter((game) => {
-      return getGameMinutes(game) > 0;
-    });
-  }, [filteredPlayerGames]);
-
-  const effectivePlayerGames = useMemo(() => {
-    return includeMissedGames ? filteredPlayerGames : playedPlayerGames;
-  }, [includeMissedGames, filteredPlayerGames, playedPlayerGames]);
+  const playerDashboard = usePlayerDashboard({
+    playerGames,
+    teamGames,
+    filters: playerFilters,
+    selectedStat: playerSelectedStat,
+    includeMissedGames,
+    selectedGame,
+  });
 
   const filteredTeamGames = useMemo(
     () => filterGames(teamGames, teamFilters),
     [teamGames, teamFilters],
-  );
-  const playerSampleTeamGames = useMemo(() => {
-    return filterGames(teamGames, {
-      locations: playerFilters.locations,
-      results: playerFilters.results,
-      opponent: playerFilters.opponent,
-      thresholds: [],
-    });
-  }, [teamGames, playerFilters]);
-
-  const playerAverages = useMemo(
-    () => calculateFilteredAverages(effectivePlayerGames),
-    [effectivePlayerGames],
   );
 
   const teamAverages = useMemo(
     () => calculateFilteredAverages(filteredTeamGames),
     [filteredTeamGames],
   );
-
-  const playerGamesPlayedCount = playedPlayerGames.length;
-  const playerSampleGamesCount = playerSampleTeamGames.length;
-  const playerSeasonPlayedCount = useMemo(() => {
-    return playerGames.filter((game) => getGameMinutes(game) > 0).length;
-  }, [playerGames]);
-
-  const teamSeasonGamesCount = teamGames.length;
-
-  const playerSeasonMissedCount = Math.max(
-    0,
-    teamSeasonGamesCount - playerSeasonPlayedCount,
-  );
-  const activePlayerStatThreshold = useMemo(() => {
-    return playerFilters.thresholds.find((filter) => {
-      const filterStatKey = String(getThresholdStatKey(filter)).toLowerCase();
-      return filterStatKey === String(playerSelectedStat).toLowerCase();
-    });
-  }, [playerFilters.thresholds, playerSelectedStat]);
 
   const activeTeamStatThreshold = useMemo(() => {
     return teamFilters.thresholds.find((filter) => {
@@ -596,25 +488,10 @@ function App() {
     });
   }, [teamFilters.thresholds, teamSelectedStat]);
 
-  const playerSelectedLine = useMemo(() => {
-    if (!activePlayerStatThreshold) return NaN;
-    return getThresholdValue(activePlayerStatThreshold);
-  }, [activePlayerStatThreshold]);
-
   const teamSelectedLine = useMemo(() => {
     if (!activeTeamStatThreshold) return NaN;
     return getThresholdValue(activeTeamStatThreshold);
   }, [activeTeamStatThreshold]);
-
-  const playerPropInsights = useMemo(() => {
-    if (!Number.isFinite(playerSelectedLine)) return null;
-
-    return calculatePropInsights({
-      games: effectivePlayerGames,
-      statKey: playerSelectedStat,
-      line: playerSelectedLine,
-    });
-  }, [effectivePlayerGames, playerSelectedStat, playerSelectedLine]);
 
   const teamPropInsights = useMemo(() => {
     if (!Number.isFinite(teamSelectedLine)) return null;
@@ -626,37 +503,7 @@ function App() {
     });
   }, [filteredTeamGames, teamSelectedStat, teamSelectedLine]);
 
-  const playerMatchupOpponent =
-    playerFilters.opponent || selectedGame?.opponent || "";
-
   const teamMatchupOpponent = teamFilters.opponent || "";
-
-  const playerMatchupSnapshot = useMemo(() => {
-    return calculateMatchupSnapshot({
-      games: playerGames,
-      statKey: playerSelectedStat,
-      line: playerSelectedLine,
-      opponentFilter: playerMatchupOpponent,
-    });
-  }, [
-    playerGames,
-    playerSelectedStat,
-    playerSelectedLine,
-    playerMatchupOpponent,
-  ]);
-  const playerHitsPlayed = useMemo(() => {
-    if (!Number.isFinite(playerSelectedLine)) return 0;
-
-    return playedPlayerGames.filter((game) => {
-      const val = Number(game?.[playerSelectedStat]);
-      return Number.isFinite(val) && val >= playerSelectedLine;
-    }).length;
-  }, [playedPlayerGames, playerSelectedStat, playerSelectedLine]);
-
-  const playerHitsSeason = useMemo(() => {
-    if (!Number.isFinite(playerSelectedLine)) return 0;
-    return playerHitsPlayed;
-  }, [playerHitsPlayed, playerSelectedLine]);
 
   const teamMatchupSnapshot = useMemo(() => {
     return calculateMatchupSnapshot({
@@ -666,6 +513,7 @@ function App() {
       opponentFilter: teamMatchupOpponent,
     });
   }, [teamGames, teamSelectedStat, teamSelectedLine, teamMatchupOpponent]);
+
   function clearPlayerFilters() {
     setPlayerFilters(INITIAL_FILTERS);
   }
@@ -752,21 +600,21 @@ function App() {
               filters={playerFilters}
               onUpdateFilter={updatePlayerFilter}
               onRemoveThresholdFilter={removePlayerThresholdFilter}
-              averages={playerAverages}
-              matchupOpponent={playerMatchupOpponent}
+              averages={playerDashboard.averages}
+              matchupOpponent={playerDashboard.matchupOpponent}
               selectedStat={playerSelectedStat}
               setSelectedStat={setPlayerSelectedStat}
               includeMissedGames={includeMissedGames}
               setIncludeMissedGames={setIncludeMissedGames}
-              allGames={playerGames}
-              filteredGames={effectivePlayerGames}
-              playedGamesCount={playerGamesPlayedCount}
-              sampleGamesCount={playerSampleGamesCount}
-              hitsPlayedCount={playerHitsPlayed}
-              hitsSampleCount={playerHitsSeason}
-              selectedLine={playerSelectedLine}
-              propInsights={playerPropInsights}
-              matchupSnapshot={playerMatchupSnapshot}
+              allGames={playerDashboard.allSeasonGames}
+              filteredGames={playerDashboard.filteredGames}
+              playedGamesCount={playerDashboard.counts.playedGamesCount}
+              sampleGamesCount={playerDashboard.counts.sampleGamesCount}
+              hitsPlayedCount={playerDashboard.counts.hitsPlayedCount}
+              hitsSampleCount={playerDashboard.counts.hitsSeasonCount}
+              selectedLine={playerDashboard.selectedLine}
+              propInsights={playerDashboard.propInsights}
+              matchupSnapshot={playerDashboard.matchupSnapshot}
               selectedGame={selectedGame}
               selectedGameId={selectedGameId}
               onSelectGame={handleSelectGame}
@@ -781,8 +629,8 @@ function App() {
               onClearFilters={clearPlayerFilters}
               onSelectPlayerFromBoxScore={handleSelectPlayerFromBoxScore}
               onSelectTeamFromBoxScore={handleSelectTeamFromBoxScore}
-              seasonPlayedCount={playerSeasonPlayedCount}
-              seasonMissedCount={playerSeasonMissedCount}
+              seasonPlayedCount={playerDashboard.counts.seasonPlayedCount}
+              seasonMissedCount={playerDashboard.counts.seasonMissedCount}
             />
           }
           teamView={
@@ -828,7 +676,7 @@ function App() {
         <div className="section-stack">
           <BettingSimulator
             games={playerGames}
-            filteredGames={filteredPlayerGames}
+            filteredGames={playerDashboard.filteredGames}
           />
         </div>
       )}
