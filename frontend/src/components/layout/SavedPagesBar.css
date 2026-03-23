@@ -1,0 +1,119 @@
+.saved-pages-bar {
+  margin: 0 0 18px;
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.saved-pages-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.saved-pages-kicker {
+  margin: 0 0 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.85);
+}
+
+.saved-pages-title {
+  margin: 0;
+  font-size: 1rem;
+  color: #f8fafc;
+}
+
+.saved-pages-save-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: white;
+}
+
+.saved-pages-save-btn:hover {
+  filter: brightness(1.06);
+}
+
+.saved-pages-empty {
+  margin: 0;
+  color: rgba(226, 232, 240, 0.78);
+  font-size: 0.92rem;
+}
+
+.saved-pages-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.saved-page-card {
+  display: flex;
+  align-items: stretch;
+  min-width: 220px;
+  max-width: 280px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(30, 41, 59, 0.82);
+}
+
+.saved-page-main {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.saved-page-main:hover {
+  background: rgba(51, 65, 85, 0.45);
+}
+
+.saved-page-type {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #93c5fd;
+}
+
+.saved-page-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.saved-page-meta {
+  font-size: 0.82rem;
+  color: rgba(226, 232, 240, 0.76);
+}
+
+.saved-page-delete {
+  width: 42px;
+  border: none;
+  border-left: 1px solid rgba(148, 163, 184, 0.14);
+  background: transparent;
+  color: rgba(248, 250, 252, 0.72);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.saved-page-delete:hover {
+  background: rgba(127, 29, 29, 0.35);
+  color: white;
+}

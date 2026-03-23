@@ -39,8 +39,10 @@ export function useDashboardSearches({
     setTeamError("");
   }
 
-  async function loadTeamDashboard(teamName) {
+  async function loadTeamDashboard(teamName, overrides = {}) {
     const trimmedQuery = String(teamName || "").trim();
+    const seasonToUse = overrides.season ?? season;
+    const lastToUse = overrides.last ?? last;
 
     if (!trimmedQuery) {
       resetTeamDashboard();
@@ -51,7 +53,11 @@ export function useDashboardSearches({
       setTeamLoading(true);
       setTeamError("");
 
-      const data = await fetchTeamDashboardData(trimmedQuery, last, season);
+      const data = await fetchTeamDashboardData(
+        trimmedQuery,
+        lastToUse,
+        seasonToUse,
+      );
 
       setTeamGames(data.games);
       setTeamTitle(data.title);
@@ -67,8 +73,10 @@ export function useDashboardSearches({
     }
   }
 
-  async function loadPlayerAndRelatedTeamDashboard(playerName) {
+  async function loadPlayerAndRelatedTeamDashboard(playerName, overrides = {}) {
     const trimmedQuery = String(playerName || "").trim();
+    const seasonToUse = overrides.season ?? season;
+    const lastToUse = overrides.last ?? last;
 
     if (!trimmedQuery) {
       resetPlayerDashboard();
@@ -84,8 +92,8 @@ export function useDashboardSearches({
 
       const playerData = await fetchPlayerDashboardData(
         trimmedQuery,
-        last,
-        season,
+        lastToUse,
+        seasonToUse,
       );
 
       setPlayerGames(playerData.games);
@@ -109,8 +117,8 @@ export function useDashboardSearches({
 
         const teamData = await fetchTeamDashboardData(
           derivedTeam,
-          last,
-          season,
+          lastToUse,
+          seasonToUse,
         );
 
         setTeamGames(teamData.games);
@@ -134,12 +142,15 @@ export function useDashboardSearches({
     }
   }
 
-  async function handlePlayerSearch() {
-    await loadPlayerAndRelatedTeamDashboard(playerQuery);
+  async function handlePlayerSearch(queryOverride, overrides = {}) {
+    await loadPlayerAndRelatedTeamDashboard(
+      queryOverride ?? playerQuery,
+      overrides,
+    );
   }
 
-  async function handleTeamSearch() {
-    await loadTeamDashboard(teamQuery);
+  async function handleTeamSearch(queryOverride, overrides = {}) {
+    await loadTeamDashboard(queryOverride ?? teamQuery, overrides);
   }
 
   useEffect(() => {
@@ -189,13 +200,6 @@ export function useDashboardSearches({
     teamLoading,
     playerError,
     teamError,
-    setPlayerGames,
-    setTeamGames,
-    setPlayerTitle,
-    setTeamTitle,
-    setPlayerError,
-    setTeamError,
-    setTeamLoading,
     loadTeamDashboard,
     loadPlayerAndRelatedTeamDashboard,
     handlePlayerSearch,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import "./App.css";
 
 import { usePlayerDashboard } from "./hooks/usePlayerDashboard";
@@ -8,12 +8,14 @@ import { useBoxScore } from "./hooks/useBoxScore";
 import { useDashboardSearches } from "./hooks/useDashboardSearches";
 import { useDashboardControls } from "./hooks/useDashboardControls";
 import { useBoxScoreNavigation } from "./hooks/useBoxScoreNavigation";
+import { useSavedPages } from "./hooks/useSavedPages";
 
 import BettingSimulator from "./components/BettingSimulator";
 import DashboardCarousel from "./components/dashboard/DashboardCarousel";
 import PlayerDashboardView from "./components/dashboard/PlayerDashboardView";
 import TeamDashboardView from "./components/dashboard/TeamDashboardView";
 import AppHeader from "./components/layout/AppHeader";
+import SavedPagesBar from "./components/layout/SavedPagesBar";
 
 function App() {
   const [viewMode, setViewMode] = useState("dashboard");
@@ -35,6 +37,7 @@ function App() {
 
   const {
     filters: playerFilters,
+    setFilters: setPlayerFilters,
     updateFilter: updatePlayerFilter,
     removeThresholdFilter: removePlayerThresholdFilter,
     toggleLocation: togglePlayerLocation,
@@ -44,6 +47,7 @@ function App() {
 
   const {
     filters: teamFilters,
+    setFilters: setTeamFilters,
     updateFilter: updateTeamFilter,
     removeThresholdFilter: removeTeamThresholdFilter,
     toggleLocation: toggleTeamLocation,
@@ -103,6 +107,8 @@ function App() {
     boxScoreState,
   });
 
+  const { savedPages, savePage, deletePage } = useSavedPages();
+
   const teamDashboard = useTeamDashboard({
     teamGames,
     filters: teamFilters,
@@ -118,8 +124,89 @@ function App() {
     selectedGame,
   });
 
-  const { playerControls, teamControls } = useDashboardControls({
-    playerConfig: {
+  function handleSaveCurrentPage() {
+    if (activeDashboardView === "player") {
+      const trimmedName = playerQuery.trim();
+      if (!trimmedName) return;
+
+      const customLabel = window.prompt(
+        "Save player page as:",
+        `${trimmedName} (${playerSelectedStat}, last ${last})`,
+      );
+
+      if (customLabel === null) return;
+
+      savePage({
+        type: "player",
+        label: customLabel.trim() || trimmedName,
+        name: trimmedName,
+        season,
+        last,
+        selectedStat: playerSelectedStat,
+        filters: playerFilters,
+        includeMissedGames,
+      });
+
+      return;
+    }
+
+    const trimmedName = teamQuery.trim();
+    if (!trimmedName) return;
+
+    const customLabel = window.prompt(
+      "Save team page as:",
+      `${trimmedName} (${teamSelectedStat}, last ${last})`,
+    );
+
+    if (customLabel === null) return;
+
+    savePage({
+      type: "team",
+      label: customLabel.trim() || trimmedName,
+      name: trimmedName,
+      season,
+      last,
+      selectedStat: teamSelectedStat,
+      filters: teamFilters,
+    });
+  }
+
+  async function handleLoadSavedPage(page) {
+    if (!page) return;
+
+    setViewMode("dashboard");
+    setSeason(page.season || "2025-26");
+    setLast(page.last || 82);
+
+    if (page.type === "player") {
+      setActiveDashboardView("player");
+      setPlayerSelectedStat(page.selectedStat || "points");
+      setIncludeMissedGames(Boolean(page.includeMissedGames));
+      setPlayerFilters(page.filters || playerFilters);
+      setPlayerQuery(page.name || "");
+
+      await handlePlayerSearch(page.name, {
+        season: page.season,
+        last: page.last,
+      });
+
+      return;
+    }
+
+    setActiveDashboardView("team");
+    setTeamSelectedStat(page.selectedStat || "points");
+    setTeamFilters(page.filters || teamFilters);
+    setTeamQuery(page.name || "");
+    skipNextTeamAutoSearchRef.current = true;
+
+    await handleTeamSearch(page.name, {
+      season: page.season,
+      last: page.last,
+    });
+  }
+
+  const playerConfig = useMemo(
+    () => ({
       title: playerTitle,
       loading: playerLoading,
       error: playerError,
@@ -140,8 +227,28 @@ function App() {
       setSelectedStat: setPlayerSelectedStat,
       includeMissedGames,
       setIncludeMissedGames,
-    },
-    teamConfig: {
+    }),
+    [
+      playerTitle,
+      playerLoading,
+      playerError,
+      playerQuery,
+      season,
+      last,
+      handlePlayerSearch,
+      playerFilters,
+      updatePlayerFilter,
+      removePlayerThresholdFilter,
+      togglePlayerLocation,
+      togglePlayerResult,
+      clearPlayerFilters,
+      playerSelectedStat,
+      includeMissedGames,
+    ],
+  );
+
+  const teamConfig = useMemo(
+    () => ({
       title: teamTitle,
       loading: teamLoading,
       error: teamError,
@@ -160,22 +267,58 @@ function App() {
       onClearFilters: clearTeamFilters,
       selectedStat: teamSelectedStat,
       setSelectedStat: setTeamSelectedStat,
-    },
+    }),
+    [
+      teamTitle,
+      teamLoading,
+      teamError,
+      teamQuery,
+      season,
+      last,
+      handleTeamSearch,
+      teamFilters,
+      updateTeamFilter,
+      removeTeamThresholdFilter,
+      toggleTeamLocation,
+      toggleTeamResult,
+      clearTeamFilters,
+      teamSelectedStat,
+    ],
+  );
+
+  const { playerControls, teamControls } = useDashboardControls({
+    playerConfig,
+    teamConfig,
   });
 
-  const sharedBoxScoreState = {
-    selectedGame,
-    selectedGameId,
-    onSelectGame: handleSelectGame,
-    boxScore,
-    boxScoreLoading,
-    boxScoreError,
-    isBoxScoreOpen,
-    setIsBoxScoreOpen,
-    boxScoreRef,
-    onSelectPlayerFromBoxScore: handleSelectPlayerFromBoxScore,
-    onSelectTeamFromBoxScore: handleSelectTeamFromBoxScore,
-  };
+  const sharedBoxScoreState = useMemo(
+    () => ({
+      selectedGame,
+      selectedGameId,
+      onSelectGame: handleSelectGame,
+      boxScore,
+      boxScoreLoading,
+      boxScoreError,
+      isBoxScoreOpen,
+      setIsBoxScoreOpen,
+      boxScoreRef,
+      onSelectPlayerFromBoxScore: handleSelectPlayerFromBoxScore,
+      onSelectTeamFromBoxScore: handleSelectTeamFromBoxScore,
+    }),
+    [
+      selectedGame,
+      selectedGameId,
+      handleSelectGame,
+      boxScore,
+      boxScoreLoading,
+      boxScoreError,
+      isBoxScoreOpen,
+      setIsBoxScoreOpen,
+      boxScoreRef,
+      handleSelectPlayerFromBoxScore,
+      handleSelectTeamFromBoxScore,
+    ],
+  );
 
   return (
     <div className="app-shell">
@@ -187,24 +330,33 @@ function App() {
       />
 
       {viewMode === "dashboard" && (
-        <DashboardCarousel
-          activeDashboardView={activeDashboardView}
-          setActiveDashboardView={setActiveDashboardView}
-          playerView={
-            <PlayerDashboardView
-              dashboard={playerDashboard}
-              controls={playerControls}
-              boxScoreState={sharedBoxScoreState}
-            />
-          }
-          teamView={
-            <TeamDashboardView
-              dashboard={teamDashboard}
-              controls={teamControls}
-              boxScoreState={sharedBoxScoreState}
-            />
-          }
-        />
+        <>
+          <SavedPagesBar
+            savedPages={savedPages}
+            onSaveCurrentPage={handleSaveCurrentPage}
+            onLoadPage={handleLoadSavedPage}
+            onDeletePage={deletePage}
+          />
+
+          <DashboardCarousel
+            activeDashboardView={activeDashboardView}
+            setActiveDashboardView={setActiveDashboardView}
+            playerView={
+              <PlayerDashboardView
+                dashboard={playerDashboard}
+                controls={playerControls}
+                boxScoreState={sharedBoxScoreState}
+              />
+            }
+            teamView={
+              <TeamDashboardView
+                dashboard={teamDashboard}
+                controls={teamControls}
+                boxScoreState={sharedBoxScoreState}
+              />
+            }
+          />
+        </>
       )}
 
       {viewMode === "simulator" && (
