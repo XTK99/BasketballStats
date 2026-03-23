@@ -7,6 +7,7 @@ import { useDashboardFilters } from "./hooks/useDashboardFilters";
 import { useBoxScore } from "./hooks/useBoxScore";
 import { useDashboardSearches } from "./hooks/useDashboardSearches";
 import { useDashboardControls } from "./hooks/useDashboardControls";
+import { useBoxScoreNavigation } from "./hooks/useBoxScoreNavigation";
 
 import BettingSimulator from "./components/BettingSimulator";
 import DashboardCarousel from "./components/dashboard/DashboardCarousel";
@@ -78,97 +79,29 @@ function App() {
   });
 
   const {
-    selectedGameId,
     selectedGame,
+    selectedGameId,
     boxScore,
     boxScoreLoading,
     boxScoreError,
     isBoxScoreOpen,
     setIsBoxScoreOpen,
     boxScoreRef,
-    setSelectedGame,
-    setSelectedGameId,
-    setBoxScore,
-    setBoxScoreError,
-    setBoxScoreLoading,
-    selectGame,
-    reloadBoxScore,
   } = boxScoreState;
 
-  async function handleSelectGame(gameOrGameId) {
-    await selectGame(gameOrGameId);
-  }
-
-  async function handleSelectTeamFromBoxScore(teamName) {
-    if (!teamName) return;
-
-    setActiveDashboardView("team");
-    skipNextTeamAutoSearchRef.current = true;
-    setTeamQuery(teamName);
-    await loadTeamDashboard(teamName);
-  }
-
-  async function handleSelectPlayerFromBoxScore(playerName) {
-    const trimmedPlayerName = String(playerName || "").trim();
-    if (!trimmedPlayerName) return;
-
-    const previousSelectedGameId =
-      selectedGame?.gameId ||
-      selectedGameId ||
-      boxScore?.gameId ||
-      boxScore?.game?.gameId ||
-      null;
-
-    const previousSelectedGame = selectedGame || null;
-
-    setActiveDashboardView("player");
-    setPlayerQuery(trimmedPlayerName);
-
-    try {
-      const normalizedPlayerGames =
-        (await loadPlayerAndRelatedTeamDashboard(trimmedPlayerName)) || [];
-
-      if (!previousSelectedGameId) return;
-
-      const matchingGame = normalizedPlayerGames.find(
-        (game) =>
-          game?.gameId === previousSelectedGameId ||
-          game?.GAME_ID === previousSelectedGameId,
-      );
-
-      if (matchingGame) {
-        await selectGame(matchingGame);
-        return;
-      }
-
-      setIsBoxScoreOpen(true);
-      setSelectedGameId(previousSelectedGameId);
-      setSelectedGame(
-        previousSelectedGame || {
-          gameId: previousSelectedGameId,
-        },
-      );
-      setBoxScoreLoading(true);
-      setBoxScoreError("");
-
-      await reloadBoxScore(previousSelectedGameId);
-
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          boxScoreRef.current?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        }, 50);
-      });
-    } catch (error) {
-      console.error("Failed to switch to player from box score:", error);
-      setBoxScoreError("Failed to load box score.");
-      setBoxScore(null);
-    } finally {
-      setBoxScoreLoading(false);
-    }
-  }
+  const {
+    handleSelectGame,
+    handleSelectTeamFromBoxScore,
+    handleSelectPlayerFromBoxScore,
+  } = useBoxScoreNavigation({
+    setActiveDashboardView,
+    setPlayerQuery,
+    setTeamQuery,
+    skipNextTeamAutoSearchRef,
+    loadTeamDashboard,
+    loadPlayerAndRelatedTeamDashboard,
+    boxScoreState,
+  });
 
   const teamDashboard = useTeamDashboard({
     teamGames,
