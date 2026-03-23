@@ -11,52 +11,56 @@ import GameLogTable from "../GameLogTable";
 import BoxScorePanel from "../BoxScorePanel";
 import "./PlayerDashboardView.css";
 
-function PlayerDashboardView({
-  title,
-  loading,
-  error,
-  query,
-  setQuery,
-  season,
-  setSeason,
-  last,
-  setLast,
-  onSearch,
-  filters,
-  onUpdateFilter,
-  onRemoveThresholdFilter,
-  onToggleLocation,
-  onToggleResult,
-  onClearFilters,
-  averages,
-  selectedStat,
-  setSelectedStat,
-  allGames,
-  filteredGames,
-  includeMissedGames,
-  setIncludeMissedGames,
-  playedGamesCount,
-  sampleGamesCount,
-  hitsPlayedCount,
-  hitsSampleCount,
-  selectedLine,
-  propInsights,
-  selectedGame,
-  selectedGameId,
-  onSelectGame,
-  onSelectPlayerFromBoxScore,
-  boxScore,
-  boxScoreLoading,
-  boxScoreError,
-  isBoxScoreOpen,
-  setIsBoxScoreOpen,
-  boxScoreRef,
-  onSelectTeamFromBoxScore,
-  hitRateStat,
-  hitRateLine,
-  seasonPlayedCount,
-  seasonMissedCount,
-}) {
+function PlayerDashboardView({ dashboard, controls, boxScoreState }) {
+  const {
+    title,
+    loading,
+    error,
+    query,
+    setQuery,
+    season,
+    setSeason,
+    last,
+    setLast,
+    onSearch,
+    filters,
+    onUpdateFilter,
+    onRemoveThresholdFilter,
+    onToggleLocation,
+    onToggleResult,
+    onClearFilters,
+    selectedStat,
+    setSelectedStat,
+    includeMissedGames,
+    setIncludeMissedGames,
+  } = controls;
+
+  const {
+    selectedGame,
+    selectedGameId,
+    onSelectGame,
+    boxScore,
+    boxScoreLoading,
+    boxScoreError,
+    isBoxScoreOpen,
+    setIsBoxScoreOpen,
+    boxScoreRef,
+    onSelectPlayerFromBoxScore,
+    onSelectTeamFromBoxScore,
+  } = boxScoreState;
+
+  const { averages, filteredGames, selectedLine, propInsights, counts } =
+    dashboard;
+
+  const {
+    playedGamesCount,
+    sampleGamesCount,
+    seasonPlayedCount,
+    seasonMissedCount,
+    hitsPlayedCount,
+    hitsSeasonCount,
+  } = counts;
+
   const safePlayedGamesCount = Number.isFinite(playedGamesCount)
     ? playedGamesCount
     : 0;
@@ -77,8 +81,8 @@ function PlayerDashboardView({
     ? hitsPlayedCount
     : 0;
 
-  const safeHitsSampleCount = Number.isFinite(hitsSampleCount)
-    ? hitsSampleCount
+  const safeHitsSampleCount = Number.isFinite(hitsSeasonCount)
+    ? hitsSeasonCount
     : 0;
 
   return (
@@ -173,14 +177,13 @@ function PlayerDashboardView({
               selectedStat={selectedStat}
               setSelectedStat={setSelectedStat}
             />
+
             <StatChart
               games={filteredGames}
               selectedStat={selectedStat}
               mode="player"
               onSelectGame={onSelectGame}
               selectedGameId={selectedGameId}
-              hitRateStat={hitRateStat}
-              hitRateLine={hitRateLine}
             />
           </section>
 

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { useTeamDashboard } from "./hooks/useTeamDashboard";
 import { getPlayerGames, getTeamGames, getBoxScore } from "./api/nbaApi";
@@ -439,6 +439,7 @@ function App() {
       setTeamLoading(false);
     }
   }
+
   const teamDashboard = useTeamDashboard({
     teamGames,
     filters: teamFilters,
@@ -461,7 +462,63 @@ function App() {
   function clearTeamFilters() {
     setTeamFilters(INITIAL_FILTERS);
   }
+  const playerControls = {
+    title: playerTitle,
+    loading: playerLoading,
+    error: playerError,
+    query: playerQuery,
+    setQuery: setPlayerQuery,
+    season,
+    setSeason,
+    last,
+    setLast,
+    onSearch: handlePlayerSearch,
+    filters: playerFilters,
+    onUpdateFilter: updatePlayerFilter,
+    onRemoveThresholdFilter: removePlayerThresholdFilter,
+    onToggleLocation: togglePlayerLocation,
+    onToggleResult: togglePlayerResult,
+    onClearFilters: clearPlayerFilters,
+    selectedStat: playerSelectedStat,
+    setSelectedStat: setPlayerSelectedStat,
+    includeMissedGames,
+    setIncludeMissedGames,
+  };
 
+  const teamControls = {
+    title: teamTitle,
+    loading: teamLoading,
+    error: teamError,
+    query: teamQuery,
+    setQuery: setTeamQuery,
+    season,
+    setSeason,
+    last,
+    setLast,
+    onSearch: handleTeamSearch,
+    filters: teamFilters,
+    onUpdateFilter: updateTeamFilter,
+    onRemoveThresholdFilter: removeTeamThresholdFilter,
+    onToggleLocation: toggleTeamLocation,
+    onToggleResult: toggleTeamResult,
+    onClearFilters: clearTeamFilters,
+    selectedStat: teamSelectedStat,
+    setSelectedStat: setTeamSelectedStat,
+  };
+
+  const sharedBoxScoreState = {
+    selectedGame,
+    selectedGameId,
+    onSelectGame: handleSelectGame,
+    boxScore,
+    boxScoreLoading,
+    boxScoreError,
+    isBoxScoreOpen,
+    setIsBoxScoreOpen,
+    boxScoreRef,
+    onSelectPlayerFromBoxScore: handleSelectPlayerFromBoxScore,
+    onSelectTeamFromBoxScore: handleSelectTeamFromBoxScore,
+  };
   return (
     <div className="app-shell">
       <header className="app-header">
@@ -527,87 +584,16 @@ function App() {
           setActiveDashboardView={setActiveDashboardView}
           playerView={
             <PlayerDashboardView
-              title={playerTitle}
-              loading={playerLoading}
-              error={playerError}
-              query={playerQuery}
-              setQuery={setPlayerQuery}
-              season={season}
-              setSeason={setSeason}
-              last={last}
-              setLast={setLast}
-              onSearch={handlePlayerSearch}
-              filters={playerFilters}
-              onUpdateFilter={updatePlayerFilter}
-              onRemoveThresholdFilter={removePlayerThresholdFilter}
-              averages={playerDashboard.averages}
-              matchupOpponent={playerDashboard.matchupOpponent}
-              selectedStat={playerSelectedStat}
-              setSelectedStat={setPlayerSelectedStat}
-              includeMissedGames={includeMissedGames}
-              setIncludeMissedGames={setIncludeMissedGames}
-              allGames={playerDashboard.allSeasonGames}
-              filteredGames={playerDashboard.filteredGames}
-              playedGamesCount={playerDashboard.counts.playedGamesCount}
-              sampleGamesCount={playerDashboard.counts.sampleGamesCount}
-              hitsPlayedCount={playerDashboard.counts.hitsPlayedCount}
-              hitsSampleCount={playerDashboard.counts.hitsSeasonCount}
-              selectedLine={playerDashboard.selectedLine}
-              propInsights={playerDashboard.propInsights}
-              matchupSnapshot={playerDashboard.matchupSnapshot}
-              selectedGame={selectedGame}
-              selectedGameId={selectedGameId}
-              onSelectGame={handleSelectGame}
-              boxScore={boxScore}
-              boxScoreLoading={boxScoreLoading}
-              boxScoreError={boxScoreError}
-              isBoxScoreOpen={isBoxScoreOpen}
-              setIsBoxScoreOpen={setIsBoxScoreOpen}
-              boxScoreRef={boxScoreRef}
-              onToggleLocation={togglePlayerLocation}
-              onToggleResult={togglePlayerResult}
-              onClearFilters={clearPlayerFilters}
-              onSelectPlayerFromBoxScore={handleSelectPlayerFromBoxScore}
-              onSelectTeamFromBoxScore={handleSelectTeamFromBoxScore}
-              seasonPlayedCount={playerDashboard.counts.seasonPlayedCount}
-              seasonMissedCount={playerDashboard.counts.seasonMissedCount}
+              dashboard={playerDashboard}
+              controls={playerControls}
+              boxScoreState={sharedBoxScoreState}
             />
           }
           teamView={
             <TeamDashboardView
-              title={teamTitle}
-              loading={teamLoading}
-              error={teamError}
-              query={teamQuery}
-              setQuery={setTeamQuery}
-              season={season}
-              setSeason={setSeason}
-              last={last}
-              setLast={setLast}
-              onSearch={handleTeamSearch}
-              filters={teamFilters}
-              onUpdateFilter={updateTeamFilter}
-              onRemoveThresholdFilter={removeTeamThresholdFilter}
-              onToggleLocation={toggleTeamLocation}
-              onToggleResult={toggleTeamResult}
-              onClearFilters={clearTeamFilters}
-              averages={teamDashboard.averages}
-              selectedStat={teamSelectedStat}
-              setSelectedStat={setTeamSelectedStat}
-              filteredGames={teamDashboard.filteredGames}
-              propInsights={teamDashboard.propInsights}
-              matchupSnapshot={teamDashboard.matchupSnapshot}
-              selectedGame={selectedGame}
-              selectedGameId={selectedGameId}
-              onSelectGame={handleSelectGame}
-              boxScore={boxScore}
-              boxScoreLoading={boxScoreLoading}
-              boxScoreError={boxScoreError}
-              isBoxScoreOpen={isBoxScoreOpen}
-              setIsBoxScoreOpen={setIsBoxScoreOpen}
-              boxScoreRef={boxScoreRef}
-              onSelectPlayerFromBoxScore={handleSelectPlayerFromBoxScore}
-              onSelectTeamFromBoxScore={handleSelectTeamFromBoxScore}
+              dashboard={teamDashboard}
+              controls={teamControls}
+              boxScoreState={sharedBoxScoreState}
             />
           }
         />

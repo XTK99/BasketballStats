@@ -2,25 +2,25 @@ import { useMemo } from "react";
 import "./HitRateBoard.css";
 
 const PLAYER_THRESHOLDS = {
-  points: [10, 15, 20, 25, 30],
-  rebounds: [4, 6, 8, 10, 12],
-  assists: [3, 5, 7, 9, 11],
+  points: [10, 15, 20, 25, 30, 35, 40, 45, 50],
+  rebounds: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+  assists: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
   steals: [1, 2, 3, 4, 5],
   blocks: [1, 2, 3, 4, 5],
   turnovers: [2, 3, 4, 5, 6],
   minutes: [20, 25, 30, 35, 40],
-  threesMade: [1, 2, 3, 4, 5],
+  threesMade: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 };
 
 const TEAM_THRESHOLDS = {
-  points: [100, 110, 120, 130, 140],
+  points: [100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150],
   rebounds: [35, 40, 45, 50, 55],
   assists: [20, 25, 30, 35, 40],
   steals: [5, 7, 9, 11, 13],
   blocks: [3, 5, 7, 9, 11],
   turnovers: [8, 10, 12, 14, 16],
   minutes: [220, 230, 240, 250, 260],
-  threesMade: [8, 10, 12, 14, 16],
+  threesMade: [8, 10, 12, 14, 16, 18, 20, 22, 24, 26],
 };
 
 const STAT_LABELS = {

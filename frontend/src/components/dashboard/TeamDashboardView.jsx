@@ -11,51 +11,44 @@ import GameLogTable from "../GameLogTable";
 import BoxScorePanel from "../BoxScorePanel";
 import "./TeamDashboardView.css";
 
-const STAT_LABEL_MAP = {
-  points: "Points",
-  rebounds: "Rebounds",
-  assists: "Assists",
-  steals: "Steals",
-  blocks: "Blocks",
-  turnovers: "Turnovers",
-  minutes: "Minutes",
-  threesMade: "3PM",
-};
+function TeamDashboardView({ dashboard, controls, boxScoreState }) {
+  const {
+    title,
+    loading,
+    error,
+    query,
+    setQuery,
+    season,
+    setSeason,
+    last,
+    setLast,
+    onSearch,
+    filters,
+    onUpdateFilter,
+    onRemoveThresholdFilter,
+    onToggleLocation,
+    onToggleResult,
+    onClearFilters,
+    selectedStat,
+    setSelectedStat,
+  } = controls;
 
-function TeamDashboardView({
-  title,
-  loading,
-  error,
-  query,
-  setQuery,
-  season,
-  setSeason,
-  last,
-  setLast,
-  onSearch,
-  filters,
-  onUpdateFilter,
-  onRemoveThresholdFilter,
-  onToggleLocation,
-  onToggleResult,
-  onClearFilters,
-  averages,
-  selectedStat,
-  setSelectedStat,
-  filteredGames,
-  propInsights,
-  selectedGame,
-  selectedGameId,
-  onSelectGame,
-  boxScore,
-  boxScoreLoading,
-  boxScoreError,
-  isBoxScoreOpen,
-  setIsBoxScoreOpen,
-  boxScoreRef,
-  onSelectPlayerFromBoxScore,
-  onSelectTeamFromBoxScore,
-}) {
+  const {
+    selectedGame,
+    selectedGameId,
+    onSelectGame,
+    boxScore,
+    boxScoreLoading,
+    boxScoreError,
+    isBoxScoreOpen,
+    setIsBoxScoreOpen,
+    boxScoreRef,
+    onSelectPlayerFromBoxScore,
+    onSelectTeamFromBoxScore,
+  } = boxScoreState;
+
+  const { averages, filteredGames, selectedLine, propInsights } = dashboard;
+
   return (
     <div className="section-stack">
       <DashboardHeaderCard heading="Team Dashboard" title={title}>
@@ -94,7 +87,8 @@ function TeamDashboardView({
 
           <PropEdgeCard
             title={title}
-            statLabel={STAT_LABEL_MAP[selectedStat] || selectedStat}
+            selectedStat={selectedStat}
+            selectedLine={selectedLine}
             insights={propInsights}
           />
 
