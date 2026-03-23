@@ -1,55 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
+
+import { usePlayerDashboard } from "./hooks/usePlayerDashboard";
 import { useTeamDashboard } from "./hooks/useTeamDashboard";
-import { getPlayerGames, getTeamGames, getBoxScore } from "./api/nbaApi";
+import { useDashboardFilters } from "./hooks/useDashboardFilters";
+import { useBoxScore } from "./hooks/useBoxScore";
+import {
+  deriveTeamQuery,
+  fetchPlayerDashboardData,
+  fetchTeamDashboardData,
+} from "./utils/dashboardFetchers";
+
 import BettingSimulator from "./components/BettingSimulator";
 import DashboardCarousel from "./components/dashboard/DashboardCarousel";
 import PlayerDashboardView from "./components/dashboard/PlayerDashboardView";
 import TeamDashboardView from "./components/dashboard/TeamDashboardView";
-import { usePlayerDashboard } from "./hooks/usePlayerDashboard";
-import { normalizeGames } from "./utils/normalizeGames";
-
-const INITIAL_FILTERS = {
-  locations: ["home", "away"],
-  results: ["win", "loss"],
-  opponent: "",
-  thresholds: [],
-};
-
-function toggleFilterValue(values, target) {
-  if (values.includes(target)) {
-    if (values.length === 1) return values;
-    return values.filter((value) => value !== target);
-  }
-
-  return [...values, target];
-}
-
-function deriveTeamQuery(playerResponse, normalizedPlayerGames) {
-  const directTeam =
-    playerResponse?.teamName ||
-    playerResponse?.team ||
-    playerResponse?.teamAbbreviation ||
-    playerResponse?.team_abbreviation ||
-    "";
-
-  if (directTeam) return String(directTeam).trim();
-
-  const firstGame = normalizedPlayerGames?.[0];
-
-  if (firstGame?.teamName) return String(firstGame.teamName).trim();
-  if (firstGame?.team) return String(firstGame.team).trim();
-  if (firstGame?.teamAbbreviation) {
-    return String(firstGame.teamAbbreviation).trim();
-  }
-
-  if (firstGame?.matchup) {
-    const firstToken = String(firstGame.matchup).trim().split(" ")[0];
-    if (firstToken) return firstToken;
-  }
-
-  return "";
-}
 
 function App() {
   const [viewMode, setViewMode] = useState("dashboard");
@@ -64,9 +29,6 @@ function App() {
   const [playerSelectedStat, setPlayerSelectedStat] = useState("points");
   const [teamSelectedStat, setTeamSelectedStat] = useState("points");
 
-  const [playerFilters, setPlayerFilters] = useState(INITIAL_FILTERS);
-  const [teamFilters, setTeamFilters] = useState(INITIAL_FILTERS);
-
   const [playerGames, setPlayerGames] = useState([]);
   const [teamGames, setTeamGames] = useState([]);
 
@@ -79,27 +41,249 @@ function App() {
   const [playerError, setPlayerError] = useState("");
   const [teamError, setTeamError] = useState("");
 
-  const [selectedGameId, setSelectedGameId] = useState(null);
-  const [selectedGame, setSelectedGame] = useState(null);
-  const [boxScore, setBoxScore] = useState(null);
-  const [boxScoreLoading, setBoxScoreLoading] = useState(false);
-  const [boxScoreError, setBoxScoreError] = useState("");
-  const [isBoxScoreOpen, setIsBoxScoreOpen] = useState(true);
   const [includeMissedGames, setIncludeMissedGames] = useState(false);
 
-  const boxScoreRef = useRef(null);
+  const playerFilterState = useDashboardFilters();
+  const teamFilterState = useDashboardFilters();
+
+  const {
+    filters: playerFilters,
+    updateFilter: updatePlayerFilter,
+    removeThresholdFilter: removePlayerThresholdFilter,
+    toggleLocation: togglePlayerLocation,
+    toggleResult: togglePlayerResult,
+    clearFilters: clearPlayerFilters,
+  } = playerFilterState;
+
+  const {
+    filters: teamFilters,
+    updateFilter: updateTeamFilter,
+    removeThresholdFilter: removeTeamThresholdFilter,
+    toggleLocation: toggleTeamLocation,
+    toggleResult: toggleTeamResult,
+    clearFilters: clearTeamFilters,
+  } = teamFilterState;
+
   const skipNextTeamAutoSearchRef = useRef(false);
+
+  const boxScoreState = useBoxScore({
+    getAllGames: () => [...playerGames, ...teamGames],
+  });
+
+  const {
+    selectedGameId,
+    selectedGame,
+    boxScore,
+    boxScoreLoading,
+    boxScoreError,
+    isBoxScoreOpen,
+    setIsBoxScoreOpen,
+    boxScoreRef,
+    setSelectedGame,
+    setSelectedGameId,
+    setBoxScore,
+    setBoxScoreError,
+    setBoxScoreLoading,
+    selectGame,
+    reloadBoxScore,
+  } = boxScoreState;
+
+  function resetPlayerDashboard() {
+    setPlayerGames([]);
+    setPlayerTitle("Player");
+    setPlayerError("");
+  }
+
+  function resetTeamDashboard() {
+    setTeamGames([]);
+    setTeamTitle("Team");
+    setTeamError("");
+  }
+
+  async function loadTeamDashboard(teamName) {
+    const trimmedQuery = String(teamName || "").trim();
+
+    if (!trimmedQuery) {
+      resetTeamDashboard();
+      return [];
+    }
+
+    try {
+      setTeamLoading(true);
+      setTeamError("");
+
+      const data = await fetchTeamDashboardData(trimmedQuery, last, season);
+
+      setTeamGames(data.games);
+      setTeamTitle(data.title);
+
+      return data.games;
+    } catch (error) {
+      console.error("Team fetch failed:", error);
+      setTeamError("Failed to load team dashboard.");
+      setTeamGames([]);
+      return [];
+    } finally {
+      setTeamLoading(false);
+    }
+  }
+
+  async function loadPlayerAndRelatedTeamDashboard(playerName) {
+    const trimmedQuery = String(playerName || "").trim();
+
+    if (!trimmedQuery) {
+      resetPlayerDashboard();
+      resetTeamDashboard();
+      return [];
+    }
+
+    try {
+      setPlayerLoading(true);
+      setTeamLoading(true);
+      setPlayerError("");
+      setTeamError("");
+
+      const playerData = await fetchPlayerDashboardData(
+        trimmedQuery,
+        last,
+        season,
+      );
+
+      setPlayerGames(playerData.games);
+      setPlayerTitle(playerData.title);
+
+      try {
+        const derivedTeamQuery = deriveTeamQuery(
+          playerData.response,
+          playerData.games,
+        );
+
+        if (!derivedTeamQuery) {
+          setTeamQuery("");
+          resetTeamDashboard();
+          return playerData.games;
+        }
+
+        skipNextTeamAutoSearchRef.current = true;
+        setTeamQuery(derivedTeamQuery);
+        setTeamTitle(derivedTeamQuery);
+
+        const teamData = await fetchTeamDashboardData(
+          derivedTeamQuery,
+          last,
+          season,
+        );
+
+        setTeamGames(teamData.games);
+        setTeamTitle(teamData.title);
+        setTeamError("");
+      } catch (teamError) {
+        console.error("Related team fetch failed:", teamError);
+        setTeamGames([]);
+        setTeamError("Failed to load team dashboard.");
+      }
+
+      return playerData.games;
+    } catch (error) {
+      console.error("Player fetch failed:", error);
+      setPlayerError("Failed to load player dashboard.");
+      setPlayerGames([]);
+      return [];
+    } finally {
+      setPlayerLoading(false);
+      setTeamLoading(false);
+    }
+  }
+
+  async function handlePlayerSearch() {
+    await loadPlayerAndRelatedTeamDashboard(playerQuery);
+  }
+
+  async function handleTeamSearch() {
+    await loadTeamDashboard(teamQuery);
+  }
+
+  async function handleSelectGame(gameOrGameId) {
+    await selectGame(gameOrGameId);
+  }
+
+  async function handleSelectTeamFromBoxScore(teamName) {
+    if (!teamName) return;
+
+    setActiveDashboardView("team");
+    skipNextTeamAutoSearchRef.current = true;
+    setTeamQuery(teamName);
+    await loadTeamDashboard(teamName);
+  }
+
+  async function handleSelectPlayerFromBoxScore(playerName) {
+    const trimmedPlayerName = String(playerName || "").trim();
+    if (!trimmedPlayerName) return;
+
+    const previousSelectedGameId =
+      selectedGame?.gameId ||
+      selectedGameId ||
+      boxScore?.gameId ||
+      boxScore?.game?.gameId ||
+      null;
+
+    const previousSelectedGame = selectedGame || null;
+
+    setActiveDashboardView("player");
+    setPlayerQuery(trimmedPlayerName);
+
+    try {
+      const normalizedPlayerGames =
+        (await loadPlayerAndRelatedTeamDashboard(trimmedPlayerName)) || [];
+
+      if (!previousSelectedGameId) return;
+
+      const matchingGame = normalizedPlayerGames.find(
+        (game) =>
+          game?.gameId === previousSelectedGameId ||
+          game?.GAME_ID === previousSelectedGameId,
+      );
+
+      if (matchingGame) {
+        await selectGame(matchingGame);
+        return;
+      }
+
+      setIsBoxScoreOpen(true);
+      setSelectedGameId(previousSelectedGameId);
+      setSelectedGame(
+        previousSelectedGame || {
+          gameId: previousSelectedGameId,
+        },
+      );
+      setBoxScoreLoading(true);
+      setBoxScoreError("");
+
+      const response = await reloadBoxScore(previousSelectedGameId);
+
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          boxScoreRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 50);
+      });
+    } catch (error) {
+      console.error("Failed to switch to player from box score:", error);
+      setBoxScoreError("Failed to load box score.");
+      setBoxScore(null);
+    } finally {
+      setBoxScoreLoading(false);
+    }
+  }
 
   useEffect(() => {
     const trimmedQuery = playerQuery.trim();
 
     if (!trimmedQuery) {
-      setPlayerGames([]);
-      setTeamGames([]);
-      setPlayerTitle("Player");
-      setTeamTitle("Team");
-      setPlayerError("");
-      setTeamError("");
+      resetPlayerDashboard();
+      resetTeamDashboard();
       return;
     }
 
@@ -121,9 +305,7 @@ function App() {
     const trimmedQuery = teamQuery.trim();
 
     if (!trimmedQuery) {
-      setTeamGames([]);
-      setTeamTitle("Team");
-      setTeamError("");
+      resetTeamDashboard();
       return;
     }
 
@@ -133,312 +315,6 @@ function App() {
 
     return () => clearTimeout(timeoutId);
   }, [teamQuery, season, last, activeDashboardView]);
-
-  function updatePlayerFilter(key, value) {
-    setPlayerFilters((prev) => ({ ...prev, [key]: value }));
-  }
-
-  function updateTeamFilter(key, value) {
-    setTeamFilters((prev) => ({ ...prev, [key]: value }));
-  }
-
-  function removePlayerThresholdFilter(indexToRemove) {
-    setPlayerFilters((prev) => ({
-      ...prev,
-      thresholds: prev.thresholds.filter((_, index) => index !== indexToRemove),
-    }));
-  }
-
-  function removeTeamThresholdFilter(indexToRemove) {
-    setTeamFilters((prev) => ({
-      ...prev,
-      thresholds: prev.thresholds.filter((_, index) => index !== indexToRemove),
-    }));
-  }
-
-  function togglePlayerLocation(location) {
-    setPlayerFilters((prev) => ({
-      ...prev,
-      locations: toggleFilterValue(prev.locations, location),
-    }));
-  }
-
-  function togglePlayerResult(result) {
-    setPlayerFilters((prev) => ({
-      ...prev,
-      results: toggleFilterValue(prev.results, result),
-    }));
-  }
-
-  function toggleTeamLocation(location) {
-    setTeamFilters((prev) => ({
-      ...prev,
-      locations: toggleFilterValue(prev.locations, location),
-    }));
-  }
-
-  function toggleTeamResult(result) {
-    setTeamFilters((prev) => ({
-      ...prev,
-      results: toggleFilterValue(prev.results, result),
-    }));
-  }
-
-  async function handlePlayerSearch() {
-    await loadPlayerDashboard(playerQuery);
-  }
-
-  async function handleSelectGame(gameOrGameId) {
-    setIsBoxScoreOpen(true);
-
-    const game =
-      typeof gameOrGameId === "string"
-        ? [...playerGames, ...teamGames].find(
-            (entry) => entry.gameId === gameOrGameId,
-          )
-        : gameOrGameId;
-
-    const gameId = game?.gameId;
-    if (!gameId) return;
-
-    try {
-      setSelectedGameId(gameId);
-      setSelectedGame(game);
-      setBoxScoreLoading(true);
-      setBoxScoreError("");
-
-      const response = await getBoxScore(gameId);
-      setBoxScore(response);
-
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          boxScoreRef.current?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        }, 50);
-      });
-    } catch (err) {
-      console.error(err);
-      setBoxScoreError("Failed to load box score.");
-      setBoxScore(null);
-    } finally {
-      setBoxScoreLoading(false);
-    }
-  }
-
-  async function handleSelectTeamFromBoxScore(teamName) {
-    if (!teamName) return;
-
-    setActiveDashboardView("team");
-    skipNextTeamAutoSearchRef.current = true;
-    setTeamQuery(teamName);
-    await handleTeamSearchFromValue(teamName);
-  }
-
-  async function handleTeamSearchFromValue(teamName) {
-    const trimmedQuery = String(teamName || "").trim();
-
-    if (!trimmedQuery) {
-      setTeamGames([]);
-      setTeamTitle("Team");
-      setTeamError("");
-      return;
-    }
-
-    try {
-      setTeamLoading(true);
-      setTeamError("");
-
-      const teamResponse = await getTeamGames(trimmedQuery, last, season);
-      const normalizedTeamGames = normalizeGames(
-        teamResponse?.games || [],
-        "team",
-      );
-
-      setTeamGames(normalizedTeamGames);
-      setTeamTitle(teamResponse?.teamName || trimmedQuery);
-    } catch (err) {
-      console.error(err);
-      setTeamError("Failed to load team dashboard.");
-      setTeamGames([]);
-    } finally {
-      setTeamLoading(false);
-    }
-  }
-
-  async function handleSelectPlayerFromBoxScore(playerName) {
-    const trimmedPlayerName = String(playerName || "").trim();
-    if (!trimmedPlayerName) return;
-
-    const previousSelectedGameId =
-      selectedGame?.gameId ||
-      selectedGameId ||
-      boxScore?.gameId ||
-      boxScore?.game?.gameId ||
-      null;
-
-    const previousSelectedGame = selectedGame || null;
-
-    setActiveDashboardView("player");
-    setPlayerQuery(trimmedPlayerName);
-
-    try {
-      const normalizedPlayerGames =
-        (await loadPlayerDashboard(trimmedPlayerName)) || [];
-
-      if (!previousSelectedGameId) return;
-
-      const matchingGame = normalizedPlayerGames.find(
-        (game) =>
-          game?.gameId === previousSelectedGameId ||
-          game?.GAME_ID === previousSelectedGameId,
-      );
-
-      if (matchingGame) {
-        await handleSelectGame(matchingGame);
-        return;
-      }
-
-      setIsBoxScoreOpen(true);
-      setSelectedGameId(previousSelectedGameId);
-      setSelectedGame(
-        previousSelectedGame || {
-          gameId: previousSelectedGameId,
-        },
-      );
-      setBoxScoreLoading(true);
-      setBoxScoreError("");
-
-      const response = await getBoxScore(previousSelectedGameId);
-      setBoxScore(response);
-
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          boxScoreRef.current?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        }, 50);
-      });
-    } catch (err) {
-      console.error("Failed to switch to player from box score:", err);
-      setBoxScoreError("Failed to load box score.");
-      setBoxScore(null);
-    } finally {
-      setBoxScoreLoading(false);
-    }
-  }
-
-  async function loadPlayerDashboard(playerName) {
-    const trimmedQuery = String(playerName || "").trim();
-
-    setPlayerLoading(true);
-    setTeamLoading(true);
-    setPlayerError("");
-    setTeamError("");
-
-    if (!trimmedQuery) {
-      setPlayerGames([]);
-      setTeamGames([]);
-      setPlayerTitle("Player");
-      setTeamTitle("Team");
-      setPlayerError("");
-      setTeamError("");
-      return [];
-    }
-
-    try {
-      setPlayerLoading(true);
-      setPlayerError("");
-
-      const playerResponse = await getPlayerGames(trimmedQuery, last, season);
-
-      const normalizedPlayerGames = normalizeGames(
-        playerResponse?.games || [],
-        "player",
-      );
-
-      setPlayerGames(normalizedPlayerGames);
-      setPlayerTitle(
-        playerResponse?.playerName || playerResponse?.player || trimmedQuery,
-      );
-
-      try {
-        const derivedTeamQuery = deriveTeamQuery(
-          playerResponse,
-          normalizedPlayerGames,
-        );
-
-        if (!derivedTeamQuery) {
-          setTeamQuery("");
-          setTeamGames([]);
-          setTeamTitle("Team");
-          return normalizedPlayerGames;
-        }
-
-        skipNextTeamAutoSearchRef.current = true;
-        setTeamQuery(derivedTeamQuery);
-        setTeamTitle(derivedTeamQuery);
-
-        const teamResponse = await getTeamGames(derivedTeamQuery, last, season);
-
-        const normalizedTeamGames = normalizeGames(
-          teamResponse?.games || [],
-          "team",
-        );
-
-        setTeamGames(normalizedTeamGames);
-        setTeamTitle(teamResponse?.teamName || derivedTeamQuery);
-        setTeamError("");
-      } catch (teamErr) {
-        console.error("Team fetch failed:", teamErr);
-        setTeamGames([]);
-        setTeamError("Failed to load team dashboard.");
-      }
-
-      return normalizedPlayerGames;
-    } catch (err) {
-      console.error("Player fetch failed:", err);
-      setPlayerError("Failed to load player dashboard.");
-      setPlayerGames([]);
-      return [];
-    } finally {
-      setPlayerLoading(false);
-      setTeamLoading(false);
-    }
-  }
-
-  async function handleTeamSearch() {
-    const trimmedQuery = teamQuery.trim();
-
-    if (!trimmedQuery) {
-      setTeamGames([]);
-      setTeamTitle("Team");
-      setTeamError("");
-      return;
-    }
-
-    try {
-      setTeamLoading(true);
-      setTeamError("");
-
-      const teamResponse = await getTeamGames(trimmedQuery, last, season);
-      const normalizedTeamGames = normalizeGames(
-        teamResponse?.games || [],
-        "team",
-      );
-
-      setTeamGames(normalizedTeamGames);
-      setTeamTitle(teamResponse?.teamName || trimmedQuery);
-    } catch (err) {
-      console.error(err);
-      setTeamError("Failed to load team dashboard.");
-      setTeamGames([]);
-    } finally {
-      setTeamLoading(false);
-    }
-  }
 
   const teamDashboard = useTeamDashboard({
     teamGames,
@@ -455,13 +331,6 @@ function App() {
     selectedGame,
   });
 
-  function clearPlayerFilters() {
-    setPlayerFilters(INITIAL_FILTERS);
-  }
-
-  function clearTeamFilters() {
-    setTeamFilters(INITIAL_FILTERS);
-  }
   const playerControls = {
     title: playerTitle,
     loading: playerLoading,
@@ -519,6 +388,7 @@ function App() {
     onSelectPlayerFromBoxScore: handleSelectPlayerFromBoxScore,
     onSelectTeamFromBoxScore: handleSelectTeamFromBoxScore,
   };
+
   return (
     <div className="app-shell">
       <header className="app-header">
@@ -536,14 +406,18 @@ function App() {
             <div className="app-hero-actions">
               <div className="segmented-group">
                 <button
-                  className={`segment-btn ${viewMode === "dashboard" ? "active" : ""}`}
+                  className={`segment-btn ${
+                    viewMode === "dashboard" ? "active" : ""
+                  }`}
                   onClick={() => setViewMode("dashboard")}
                 >
                   Dashboard
                 </button>
 
                 <button
-                  className={`segment-btn ${viewMode === "simulator" ? "active" : ""}`}
+                  className={`segment-btn ${
+                    viewMode === "simulator" ? "active" : ""
+                  }`}
                   onClick={() => setViewMode("simulator")}
                 >
                   Betting Simulator
