@@ -6,6 +6,7 @@ import { useTeamDashboard } from "./hooks/useTeamDashboard";
 import { useDashboardFilters } from "./hooks/useDashboardFilters";
 import { useBoxScore } from "./hooks/useBoxScore";
 import { useDashboardSearches } from "./hooks/useDashboardSearches";
+import { useDashboardControls } from "./hooks/useDashboardControls";
 
 import BettingSimulator from "./components/BettingSimulator";
 import DashboardCarousel from "./components/dashboard/DashboardCarousel";
@@ -184,49 +185,50 @@ function App() {
     selectedGame,
   });
 
-  const playerControls = {
-    title: playerTitle,
-    loading: playerLoading,
-    error: playerError,
-    query: playerQuery,
-    setQuery: setPlayerQuery,
-    season,
-    setSeason,
-    last,
-    setLast,
-    onSearch: handlePlayerSearch,
-    filters: playerFilters,
-    onUpdateFilter: updatePlayerFilter,
-    onRemoveThresholdFilter: removePlayerThresholdFilter,
-    onToggleLocation: togglePlayerLocation,
-    onToggleResult: togglePlayerResult,
-    onClearFilters: clearPlayerFilters,
-    selectedStat: playerSelectedStat,
-    setSelectedStat: setPlayerSelectedStat,
-    includeMissedGames,
-    setIncludeMissedGames,
-  };
-
-  const teamControls = {
-    title: teamTitle,
-    loading: teamLoading,
-    error: teamError,
-    query: teamQuery,
-    setQuery: setTeamQuery,
-    season,
-    setSeason,
-    last,
-    setLast,
-    onSearch: handleTeamSearch,
-    filters: teamFilters,
-    onUpdateFilter: updateTeamFilter,
-    onRemoveThresholdFilter: removeTeamThresholdFilter,
-    onToggleLocation: toggleTeamLocation,
-    onToggleResult: toggleTeamResult,
-    onClearFilters: clearTeamFilters,
-    selectedStat: teamSelectedStat,
-    setSelectedStat: setTeamSelectedStat,
-  };
+  const { playerControls, teamControls } = useDashboardControls({
+    playerConfig: {
+      title: playerTitle,
+      loading: playerLoading,
+      error: playerError,
+      query: playerQuery,
+      setQuery: setPlayerQuery,
+      season,
+      setSeason,
+      last,
+      setLast,
+      onSearch: handlePlayerSearch,
+      filters: playerFilters,
+      onUpdateFilter: updatePlayerFilter,
+      onRemoveThresholdFilter: removePlayerThresholdFilter,
+      onToggleLocation: togglePlayerLocation,
+      onToggleResult: togglePlayerResult,
+      onClearFilters: clearPlayerFilters,
+      selectedStat: playerSelectedStat,
+      setSelectedStat: setPlayerSelectedStat,
+      includeMissedGames,
+      setIncludeMissedGames,
+    },
+    teamConfig: {
+      title: teamTitle,
+      loading: teamLoading,
+      error: teamError,
+      query: teamQuery,
+      setQuery: setTeamQuery,
+      season,
+      setSeason,
+      last,
+      setLast,
+      onSearch: handleTeamSearch,
+      filters: teamFilters,
+      onUpdateFilter: updateTeamFilter,
+      onRemoveThresholdFilter: removeTeamThresholdFilter,
+      onToggleLocation: toggleTeamLocation,
+      onToggleResult: toggleTeamResult,
+      onClearFilters: clearTeamFilters,
+      selectedStat: teamSelectedStat,
+      setSelectedStat: setTeamSelectedStat,
+    },
+  });
 
   const sharedBoxScoreState = {
     selectedGame,
