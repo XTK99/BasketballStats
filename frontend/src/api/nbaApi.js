@@ -6,27 +6,34 @@ async function fetchJson(url, fallbackMessage) {
 
   if (!response.ok) {
     let message = fallbackMessage;
+
     if (contentType.includes("application/json")) {
       const errorData = await response.json();
-      message = errorData.error || message;
+      message = errorData.error || errorData.details || message;
     }
+
     throw new Error(message);
   }
 
   return response.json();
 }
+
 export async function searchTeams(query) {
   return fetchJson(
     `${API_BASE}/api/nba/team-search?q=${encodeURIComponent(query)}`,
     "Failed to search teams",
   );
 }
+
 export async function searchPlayers(query, season = "2025-26") {
   return fetchJson(
-    `${API_BASE}/api/nba/player-search?q=${encodeURIComponent(query)}&season=${encodeURIComponent(season)}`,
+    `${API_BASE}/api/nba/player-search?q=${encodeURIComponent(
+      query,
+    )}&season=${encodeURIComponent(season)}`,
     "Failed to search players",
   );
 }
+
 export async function getPlayerGames(
   playerName,
   gameCount = 5,
@@ -47,12 +54,18 @@ export async function getTeamGames(
   gameCount = 5,
   season = "2025-26",
 ) {
+  const normalizedIdentifier = String(teamIdentifier ?? "").trim();
+
+  if (!normalizedIdentifier) {
+    throw new Error("Team identifier is required");
+  }
+
   const isNumericTeamId =
-    typeof teamIdentifier === "number" || /^\d+$/.test(String(teamIdentifier));
+    typeof teamIdentifier === "number" || /^\d+$/.test(normalizedIdentifier);
 
   const teamParam = isNumericTeamId
-    ? `teamId=${encodeURIComponent(teamIdentifier)}`
-    : `teamName=${encodeURIComponent(teamIdentifier)}`;
+    ? `teamId=${encodeURIComponent(normalizedIdentifier)}`
+    : `teamName=${encodeURIComponent(normalizedIdentifier)}`;
 
   return fetchJson(
     `${API_BASE}/api/nba/team-games?${teamParam}&last=${encodeURIComponent(
