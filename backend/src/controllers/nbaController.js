@@ -9,44 +9,118 @@ const {
 const { formatTeamGames } = require("../utils/formatTeamGames");
 const { calculateTeamAverages } = require("../utils/calculateTeamAverages");
 const {
+  getPlayerGamesFromDBByPlayerId,
+} = require("../services/playerGameLogService");
+const {
   warmPlayerCache,
   findPlayerByName,
 } = require("../services/playerService");
-const { getPlayerGamesFromDB } = require("../services/playerGameLogService");
+
+function healthCheck(req, res) {
+  return res.json({ message: "NBA route working" });
+}
+
+async function getPlayerGames(req, res) {
+  try {
+    const playerName = String(req.query.player || "").trim();
+    const season = req.query.season || "2025-26";
+    const last = Number(req.query.last || 10);
+
+    console.log("HIT /player-games ROUTE");
+    console.log("USING DB VERSION");
+    console.log("playerName:", playerName);
+    console.log("season:", season);
+
+    if (!playerName) {
+      return res.status(400).json({ error: "Player is required" });
+    }
+
+    try {
+      await warmPlayerCache(season);
+    } catch (error) {
+      console.warn(
+        "warmPlayerCache failed, continuing with existing cache if available:",
+      );
+      console.warn(error.message);
+    }
+
+    const matchedPlayer = findPlayerByName(playerName);
+
+    console.log("matchedPlayer:", matchedPlayer);
+
+    if (!matchedPlayer) {
+      return res.status(404).json({
+        error: `No player found for "${playerName}"`,
+      });
+    }
+
+    const playerId = Number(matchedPlayer.playerId);
+
+    if (!Number.isFinite(playerId)) {
+      return res.status(500).json({
+        error: `Resolved playerId is invalid for "${playerName}"`,
+      });
+    }
+
+    const games = await getPlayerGamesFromDBByPlayerId(playerId, season);
+    const limitedGames = last > 0 ? games.slice(0, last) : games;
+
+    return res.json({
+      title: matchedPlayer.fullName,
+      source: "database",
+      playerId,
+      playerName: matchedPlayer.fullName,
+      season,
+      count: limitedGames.length,
+      totalGames: games.length,
+      games: limitedGames,
+    });
+  } catch (error) {
+    console.error("Player games controller error:", error);
+    console.error(error?.stack);
+
+    return res.status(500).json({
+      error: error.message || "Failed to load player games from database",
+    });
+  }
+}
 
 async function getBoxScore(req, res) {
   try {
     const { gameId } = req.params;
+
+    if (!gameId) {
+      return res.status(400).json({ error: "gameId is required" });
+    }
+
     const data = await fetchBoxScoreByGameId(gameId);
-    res.json(data);
+    return res.json(data);
   } catch (error) {
     console.error("Box score controller error:", error);
-    res
-      .status(500)
-      .json({ error: error.message || "Failed to fetch box score" });
-  }
-}
+    console.error(error?.stack);
 
-function healthCheck(req, res) {
-  res.json({ message: "NBA route working" });
+    return res.status(500).json({
+      error: error.message || "Failed to fetch box score",
+    });
+  }
 }
 
 async function getTeamGamesController(req, res) {
   try {
-    const { teamId, teamName, last = 5, season = "2025-26" } = req.query;
+    const { teamId, teamName, season = "2025-26" } = req.query;
+    const last = Number(req.query.last) || 5;
 
     let resolvedTeamId = teamId ? Number(teamId) : null;
-    let resolvedTeamName = teamName || "";
+    let resolvedTeamName = teamName ? String(teamName).trim() : "";
 
     if (!resolvedTeamId) {
-      if (!teamName) {
-        return res
-          .status(400)
-          .json({ error: "teamId or teamName is required" });
+      if (!resolvedTeamName) {
+        return res.status(400).json({
+          error: "teamId or teamName is required",
+        });
       }
 
-      resolvedTeamId = getTeamIdByName(teamName);
-      resolvedTeamName = teamName;
+      resolvedTeamId = getTeamIdByName(resolvedTeamName);
     }
 
     if (!resolvedTeamId) {
@@ -57,12 +131,13 @@ async function getTeamGamesController(req, res) {
     }
 
     const games = await getTeamGames(resolvedTeamId, season);
-    const limitedGames = limitGames(games, last);
+    const limitedGames = limitGames(games || [], last);
     const formattedGames = formatTeamGames(limitedGames);
     const averages = calculateTeamAverages(formattedGames);
 
-    res.json({
-      teamName: resolvedTeamName,
+    return res.json({
+      title: resolvedTeamName || "Team Dashboard",
+      teamName: resolvedTeamName || null,
       teamId: resolvedTeamId,
       season,
       count: formattedGames.length,
@@ -70,50 +145,11 @@ async function getTeamGamesController(req, res) {
       games: formattedGames,
     });
   } catch (error) {
-    console.error("Controller error:", error);
-    res.status(500).json({
-      error: "Failed to fetch team games",
-      details: error.message,
-    });
-  }
-}
+    console.error("Team games controller error:", error);
+    console.error(error?.stack);
 
-async function getPlayerGames(req, res) {
-  try {
-    console.log("USING DB VERSION");
-
-    const playerName = req.query.player;
-    const last = Number(req.query.last) || 5;
-    const season = req.query.season || "2025-26";
-
-    if (!playerName) {
-      return res.status(400).json({ error: "player query is required" });
-    }
-
-    await warmPlayerCache(season);
-
-    const matchedPlayer = findPlayerByName(playerName, season);
-    console.log("playerName:", playerName);
-    console.log("season:", season);
-    console.log("matchedPlayer:", matchedPlayer);
-    if (!matchedPlayer) {
-      return res.status(404).json({ error: "Player not found" });
-    }
-
-    const games = await getPlayerGamesFromDB(matchedPlayer.playerId, last);
-
-    return res.json({
-      source: "database",
-      playerId: matchedPlayer.playerId,
-      playerName: matchedPlayer.fullName,
-      season,
-      count: games.length,
-      games,
-    });
-  } catch (error) {
-    console.error("Controller error:", error);
     return res.status(500).json({
-      error: "Failed to fetch player games",
+      error: "Failed to fetch team games",
       details: error.message,
     });
   }

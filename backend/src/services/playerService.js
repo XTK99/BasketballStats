@@ -1,14 +1,22 @@
+const fs = require("fs");
+const path = require("path");
 const axios = require("axios");
 
 const playerCache = new Map();
 
 function normalize(value) {
   return String(value || "")
-    .normalize("NFD") // break accents
-    .replace(/[\u0300-\u036f]/g, "") // remove accents
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/č/g, "c")
+    .replace(/ć/g, "c")
+    .replace(/đ/g, "d")
+    .replace(/š/g, "s")
+    .replace(/ž/g, "z")
     .trim()
     .toLowerCase();
 }
+
 function buildFullName(obj) {
   return (
     obj.DISPLAY_FIRST_LAST ||
@@ -16,6 +24,109 @@ function buildFullName(obj) {
     [obj.FIRST_NAME, obj.LAST_NAME].filter(Boolean).join(" ").trim() ||
     ""
   );
+}
+
+function getLocalPlayersFilePath(season = "2025-26") {
+  return path.resolve(__dirname, `../data/players-${season}.json`);
+}
+
+function loadPlayersFromLocalFile(season = "2025-26") {
+  try {
+    const filePath = getLocalPlayersFilePath(season);
+
+    if (!fs.existsSync(filePath)) {
+      return [];
+    }
+
+    const raw = fs.readFileSync(filePath, "utf8");
+    const parsed = JSON.parse(raw);
+
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.error(`Failed to load local players file for ${season}:`, error);
+    return [];
+  }
+}
+
+function savePlayersToLocalFile(season = "2025-26", players = []) {
+  try {
+    const filePath = getLocalPlayersFilePath(season);
+    fs.mkdirSync(path.dirname(filePath), { recursive: true });
+    fs.writeFileSync(filePath, JSON.stringify(players, null, 2), "utf8");
+  } catch (error) {
+    console.error(`Failed to save local players file for ${season}:`, error);
+  }
+}
+
+function levenshteinDistance(a, b) {
+  const matrix = Array.from({ length: b.length + 1 }, () =>
+    Array(a.length + 1).fill(0),
+  );
+
+  for (let i = 0; i <= a.length; i += 1) {
+    matrix[0][i] = i;
+  }
+
+  for (let j = 0; j <= b.length; j += 1) {
+    matrix[j][0] = j;
+  }
+
+  for (let j = 1; j <= b.length; j += 1) {
+    for (let i = 1; i <= a.length; i += 1) {
+      if (a[i - 1] === b[j - 1]) {
+        matrix[j][i] = matrix[j - 1][i - 1];
+      } else {
+        matrix[j][i] = Math.min(
+          matrix[j - 1][i] + 1,
+          matrix[j][i - 1] + 1,
+          matrix[j - 1][i - 1] + 1,
+        );
+      }
+    }
+  }
+
+  return matrix[b.length][a.length];
+}
+
+function getPlayerSearchScore(player, query) {
+  const fullName = normalize(player.fullName);
+  const queryParts = query.split(/\s+/).filter(Boolean);
+  const nameParts = fullName.split(/\s+/).filter(Boolean);
+
+  if (!query) return Infinity;
+
+  if (fullName === query) return 0;
+  if (fullName.startsWith(query)) return 1;
+  if (fullName.includes(query)) return 2;
+
+  const allPartsMatch = queryParts.every((queryPart) =>
+    nameParts.some(
+      (namePart) =>
+        namePart === queryPart ||
+        namePart.startsWith(queryPart) ||
+        namePart.includes(queryPart),
+    ),
+  );
+
+  if (allPartsMatch) return 3;
+
+  const fuzzyPartScore = queryParts.reduce((total, queryPart) => {
+    let bestPartDistance = Infinity;
+
+    for (const namePart of nameParts) {
+      const distance = levenshteinDistance(namePart, queryPart);
+      if (distance < bestPartDistance) {
+        bestPartDistance = distance;
+      }
+    }
+
+    return total + bestPartDistance;
+  }, 0);
+
+  if (fuzzyPartScore <= queryParts.length) return 4 + fuzzyPartScore;
+
+  const fullNameDistance = levenshteinDistance(fullName, query);
+  return 20 + fullNameDistance;
 }
 
 async function fetchCurrentPlayersFromNBA(season = "2025-26") {
@@ -73,59 +184,91 @@ async function fetchCurrentPlayersFromNBA(season = "2025-26") {
 }
 
 async function warmPlayerCache(season = "2025-26") {
-  if (playerCache.has(season)) {
-    return playerCache.get(season);
+  const existingPlayers = playerCache.get(season);
+  const localPlayers = loadPlayersFromLocalFile(season);
+
+  if (!existingPlayers?.length && localPlayers.length) {
+    playerCache.set(season, localPlayers);
+    console.log(
+      `Loaded player cache from local file for ${season}: ${localPlayers.length} players`,
+    );
   }
 
-  const players = await fetchCurrentPlayersFromNBA(season);
-  playerCache.set(season, players);
+  try {
+    const players = await fetchCurrentPlayersFromNBA(season);
+    playerCache.set(season, players);
+    savePlayersToLocalFile(season, players);
 
-  console.log(`Warmed player cache for ${season}: ${players.length} players`);
-  console.log(
-    "Sample players:",
-    players.slice(0, 10).map((player) => player.fullName),
-  );
+    console.log(`Warmed player cache for ${season}: ${players.length} players`);
+    console.log(
+      "Sample players:",
+      players.slice(0, 10).map((player) => player.fullName),
+    );
 
-  return players;
+    return players;
+  } catch (error) {
+    console.error(
+      `Failed to warm player cache for ${season}:`,
+      error?.message || error,
+    );
+
+    const cachedPlayers = playerCache.get(season) || [];
+
+    if (cachedPlayers.length) {
+      console.log(
+        `Using existing player cache for ${season}: ${cachedPlayers.length} players`,
+      );
+      return cachedPlayers;
+    }
+
+    if (localPlayers.length) {
+      console.log(
+        `Using local players file for ${season}: ${localPlayers.length} players`,
+      );
+      playerCache.set(season, localPlayers);
+      return localPlayers;
+    }
+
+    throw error;
+  }
 }
 
 function searchPlayersLocal(query, season = "2025-26", limit = 10) {
-  const players = playerCache.get(season) || [];
+  const players = playerCache.get(season) || loadPlayersFromLocalFile(season);
   const q = normalize(query);
 
   if (!q) return [];
 
-  const exact = [];
-  const startsWith = [];
-  const includes = [];
+  const ranked = players
+    .map((player) => ({
+      player,
+      score: getPlayerSearchScore(player, q),
+    }))
+    .filter(({ score }) => score <= 25)
+    .sort((a, b) => {
+      if (a.score !== b.score) return a.score - b.score;
+      return a.player.fullName.localeCompare(b.player.fullName);
+    });
 
-  for (const player of players) {
-    const name = normalize(player.fullName);
+  const seen = new Set();
+  const results = [];
 
-    if (name === q) {
-      exact.push(player);
-    } else if (name.startsWith(q)) {
-      startsWith.push(player);
-    } else if (name.includes(q)) {
-      includes.push(player);
-    }
+  for (const { player } of ranked) {
+    const key = `${player.playerId}-${normalize(player.fullName)}`;
+    if (seen.has(key)) continue;
+
+    seen.add(key);
+    results.push(player);
+
+    if (results.length >= limit) break;
   }
 
-  return [...exact, ...startsWith, ...includes].slice(0, limit);
+  return results;
 }
 
 function findPlayerByName(query, season = "2025-26") {
-  const players = playerCache.get(season) || [];
-  const q = normalize(query);
-
-  if (!q) return null;
-
-  return (
-    players.find((player) => normalize(player.fullName) === q) ||
-    players.find((player) => normalize(player.fullName).startsWith(q)) ||
-    players.find((player) => normalize(player.fullName).includes(q)) ||
-    null
-  );
+  const matches = searchPlayersLocal(query, season, 1);
+  return matches[0] || null;
 }
 
 module.exports = {

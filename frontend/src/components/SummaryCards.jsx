@@ -17,8 +17,13 @@ function formatValue(value) {
   return num.toFixed(1);
 }
 
-function SummaryCards({ averages, selectedStat, onSelectStat }) {
-  if (!averages) return null;
+function SummaryCards({
+  averages = null,
+  summary = null,
+  selectedStat,
+  onSelectStat,
+}) {
+  const values = averages || summary?.averages || {};
 
   return (
     <section className="summary-grid">
@@ -32,7 +37,7 @@ function SummaryCards({ averages, selectedStat, onSelectStat }) {
           onClick={() => onSelectStat(card.key)}
         >
           <div className="summary-label">{card.label}</div>
-          <div className="summary-value">{formatValue(averages[card.key])}</div>
+          <div className="summary-value">{formatValue(values[card.key])}</div>
         </button>
       ))}
     </section>

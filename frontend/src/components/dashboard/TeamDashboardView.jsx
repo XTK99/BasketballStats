@@ -11,6 +11,11 @@ import GameLogTable from "../GameLogTable";
 import BoxScorePanel from "../BoxScorePanel";
 import "./TeamDashboardView.css";
 
+function toSafeNumber(value, fallback = 0) {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : fallback;
+}
+
 function TeamDashboardView({ dashboard, controls, boxScoreState }) {
   const {
     title,
@@ -47,7 +52,33 @@ function TeamDashboardView({ dashboard, controls, boxScoreState }) {
     onSelectTeamFromBoxScore,
   } = boxScoreState;
 
-  const { averages, filteredGames, selectedLine, propInsights } = dashboard;
+  // ✅ NEW DASHBOARD SHAPE
+  const games = dashboard?.games ?? [];
+  const filteredGames = dashboard?.filteredGames ?? [];
+  const chartData = dashboard?.chartData ?? [];
+  const splits = dashboard?.splits ?? {};
+  const hitRateBoard = dashboard?.hitRateBoard ?? [];
+  const summary = dashboard?.summary ?? {};
+
+  const loadedGames = toSafeNumber(summary.loadedGames, games.length);
+  const filteredCount = toSafeNumber(
+    summary.filteredCount,
+    filteredGames.length,
+  );
+  const filteredPercent = summary.filteredPercent ?? "0.0";
+  const averageSelectedStat = summary.averageSelectedStat ?? "0.0";
+
+  // keep compatibility for old components
+  const averages = dashboard?.averages ?? {
+    [selectedStat]: averageSelectedStat,
+    averageSelectedStat,
+    loadedGames,
+    filteredCount,
+    filteredPercent,
+  };
+
+  const selectedLine = dashboard?.selectedLine ?? null;
+  const propInsights = dashboard?.propInsights ?? null;
 
   return (
     <div className="section-stack">
@@ -92,14 +123,20 @@ function TeamDashboardView({ dashboard, controls, boxScoreState }) {
             insights={propInsights}
           />
 
-          <SplitsPanel games={filteredGames} selectedStat={selectedStat} />
+          <SplitsPanel
+            splits={splits}
+            games={filteredGames}
+            selectedStat={selectedStat}
+          />
 
           <section className="panel-card">
             <StatSelector
               selectedStat={selectedStat}
               setSelectedStat={setSelectedStat}
             />
+
             <StatChart
+              data={chartData}
               games={filteredGames}
               selectedStat={selectedStat}
               mode="team"
@@ -109,6 +146,7 @@ function TeamDashboardView({ dashboard, controls, boxScoreState }) {
           </section>
 
           <HitRateBoard
+            data={hitRateBoard}
             games={filteredGames}
             selectedStat={selectedStat}
             mode="team"

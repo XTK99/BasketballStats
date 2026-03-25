@@ -6,6 +6,31 @@ import {
   fetchTeamDashboardData,
 } from "../utils/dashboardFetchers";
 
+function normalizeDashboardPayload(data, fallbackTitle = "Dashboard") {
+  const safeData = data && typeof data === "object" ? data : {};
+
+  const games = Array.isArray(safeData.games)
+    ? safeData.games
+    : Array.isArray(safeData.data)
+      ? safeData.data
+      : Array.isArray(safeData.results)
+        ? safeData.results
+        : [];
+
+  const title =
+    safeData.title ||
+    safeData.name ||
+    safeData.teamName ||
+    safeData.playerName ||
+    fallbackTitle;
+
+  return {
+    games,
+    title,
+    response: safeData.response || safeData.raw || safeData,
+  };
+}
+
 export function useDashboardSearches({
   season,
   last,
@@ -54,19 +79,29 @@ export function useDashboardSearches({
       setTeamLoading(true);
       setTeamError("");
 
-      const data = await fetchTeamDashboardData(
+      console.log("loadTeamDashboard called:", {
+        teamName: trimmedQuery,
+        season: seasonToUse,
+        last: lastToUse,
+      });
+
+      const rawData = await fetchTeamDashboardData(
         trimmedQuery,
         lastToUse,
         seasonToUse,
       );
 
+      const data = normalizeDashboardPayload(rawData, trimmedQuery);
+
+      console.log("loadTeamDashboard response:", data);
+
       setTeamGames(data.games);
-      setTeamTitle(data.title);
+      setTeamTitle(data.title || trimmedQuery);
 
       return data.games;
     } catch (error) {
       console.error("Team fetch failed:", error);
-      setTeamError("Failed to load team dashboard.");
+      setTeamError(error?.message || "Failed to load team dashboard.");
       setTeamGames([]);
       return [];
     } finally {
@@ -91,53 +126,84 @@ export function useDashboardSearches({
       setPlayerError("");
       setTeamError("");
 
-      const playerData = await fetchPlayerDashboardData(
+      console.log("loadPlayerAndRelatedTeamDashboard called:", {
+        playerName: trimmedQuery,
+        season: seasonToUse,
+        last: lastToUse,
+      });
+
+      const rawPlayerData = await fetchPlayerDashboardData(
         trimmedQuery,
         lastToUse,
         seasonToUse,
       );
 
+      const playerData = normalizeDashboardPayload(rawPlayerData, trimmedQuery);
+
+      console.log("player dashboard response:", playerData);
+
       setPlayerGames(playerData.games);
-      setPlayerTitle(playerData.title);
+      setPlayerTitle(playerData.title || trimmedQuery);
 
       try {
-        const derivedTeamIdentifier = deriveTeamIdentifier(
+        const derivedTeamIdOrAbbr = deriveTeamIdentifier(
           playerData.response,
           playerData.games,
         );
-        const derivedTeamDisplayName = deriveTeamDisplayName(
+        const derivedTeamName = deriveTeamDisplayName(
           playerData.response,
           playerData.games,
         );
 
-        if (!derivedTeamIdentifier) {
+        console.log("derived team values:", {
+          derivedTeamIdOrAbbr,
+          derivedTeamName,
+        });
+
+        if (!derivedTeamIdOrAbbr && !derivedTeamName) {
           setTeamQuery("");
           resetTeamDashboard();
           return playerData.games;
         }
 
-        skipNextTeamAutoSearchRef.current = true;
-        setTeamQuery(String(derivedTeamDisplayName || ""));
-        setTeamTitle(derivedTeamDisplayName || "Team");
+        const teamSearchValue = String(
+          derivedTeamIdOrAbbr || derivedTeamName || "",
+        ).trim();
 
-        const teamData = await fetchTeamDashboardData(
-          derivedTeamIdentifier,
+        skipNextTeamAutoSearchRef.current = true;
+        setTeamQuery(String(derivedTeamName || teamSearchValue || ""));
+        setTeamTitle(derivedTeamName || "Team");
+
+        const rawTeamData = await fetchTeamDashboardData(
+          teamSearchValue,
           lastToUse,
           seasonToUse,
         );
+
+        const teamData = normalizeDashboardPayload(
+          rawTeamData,
+          derivedTeamName || teamSearchValue || "Team",
+        );
+
+        console.log("related team dashboard response:", teamData);
+
         setTeamGames(teamData.games);
-        setTeamTitle(teamData.title);
+        setTeamTitle(
+          teamData.title || derivedTeamName || teamSearchValue || "Team",
+        );
         setTeamError("");
-      } catch (teamError) {
-        console.error("Related team fetch failed:", teamError);
+      } catch (relatedTeamError) {
+        console.error("Related team fetch failed:", relatedTeamError);
         setTeamGames([]);
-        setTeamError("Failed to load team dashboard.");
+        setTeamError(
+          relatedTeamError?.message || "Failed to load team dashboard.",
+        );
       }
 
       return playerData.games;
     } catch (error) {
       console.error("Player fetch failed:", error);
-      setPlayerError("Failed to load player dashboard.");
+      setPlayerError(error?.message || "Failed to load player dashboard.");
       setPlayerGames([]);
       return [];
     } finally {
@@ -147,18 +213,18 @@ export function useDashboardSearches({
   }
 
   async function handlePlayerSearch(queryOverride, overrides = {}) {
-    await loadPlayerAndRelatedTeamDashboard(
+    return loadPlayerAndRelatedTeamDashboard(
       queryOverride ?? playerQuery,
       overrides,
     );
   }
 
   async function handleTeamSearch(queryOverride, overrides = {}) {
-    await loadTeamDashboard(queryOverride ?? teamQuery, overrides);
+    return loadTeamDashboard(queryOverride ?? teamQuery, overrides);
   }
 
   useEffect(() => {
-    const trimmedQuery = playerQuery.trim();
+    const trimmedQuery = String(playerQuery || "").trim();
 
     if (!trimmedQuery) {
       resetPlayerDashboard();
@@ -181,19 +247,30 @@ export function useDashboardSearches({
       return;
     }
 
-    const trimmedQuery = teamQuery.trim();
+    const trimmedQuery = String(teamQuery || "").trim();
 
     if (!trimmedQuery) {
       resetTeamDashboard();
       return;
     }
 
+    const shouldFetch = teamGames.length === 0 || teamTitle === "Team";
+
     const timeoutId = setTimeout(() => {
-      handleTeamSearch();
+      if (shouldFetch) {
+        handleTeamSearch();
+      }
     }, 350);
 
     return () => clearTimeout(timeoutId);
-  }, [teamQuery, season, last, activeDashboardView]);
+  }, [
+    teamQuery,
+    season,
+    last,
+    activeDashboardView,
+    teamGames.length,
+    teamTitle,
+  ]);
 
   return {
     playerGames,

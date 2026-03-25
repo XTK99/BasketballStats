@@ -1,14 +1,13 @@
 import { useMemo, useState } from "react";
 import "./App.css";
 
-import { usePlayerDashboard } from "./hooks/usePlayerDashboard";
-import { useTeamDashboard } from "./hooks/useTeamDashboard";
 import { useDashboardFilters } from "./hooks/useDashboardFilters";
 import { useBoxScore } from "./hooks/useBoxScore";
 import { useDashboardSearches } from "./hooks/useDashboardSearches";
 import { useDashboardControls } from "./hooks/useDashboardControls";
 import { useBoxScoreNavigation } from "./hooks/useBoxScoreNavigation";
 import { useSavedPages } from "./hooks/useSavedPages";
+import { useDashboardData } from "./hooks/useDashboardData";
 
 import BettingSimulator from "./components/BettingSimulator";
 import DashboardCarousel from "./components/dashboard/DashboardCarousel";
@@ -109,19 +108,21 @@ function App() {
 
   const { savedPages, savePage, deletePage } = useSavedPages();
 
-  const teamDashboard = useTeamDashboard({
-    teamGames,
-    filters: teamFilters,
-    selectedStat: teamSelectedStat,
-  });
-
-  const playerDashboard = usePlayerDashboard({
-    playerGames,
-    teamGames,
+  const playerDashboard = useDashboardData({
+    mode: "player",
+    rawPlayerGames: playerGames,
+    rawTeamGames: teamGames,
     filters: playerFilters,
     selectedStat: playerSelectedStat,
     includeMissedGames,
-    selectedGame,
+  });
+
+  const teamDashboard = useDashboardData({
+    mode: "team",
+    rawTeamGames: teamGames,
+    filters: teamFilters,
+    selectedStat: teamSelectedStat,
+    includeMissedGames: false,
   });
 
   function handleSaveCurrentPage() {

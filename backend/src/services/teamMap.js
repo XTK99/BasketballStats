@@ -92,7 +92,9 @@ const teams = [
 ];
 
 function getTeamIdByName(input) {
-  const search = input.trim().toLowerCase();
+  const search = String(input || "")
+    .trim()
+    .toLowerCase();
 
   const team = teams.find((t) => {
     const fullName = t.name?.toLowerCase();
@@ -109,4 +111,26 @@ function getTeamIdByName(input) {
   return team.id;
 }
 
-module.exports = { getTeamIdByName, teams };
+function getTeamIdByAbbreviation(abbr) {
+  const search = String(abbr || "")
+    .trim()
+    .toLowerCase();
+
+  const team = teams.find((t) => t.abbr?.toLowerCase() === search);
+  return team ? team.id : null;
+}
+
+function getOpponentAbbreviationFromMatchup(matchup) {
+  const value = String(matchup || "").trim();
+  if (!value) return "";
+
+  const parts = value.split(" ");
+  return parts[parts.length - 1] || "";
+}
+
+module.exports = {
+  getTeamIdByName,
+  getTeamIdByAbbreviation,
+  getOpponentAbbreviationFromMatchup,
+  teams,
+};

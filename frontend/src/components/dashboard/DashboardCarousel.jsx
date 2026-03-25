@@ -6,56 +6,66 @@ function DashboardCarousel({
   playerView,
   teamView,
 }) {
-  const views = [
-    { key: "player", label: "Player", content: playerView },
-    { key: "team", label: "Team", content: teamView },
-  ];
-
-  function goToPreviousDashboard() {
-    const currentIndex = views.findIndex(
-      (view) => view.key === activeDashboardView,
-    );
-    const nextIndex = currentIndex === 0 ? views.length - 1 : currentIndex - 1;
-    setActiveDashboardView(views[nextIndex].key);
-  }
-
-  function goToNextDashboard() {
-    const currentIndex = views.findIndex(
-      (view) => view.key === activeDashboardView,
-    );
-    const nextIndex = currentIndex === views.length - 1 ? 0 : currentIndex + 1;
-    setActiveDashboardView(views[nextIndex].key);
-  }
-
-  const activeView =
-    views.find((view) => view.key === activeDashboardView) || views[0];
+  const activeView = activeDashboardView === "team" ? "team" : "player";
 
   return (
-    <>
-      <section className="dashboard-carousel-shell">
+    <section className="dashboard-carousel-shell">
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "12px",
+          marginBottom: "16px",
+          flexWrap: "wrap",
+        }}
+      >
         <button
           type="button"
-          className="dashboard-swap-zone dashboard-swap-zone-left"
-          onClick={goToPreviousDashboard}
-          aria-label="Show previous dashboard"
-          title="Previous dashboard"
+          onClick={() => setActiveDashboardView("player")}
+          style={{
+            padding: "10px 16px",
+            borderRadius: "999px",
+            border:
+              activeView === "player"
+                ? "1px solid rgba(96, 165, 250, 0.9)"
+                : "1px solid rgba(255,255,255,0.16)",
+            background:
+              activeView === "player"
+                ? "rgba(59, 130, 246, 0.18)"
+                : "rgba(255,255,255,0.04)",
+            color: "#fff",
+            cursor: "pointer",
+          }}
         >
-          <span className="dashboard-swap-arrow">‹</span>
+          Player
         </button>
-
-        <div className="dashboard-carousel-content">{activeView.content}</div>
 
         <button
           type="button"
-          className="dashboard-swap-zone dashboard-swap-zone-right"
-          onClick={goToNextDashboard}
-          aria-label="Show next dashboard"
-          title="Next dashboard"
+          onClick={() => setActiveDashboardView("team")}
+          style={{
+            padding: "10px 16px",
+            borderRadius: "999px",
+            border:
+              activeView === "team"
+                ? "1px solid rgba(96, 165, 250, 0.9)"
+                : "1px solid rgba(255,255,255,0.16)",
+            background:
+              activeView === "team"
+                ? "rgba(59, 130, 246, 0.18)"
+                : "rgba(255,255,255,0.04)",
+            color: "#fff",
+            cursor: "pointer",
+          }}
         >
-          <span className="dashboard-swap-arrow">›</span>
+          Team
         </button>
-      </section>
-    </>
+      </div>
+
+      <div className="dashboard-carousel-content">
+        {activeView === "player" ? playerView : teamView}
+      </div>
+    </section>
   );
 }
 

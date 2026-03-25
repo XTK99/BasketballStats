@@ -1,5 +1,4 @@
 import { getPlayerGames, getTeamGames } from "../api/nbaApi";
-import { normalizeGames } from "./normalizeGames";
 
 export function deriveTeamIdentifier(playerResponse, normalizedPlayerGames) {
   const directTeamId =
@@ -68,17 +67,16 @@ export async function fetchTeamDashboardData(teamIdentifier, last, season) {
     response,
     title:
       response?.teamName || response?.team || String(teamIdentifier).trim(),
-    games: normalizeGames(response?.games || [], "team"),
+    games: response?.games || [],
   };
 }
 
 export async function fetchPlayerDashboardData(playerName, last, season) {
   const response = await getPlayerGames(playerName, last, season);
-  const games = normalizeGames(response?.games || [], "player");
 
   return {
     response,
-    games,
+    games: response?.games || [],
     title: response?.playerName || response?.player || playerName,
   };
 }

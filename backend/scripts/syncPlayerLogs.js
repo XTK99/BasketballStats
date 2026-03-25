@@ -4,6 +4,11 @@ require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
 const axios = require("axios");
 const { Pool } = require("pg");
 
+const {
+  getTeamIdByAbbreviation,
+  getOpponentAbbreviationFromMatchup,
+} = require("../src/services/teamMap");
+
 console.log("DB_HOST:", process.env.DB_HOST);
 console.log("DB_NAME:", process.env.DB_NAME);
 
@@ -26,13 +31,30 @@ function parseGameDate(value) {
   return parsed.toISOString().slice(0, 10);
 }
 
-async function syncPlayer(playerId) {
+function getRecordValue(record, ...keys) {
+  for (const key of keys) {
+    if (record[key] !== undefined && record[key] !== null) {
+      return record[key];
+    }
+  }
+  return null;
+}
+
+function getTeamAbbreviationFromMatchup(matchup) {
+  const text = String(matchup || "").trim();
+  if (!text) return null;
+
+  const parts = text.split(" ");
+  return parts[0] || null;
+}
+
+async function syncPlayer(playerId, season = "2025-26") {
   const response = await axios.get(
     "https://stats.nba.com/stats/playergamelog",
     {
       params: {
         PlayerID: playerId,
-        Season: "2025-26",
+        Season: season,
         SeasonType: "Regular Season",
         LeagueID: "00",
       },
@@ -57,21 +79,63 @@ async function syncPlayer(playerId) {
   const headers = resultSet.headers || [];
   const rows = resultSet.rowSet || [];
 
+  console.log("NBA headers:", headers);
+
   for (const row of rows) {
     const record = Object.fromEntries(
       headers.map((header, index) => [header, row[index]]),
     );
 
-    const gameId = record.Game_ID || record.GAME_ID;
-    const recordPlayerId = record.Player_ID || record.PLAYER_ID;
-    const gameDateRaw = record.GAME_DATE;
-    const teamId = record.Team_ID || record.TEAM_ID;
-    const matchup = record.MATCHUP || "";
-    const wl = record.WL || "";
+    const gameId = getRecordValue(record, "GAME_ID", "Game_ID");
+    const recordPlayerId = getRecordValue(record, "PLAYER_ID", "Player_ID");
 
+    const gameDateRaw = getRecordValue(record, "GAME_DATE", "Game_Date");
     const gameDate = parseGameDate(gameDateRaw);
+
+    const matchup = getRecordValue(record, "MATCHUP", "Matchup") || "";
+    const wl = getRecordValue(record, "WL", "W/L") || "";
+
+    const rawTeamId = getRecordValue(record, "TEAM_ID", "Team_ID");
+    const teamAbbrFromMatchup = getTeamAbbreviationFromMatchup(matchup);
+
+    const teamId =
+      rawTeamId != null
+        ? Number(rawTeamId)
+        : teamAbbrFromMatchup
+          ? getTeamIdByAbbreviation(teamAbbrFromMatchup)
+          : null;
+
     const isHome = matchup.includes("vs.");
     const isWin = wl === "W";
+
+    const opponentAbbr = getOpponentAbbreviationFromMatchup(matchup);
+    const opponentTeamId = opponentAbbr
+      ? getTeamIdByAbbreviation(opponentAbbr)
+      : null;
+
+    console.log({
+      gameId,
+      recordPlayerId,
+      rawTeamId,
+      teamAbbrFromMatchup,
+      teamId,
+      opponentAbbr,
+      opponentTeamId,
+      gameDate,
+      matchup,
+    });
+
+    if (!gameId || !recordPlayerId) {
+      console.log("Skipping row due to missing IDs:", {
+        availableKeys: Object.keys(record),
+        gameId,
+        recordPlayerId,
+        teamId,
+        gameDate,
+        matchup,
+      });
+      continue;
+    }
 
     await pool.query(
       `
@@ -79,6 +143,7 @@ async function syncPlayer(playerId) {
         game_id,
         player_id,
         team_id,
+        opponent_team_id,
         game_date,
         is_home,
         is_win,
@@ -94,46 +159,80 @@ async function syncPlayer(playerId) {
         fg3m,
         fg3a,
         ftm,
-        fta
+        fta,
+        wl,
+        matchup,
+        season
       )
       VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
-        $11, $12, $13, $14, $15, $16, $17, $18, $19
+        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,
+        $11,$12,$13,$14,$15,$16,$17,$18,$19,$20,
+        $21,$22,$23
       )
-      ON CONFLICT DO NOTHING
+      ON CONFLICT (player_id, game_id)
+      DO UPDATE SET
+        team_id = EXCLUDED.team_id,
+        opponent_team_id = EXCLUDED.opponent_team_id,
+        game_date = EXCLUDED.game_date,
+        is_home = EXCLUDED.is_home,
+        is_win = EXCLUDED.is_win,
+        minutes = EXCLUDED.minutes,
+        points = EXCLUDED.points,
+        rebounds = EXCLUDED.rebounds,
+        assists = EXCLUDED.assists,
+        steals = EXCLUDED.steals,
+        blocks = EXCLUDED.blocks,
+        turnovers = EXCLUDED.turnovers,
+        fgm = EXCLUDED.fgm,
+        fga = EXCLUDED.fga,
+        fg3m = EXCLUDED.fg3m,
+        fg3a = EXCLUDED.fg3a,
+        ftm = EXCLUDED.ftm,
+        fta = EXCLUDED.fta,
+        wl = EXCLUDED.wl,
+        matchup = EXCLUDED.matchup,
+        season = EXCLUDED.season
       `,
       [
         gameId,
         recordPlayerId,
-        teamId || null,
+        teamId,
+        opponentTeamId,
         gameDate,
         isHome,
         isWin,
-        Number(record.MIN) || 0,
-        Number(record.PTS) || 0,
-        Number(record.REB) || 0,
-        Number(record.AST) || 0,
-        Number(record.STL) || 0,
-        Number(record.BLK) || 0,
-        Number(record.TOV) || 0,
-        Number(record.FGM) || 0,
-        Number(record.FGA) || 0,
-        Number(record.FG3M) || 0,
-        Number(record.FG3A) || 0,
-        Number(record.FTM) || 0,
-        Number(record.FTA) || 0,
+        Number(getRecordValue(record, "MIN")) || 0,
+        Number(getRecordValue(record, "PTS")) || 0,
+        Number(getRecordValue(record, "REB")) || 0,
+        Number(getRecordValue(record, "AST")) || 0,
+        Number(getRecordValue(record, "STL")) || 0,
+        Number(getRecordValue(record, "BLK")) || 0,
+        Number(getRecordValue(record, "TOV")) || 0,
+        Number(getRecordValue(record, "FGM")) || 0,
+        Number(getRecordValue(record, "FGA")) || 0,
+        Number(getRecordValue(record, "FG3M")) || 0,
+        Number(getRecordValue(record, "FG3A")) || 0,
+        Number(getRecordValue(record, "FTM")) || 0,
+        Number(getRecordValue(record, "FTA")) || 0,
+        wl,
+        matchup,
+        season,
       ],
     );
   }
 
-  console.log(`DONE - inserted ${rows.length} rows for player ${playerId}`);
+  console.log(`DONE - upserted ${rows.length} rows for player ${playerId}`);
 }
 
-syncPlayer(1629029)
-  .catch((error) => {
-    console.error("Sync failed:", error.message);
-    process.exitCode = 1;
-  })
-  .finally(async () => {
-    await pool.end();
-  });
+module.exports = { syncPlayer, pool };
+
+if (require.main === module) {
+  syncPlayer(1629029)
+    .catch((error) => {
+      console.error("Sync failed:", error);
+      process.exitCode = 1;
+    })
+    .finally(async () => {
+      await pool.end();
+    });
+}

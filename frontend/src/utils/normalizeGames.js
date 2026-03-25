@@ -22,7 +22,7 @@ function parseMatchup(matchup = "") {
     };
   }
 
-  if (matchup.includes(" vs. ")) {
+  if (matchup.includes("vs")) {
     const parts = matchup.split(" vs. ");
     return {
       opponent: parts[1] || "",
@@ -30,7 +30,7 @@ function parseMatchup(matchup = "") {
     };
   }
 
-  if (matchup.includes(" @ ")) {
+  if (matchup.includes("@")) {
     const parts = matchup.split(" @ ");
     return {
       opponent: parts[1] || "",
