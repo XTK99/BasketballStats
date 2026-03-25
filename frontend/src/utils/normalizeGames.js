@@ -44,39 +44,6 @@ function parseMatchup(matchup = "") {
   };
 }
 
-const TEAM_TIMEZONES = {
-  ATL: "America/New_York",
-  BOS: "America/New_York",
-  BKN: "America/New_York",
-  CHA: "America/New_York",
-  CHI: "America/Chicago",
-  CLE: "America/New_York",
-  DAL: "America/Chicago",
-  DEN: "America/Denver",
-  DET: "America/New_York",
-  GSW: "America/Los_Angeles",
-  HOU: "America/Chicago",
-  IND: "America/Indiana/Indianapolis",
-  LAC: "America/Los_Angeles",
-  LAL: "America/Los_Angeles",
-  MEM: "America/Chicago",
-  MIA: "America/New_York",
-  MIL: "America/Chicago",
-  MIN: "America/Chicago",
-  NOP: "America/Chicago",
-  NYK: "America/New_York",
-  OKC: "America/Chicago",
-  ORL: "America/New_York",
-  PHI: "America/New_York",
-  PHX: "America/Phoenix",
-  POR: "America/Los_Angeles",
-  SAC: "America/Los_Angeles",
-  SAS: "America/Chicago",
-  TOR: "America/Toronto",
-  UTA: "America/Denver",
-  WAS: "America/New_York",
-};
-
 function estimateGameStartTs(game) {
   const gameDate = getValue(game, ["date", "gameDate", "GAME_DATE"], "");
   const matchup = getValue(game, ["matchup", "MATCHUP"], "");
@@ -197,9 +164,29 @@ export function normalizeGame(game) {
 
   const result = wl === "W" ? "win" : wl === "L" ? "loss" : "";
 
+  const teamId = getValue(game, ["teamId", "TEAM_ID", "team_id"], null);
+
+  const teamAbbreviation = getValue(
+    game,
+    [
+      "teamAbbreviation",
+      "TEAM_ABBREVIATION",
+      "team_abbreviation",
+      "team",
+      "TEAM",
+    ],
+    "",
+  );
+
+  const teamName = getValue(game, ["teamName", "TEAM_NAME", "team_name"], "");
+
   return {
-    gameId: getValue(game, ["gameId", "GAME_ID", "Game_ID"], ""),
-    gameDate: getValue(game, ["gameDate", "GAME_DATE", "date"], ""),
+    gameId: getValue(game, ["gameId", "GAME_ID", "Game_ID", "game_id"], ""),
+    gameDate: getValue(
+      game,
+      ["gameDate", "GAME_DATE", "date", "game_date"],
+      "",
+    ),
     gameStartTs: finalGameStartTs,
 
     matchup,
@@ -208,6 +195,11 @@ export function normalizeGame(game) {
     location,
     wl,
     result,
+
+    teamId,
+    teamName,
+    team: teamAbbreviation,
+    teamAbbreviation,
 
     minutes: getNumberValue(game, ["minutes", "MIN", "min"], 0),
     points: getNumberValue(game, ["points", "PTS", "pts"], 0),

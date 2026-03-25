@@ -1,12 +1,18 @@
+console.log("LOADED backend/src/controllers/nbaController.js");
+
 const { getTeamIdByName } = require("../services/teamMap");
 const {
   getTeamGames,
   limitGames,
-  fetchPlayerGames,
   fetchBoxScoreByGameId,
 } = require("../services/nbaService");
 const { formatTeamGames } = require("../utils/formatTeamGames");
 const { calculateTeamAverages } = require("../utils/calculateTeamAverages");
+const {
+  warmPlayerCache,
+  findPlayerByName,
+} = require("../services/playerService");
+const { getPlayerGamesFromDB } = require("../services/playerGameLogService");
 
 async function getBoxScore(req, res) {
   try {
@@ -52,7 +58,6 @@ async function getTeamGamesController(req, res) {
 
     const games = await getTeamGames(resolvedTeamId, season);
     const limitedGames = limitGames(games, last);
-
     const formattedGames = formatTeamGames(limitedGames);
     const averages = calculateTeamAverages(formattedGames);
 
@@ -75,6 +80,8 @@ async function getTeamGamesController(req, res) {
 
 async function getPlayerGames(req, res) {
   try {
+    console.log("USING DB VERSION");
+
     const playerName = req.query.player;
     const last = Number(req.query.last) || 5;
     const season = req.query.season || "2025-26";
@@ -83,11 +90,29 @@ async function getPlayerGames(req, res) {
       return res.status(400).json({ error: "player query is required" });
     }
 
-    const result = await fetchPlayerGames(playerName, last, season);
-    res.json(result);
+    await warmPlayerCache(season);
+
+    const matchedPlayer = findPlayerByName(playerName, season);
+    console.log("playerName:", playerName);
+    console.log("season:", season);
+    console.log("matchedPlayer:", matchedPlayer);
+    if (!matchedPlayer) {
+      return res.status(404).json({ error: "Player not found" });
+    }
+
+    const games = await getPlayerGamesFromDB(matchedPlayer.playerId, last);
+
+    return res.json({
+      source: "database",
+      playerId: matchedPlayer.playerId,
+      playerName: matchedPlayer.fullName,
+      season,
+      count: games.length,
+      games,
+    });
   } catch (error) {
     console.error("Controller error:", error);
-    res.status(500).json({
+    return res.status(500).json({
       error: "Failed to fetch player games",
       details: error.message,
     });

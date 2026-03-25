@@ -1,7 +1,21 @@
 import { getPlayerGames, getTeamGames } from "../api/nbaApi";
 import { normalizeGames } from "./normalizeGames";
 
-export function deriveTeamQuery(playerResponse, normalizedPlayerGames) {
+export function deriveTeamIdentifier(playerResponse, normalizedPlayerGames) {
+  const directTeamId =
+    playerResponse?.teamId ??
+    playerResponse?.team_id ??
+    normalizedPlayerGames?.[0]?.teamId ??
+    normalizedPlayerGames?.[0]?.team_id;
+
+  if (
+    directTeamId !== undefined &&
+    directTeamId !== null &&
+    String(directTeamId).trim() !== ""
+  ) {
+    return directTeamId;
+  }
+
   const directTeam =
     playerResponse?.teamName ||
     playerResponse?.team ||
@@ -27,12 +41,33 @@ export function deriveTeamQuery(playerResponse, normalizedPlayerGames) {
   return "";
 }
 
-export async function fetchTeamDashboardData(teamName, last, season) {
-  const response = await getTeamGames(teamName, last, season);
+export function deriveTeamDisplayName(playerResponse, normalizedPlayerGames) {
+  const directTeamName =
+    playerResponse?.teamName ||
+    playerResponse?.team ||
+    normalizedPlayerGames?.[0]?.teamName ||
+    normalizedPlayerGames?.[0]?.team ||
+    normalizedPlayerGames?.[0]?.teamAbbreviation ||
+    normalizedPlayerGames?.[0]?.team_abbreviation ||
+    "";
+
+  if (directTeamName) return String(directTeamName).trim();
+
+  const fallbackIdentifier = deriveTeamIdentifier(
+    playerResponse,
+    normalizedPlayerGames,
+  );
+
+  return fallbackIdentifier ? String(fallbackIdentifier).trim() : "Team";
+}
+
+export async function fetchTeamDashboardData(teamIdentifier, last, season) {
+  const response = await getTeamGames(teamIdentifier, last, season);
 
   return {
     response,
-    title: response?.teamName || teamName,
+    title:
+      response?.teamName || response?.team || String(teamIdentifier).trim(),
     games: normalizeGames(response?.games || [], "team"),
   };
 }

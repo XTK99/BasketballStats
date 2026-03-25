@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  deriveTeamQuery,
+  deriveTeamDisplayName,
+  deriveTeamIdentifier,
   fetchPlayerDashboardData,
   fetchTeamDashboardData,
 } from "../utils/dashboardFetchers";
@@ -100,27 +101,30 @@ export function useDashboardSearches({
       setPlayerTitle(playerData.title);
 
       try {
-        const derivedTeam = deriveTeamQuery(
+        const derivedTeamIdentifier = deriveTeamIdentifier(
+          playerData.response,
+          playerData.games,
+        );
+        const derivedTeamDisplayName = deriveTeamDisplayName(
           playerData.response,
           playerData.games,
         );
 
-        if (!derivedTeam) {
+        if (!derivedTeamIdentifier) {
           setTeamQuery("");
           resetTeamDashboard();
           return playerData.games;
         }
 
         skipNextTeamAutoSearchRef.current = true;
-        setTeamQuery(derivedTeam);
-        setTeamTitle(derivedTeam);
+        setTeamQuery(String(derivedTeamDisplayName || ""));
+        setTeamTitle(derivedTeamDisplayName || "Team");
 
         const teamData = await fetchTeamDashboardData(
-          derivedTeam,
+          derivedTeamIdentifier,
           lastToUse,
           seasonToUse,
         );
-
         setTeamGames(teamData.games);
         setTeamTitle(teamData.title);
         setTeamError("");

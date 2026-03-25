@@ -4,8 +4,18 @@ const playerCache = new Map();
 
 function normalize(value) {
   return String(value || "")
+    .normalize("NFD") // break accents
+    .replace(/[\u0300-\u036f]/g, "") // remove accents
     .trim()
     .toLowerCase();
+}
+function buildFullName(obj) {
+  return (
+    obj.DISPLAY_FIRST_LAST ||
+    obj.DISPLAY_LAST_COMMA_FIRST?.split(",").reverse().join(" ").trim() ||
+    [obj.FIRST_NAME, obj.LAST_NAME].filter(Boolean).join(" ").trim() ||
+    ""
+  );
 }
 
 async function fetchCurrentPlayersFromNBA(season = "2025-26") {
@@ -24,8 +34,9 @@ async function fetchCurrentPlayersFromNBA(season = "2025-26") {
       Origin: "https://www.nba.com",
       Accept: "application/json, text/plain, */*",
       "Accept-Language": "en-US,en;q=0.9",
+      Connection: "keep-alive",
     },
-    timeout: 10000,
+    timeout: 15000,
   });
 
   const resultSet = response.data?.resultSets?.[0];
@@ -37,21 +48,28 @@ async function fetchCurrentPlayersFromNBA(season = "2025-26") {
   const headers = resultSet.headers;
   const rows = resultSet.rowSet;
 
-  return rows.map((row) => {
-    const obj = {};
+  const players = rows
+    .map((row) => {
+      const obj = {};
 
-    headers.forEach((header, index) => {
-      obj[header] = row[index];
-    });
+      headers.forEach((header, index) => {
+        obj[header] = row[index];
+      });
 
-    return {
-      playerId: obj.PERSON_ID,
-      fullName: obj.DISPLAY_FIRST_LAST,
-      teamId: obj.TEAM_ID,
-      teamName: obj.TEAM_NAME,
-      teamAbbreviation: obj.TEAM_ABBREVIATION,
-    };
-  });
+      const fullName = buildFullName(obj);
+
+      return {
+        playerId: obj.PERSON_ID,
+        fullName,
+        teamId: obj.TEAM_ID,
+        teamName: obj.TEAM_NAME,
+        teamAbbreviation: obj.TEAM_ABBREVIATION,
+        rosterStatus: obj.ROSTERSTATUS,
+      };
+    })
+    .filter((player) => player.playerId && player.fullName);
+
+  return players;
 }
 
 async function warmPlayerCache(season = "2025-26") {
@@ -61,6 +79,13 @@ async function warmPlayerCache(season = "2025-26") {
 
   const players = await fetchCurrentPlayersFromNBA(season);
   playerCache.set(season, players);
+
+  console.log(`Warmed player cache for ${season}: ${players.length} players`);
+  console.log(
+    "Sample players:",
+    players.slice(0, 10).map((player) => player.fullName),
+  );
+
   return players;
 }
 
@@ -70,23 +95,41 @@ function searchPlayersLocal(query, season = "2025-26", limit = 10) {
 
   if (!q) return [];
 
+  const exact = [];
   const startsWith = [];
   const includes = [];
 
   for (const player of players) {
     const name = normalize(player.fullName);
 
-    if (name.startsWith(q)) {
+    if (name === q) {
+      exact.push(player);
+    } else if (name.startsWith(q)) {
       startsWith.push(player);
     } else if (name.includes(q)) {
       includes.push(player);
     }
   }
 
-  return [...startsWith, ...includes].slice(0, limit);
+  return [...exact, ...startsWith, ...includes].slice(0, limit);
+}
+
+function findPlayerByName(query, season = "2025-26") {
+  const players = playerCache.get(season) || [];
+  const q = normalize(query);
+
+  if (!q) return null;
+
+  return (
+    players.find((player) => normalize(player.fullName) === q) ||
+    players.find((player) => normalize(player.fullName).startsWith(q)) ||
+    players.find((player) => normalize(player.fullName).includes(q)) ||
+    null
+  );
 }
 
 module.exports = {
   warmPlayerCache,
   searchPlayersLocal,
+  findPlayerByName,
 };
