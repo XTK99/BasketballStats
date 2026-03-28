@@ -1,14 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-// ✅ make sure this path is correct
 const nbaController = require("../controllers/nbaController");
 
+// Health check
 router.get("/health", nbaController.healthCheck);
 
-router.get("/team-games", nbaController.getTeamGamesController);
+// Player search (NEW)
+router.get("/player-search", nbaController.searchPlayersController);
 
-// 🔥 DEBUG: confirm route is hit
+// Player games
 router.get(
   "/player-games",
   (req, res, next) => {
@@ -18,8 +19,10 @@ router.get(
   nbaController.getPlayerGames,
 );
 
+// Team games
+router.get("/team-games", nbaController.getTeamGamesController);
+
+// Box score
 router.get("/boxscore/:gameId", nbaController.getBoxScore);
 
 module.exports = router;
-///http://localhost:5000/api/nba/player-games?player=LeBron%20James&last=10&season=2025-26///
-///http://localhost:5000/api/nba/team-games?teamName=Los%20Angeles%20Lakers&last=10&season=2025-26

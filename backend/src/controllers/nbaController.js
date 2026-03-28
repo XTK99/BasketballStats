@@ -11,10 +11,8 @@ const { calculateTeamAverages } = require("../utils/calculateTeamAverages");
 const {
   getPlayerGamesFromDBByPlayerId,
 } = require("../services/playerGameLogService");
-const {
-  warmPlayerCache,
-  findPlayerByName,
-} = require("../services/playerService");
+const { findPlayerByNameInDB } = require("../services/playerLookupService");
+const { searchPlayersInDB } = require("../services/playerSearchService");
 
 function healthCheck(req, res) {
   return res.json({ message: "NBA route working" });
@@ -35,16 +33,7 @@ async function getPlayerGames(req, res) {
       return res.status(400).json({ error: "Player is required" });
     }
 
-    try {
-      await warmPlayerCache(season);
-    } catch (error) {
-      console.warn(
-        "warmPlayerCache failed, continuing with existing cache if available:",
-      );
-      console.warn(error.message);
-    }
-
-    const matchedPlayer = findPlayerByName(playerName);
+    const matchedPlayer = await findPlayerByNameInDB(playerName, season);
 
     console.log("matchedPlayer:", matchedPlayer);
 
@@ -54,7 +43,7 @@ async function getPlayerGames(req, res) {
       });
     }
 
-    const playerId = Number(matchedPlayer.playerId);
+    const playerId = Number(matchedPlayer.player_id);
 
     if (!Number.isFinite(playerId)) {
       return res.status(500).json({
@@ -66,10 +55,10 @@ async function getPlayerGames(req, res) {
     const limitedGames = last > 0 ? games.slice(0, last) : games;
 
     return res.json({
-      title: matchedPlayer.fullName,
+      title: matchedPlayer.full_name,
       source: "database",
       playerId,
-      playerName: matchedPlayer.fullName,
+      playerName: matchedPlayer.full_name,
       season,
       count: limitedGames.length,
       totalGames: games.length,
@@ -154,10 +143,41 @@ async function getTeamGamesController(req, res) {
     });
   }
 }
+async function searchPlayersController(req, res) {
+  try {
+    const query = String(req.query.q || "").trim();
+    const season = String(req.query.season || "2025-26").trim();
+    const limit = Number(req.query.limit || 10);
 
+    if (!query) {
+      return res.json([]);
+    }
+
+    const players = await searchPlayersInDB(query, season, limit);
+
+    return res.json(
+      players.map((player) => ({
+        id: player.player_id,
+        name: player.full_name,
+        fullName: player.full_name,
+        teamId: player.team_id,
+        teamAbbreviation: player.team_abbreviation,
+        teamName: player.team_name,
+      })),
+    );
+  } catch (error) {
+    console.error("Player search controller error:", error);
+    console.error(error?.stack);
+
+    return res.status(500).json({
+      error: error.message || "Failed to search players",
+    });
+  }
+}
 module.exports = {
   healthCheck,
   getTeamGamesController,
   getPlayerGames,
   getBoxScore,
+  searchPlayersController,
 };

@@ -1,10 +1,4650 @@
 [
   {
-    "playerId": 1629029,
-    "fullName": "Luka Doncic",
+    "playerId": 1630173,
+    "fullName": "Precious Achiuwa",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203500,
+    "fullName": "Steven Adams",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628389,
+    "fullName": "Bam Adebayo",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630534,
+    "fullName": "Ochai Agbaji",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630583,
+    "fullName": "Santi Aldama",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641725,
+    "fullName": "Trey Alexander",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629638,
+    "fullName": "Nickeil Alexander-Walker",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628960,
+    "fullName": "Grayson Allen",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628386,
+    "fullName": "Jarrett Allen",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630631,
+    "fullName": "Jose Alvarado",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203937,
+    "fullName": "Kyle Anderson",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630828,
+    "fullName": "Alex Antetokounmpo",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203507,
+    "fullName": "Giannis Antetokounmpo",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203648,
+    "fullName": "Thanasis Antetokounmpo",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630175,
+    "fullName": "Cole Anthony",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1628384,
+    "fullName": "OG Anunoby",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630166,
+    "fullName": "Deni Avdija",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629028,
+    "fullName": "Deandre Ayton",
     "teamId": 1610612747,
     "teamName": "Lakers",
     "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628963,
+    "fullName": "Marvin Bagley III",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642846,
+    "fullName": "Ace Bailey",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631116,
+    "fullName": "Patrick Baldwin Jr.",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630163,
+    "fullName": "LaMelo Ball",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628366,
+    "fullName": "Lonzo Ball",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1628964,
+    "fullName": "Mo Bamba",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1631094,
+    "fullName": "Paolo Banchero",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630217,
+    "fullName": "Desmond Bane",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630625,
+    "fullName": "Dalano Banton",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1631230,
+    "fullName": "Dominick Barlow",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203084,
+    "fullName": "Harrison Barnes",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630567,
+    "fullName": "Scottie Barnes",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642964,
+    "fullName": "Brooks Barnhizer",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629628,
+    "fullName": "RJ Barrett",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629646,
+    "fullName": "Charles Bassey",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642419,
+    "fullName": "Jamison Battle",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 201587,
+    "fullName": "Nicolas Batum",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203078,
+    "fullName": "Bradley Beal",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630699,
+    "fullName": "MarJon Beauchamp",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642866,
+    "fullName": "Joan Beringer",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630180,
+    "fullName": "Saddiq Bey",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629048,
+    "fullName": "Goga Bitadze",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 202687,
+    "fullName": "Bismack Biyombo",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641710,
+    "fullName": "Anthony Black",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641778,
+    "fullName": "Leaky Black",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631205,
+    "fullName": "Buddy Boeheim",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 203992,
+    "fullName": "Bogdan Bogdanović",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641737,
+    "fullName": "Adem Bona",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1626164,
+    "fullName": "Devin Booker",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628449,
+    "fullName": "Chris Boucher",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1631123,
+    "fullName": "Jamaree Bouyea",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628396,
+    "fullName": "Tony Bradley",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1631103,
+    "fullName": "Malaki Branham",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1631128,
+    "fullName": "Christian Braun",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642886,
+    "fullName": "Koby Brea",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628969,
+    "fullName": "Mikal Bridges",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628970,
+    "fullName": "Miles Bridges",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628415,
+    "fullName": "Dillon Brooks",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641780,
+    "fullName": "Johni Broome",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628971,
+    "fullName": "Bruce Brown",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642468,
+    "fullName": "Darius Brown",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1627759,
+    "fullName": "Jaylen Brown",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641738,
+    "fullName": "Kobe Brown",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628973,
+    "fullName": "Jalen Brunson",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642868,
+    "fullName": "Carter Bryant",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628418,
+    "fullName": "Thomas Bryant",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641723,
+    "fullName": "Kobe Bufkin",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631174,
+    "fullName": "Tyler Burton",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 202710,
+    "fullName": "Jimmy Butler III",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641824,
+    "fullName": "Matas Buzelis",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631288,
+    "fullName": "Jamal Cain",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203484,
+    "fullName": "Kentavious Caldwell-Pope",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641739,
+    "fullName": "Toumani Camara",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203991,
+    "fullName": "Clint Capela",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642928,
+    "fullName": "Dylan Cardwell",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642382,
+    "fullName": "Branden Carlson",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642267,
+    "fullName": "Bub Carrington",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642269,
+    "fullName": "Devin Carter",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628975,
+    "fullName": "Jevon Carter",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628976,
+    "fullName": "Wendell Carter Jr.",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627936,
+    "fullName": "Alex Caruso",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642264,
+    "fullName": "Stephon Castle",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630658,
+    "fullName": "Colin Castleton",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630577,
+    "fullName": "Julian Champagnie",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630551,
+    "fullName": "Justin Champagnie",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631113,
+    "fullName": "Kennedy Chandler",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642353,
+    "fullName": "Cam Christie",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631108,
+    "fullName": "Max Christie",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630619,
+    "fullName": "Moussa Cisse",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631321,
+    "fullName": "Sidy Cissoko",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641740,
+    "fullName": "Jaylen Clark",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629634,
+    "fullName": "Brandon Clarke",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203903,
+    "fullName": "Jordan Clarkson",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629651,
+    "fullName": "Nic Claxton",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642383,
+    "fullName": "Walter Clayton Jr.",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642363,
+    "fullName": "Nique Clifford",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642270,
+    "fullName": "Donovan Clingan",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641730,
+    "fullName": "Noah Clowney",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629599,
+    "fullName": "Amir Coffey",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642268,
+    "fullName": "Isaiah Collier",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628381,
+    "fullName": "John Collins",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628380,
+    "fullName": "Zach Collins",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 201144,
+    "fullName": "Mike Conley",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1626192,
+    "fullName": "Pat Connaughton",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631451,
+    "fullName": "Javonte Cooke",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1630536,
+    "fullName": "Sharife Cooper",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641731,
+    "fullName": "Bilal Coulibaly",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642907,
+    "fullName": "Cedric Coward",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642384,
+    "fullName": "Isaiah Crawford",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1643018,
+    "fullName": "LJ Cryer",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630595,
+    "fullName": "Cade Cunningham",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203552,
+    "fullName": "Seth Curry",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 201939,
+    "fullName": "Stephen Curry",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642359,
+    "fullName": "Pacôme Dadiet",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630700,
+    "fullName": "Dyson Daniels",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642368,
+    "fullName": "N'Faly Dante",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 203076,
+    "fullName": "Anthony Davis",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631120,
+    "fullName": "JD Davison",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 201942,
+    "fullName": "DeMar DeRozan",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642484,
+    "fullName": "RayJ Dennis",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628978,
+    "fullName": "Donte DiVincenzo",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631217,
+    "fullName": "Moussa Diabaté",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642885,
+    "fullName": "Mohamed Diawara",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641711,
+    "fullName": "Gradey Dick",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630621,
+    "fullName": "Hunter Dickinson",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631172,
+    "fullName": "Ousmane Dieng",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642265,
+    "fullName": "Rob Dillingham",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629029,
+    "fullName": "Luka Dončić",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629652,
+    "fullName": "Luguentz Dort",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630245,
+    "fullName": "Ayo Dosunmu",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203083,
+    "fullName": "Andre Drummond",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627739,
+    "fullName": "Kris Dunn",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642346,
+    "fullName": "Ryan Dunn",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 201142,
+    "fullName": "Kevin Durant",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631105,
+    "fullName": "Jalen Duren",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642856,
+    "fullName": "Egor Dëmin",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631106,
+    "fullName": "Tari Eason",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641744,
+    "fullName": "Zach Edey",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642845,
+    "fullName": "VJ Edgecombe",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630162,
+    "fullName": "Anthony Edwards",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642348,
+    "fullName": "Justin Edwards",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631165,
+    "fullName": "Keon Ellis",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203954,
+    "fullName": "Joel Embiid",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642400,
+    "fullName": "Tristan Enaruna",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642855,
+    "fullName": "Noa Essengue",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630623,
+    "fullName": "Tyson Etienne",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629234,
+    "fullName": "Drew Eubanks",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641787,
+    "fullName": "Tosan Evbuomwan",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642847,
+    "fullName": "Jeremiah Fears",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642271,
+    "fullName": "Kyle Filipowski",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627827,
+    "fullName": "Dorian Finney-Smith",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642843,
+    "fullName": "Cooper Flagg",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642853,
+    "fullName": "Rasheer Fleming",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642280,
+    "fullName": "Trentyn Flowers",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1631323,
+    "fullName": "Simone Fontecchio",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628368,
+    "fullName": "De'Aaron Fox",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642402,
+    "fullName": "Enrique Freeman",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628365,
+    "fullName": "Markelle Fultz",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642277,
+    "fullName": "Johnny Furphy",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629655,
+    "fullName": "Daniel Gafford",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1643158,
+    "fullName": "Andersson Garcia",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1642066,
+    "fullName": "Myron Gardner",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629636,
+    "fullName": "Darius Garland",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630568,
+    "fullName": "Luka Garza",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641718,
+    "fullName": "Keyonte George",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642273,
+    "fullName": "Kyshawn George",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 202331,
+    "fullName": "Paul George",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 201959,
+    "fullName": "Taj Gibson",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630581,
+    "fullName": "Josh Giddey",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642933,
+    "fullName": "Keshon Gilbert",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628983,
+    "fullName": "Shai Gilgeous-Alexander",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630264,
+    "fullName": "Anthony Gill",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631221,
+    "fullName": "Collin Gillespie",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203497,
+    "fullName": "Rudy Gobert",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642884,
+    "fullName": "Vladislav Goldin",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642864,
+    "fullName": "Hugo González",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630692,
+    "fullName": "Jordan Goodwin",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203932,
+    "fullName": "Aaron Gordon",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 201569,
+    "fullName": "Eric Gordon",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 203924,
+    "fullName": "Jerami Grant",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631260,
+    "fullName": "AJ Green",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203110,
+    "fullName": "Draymond Green",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630224,
+    "fullName": "Jalen Green",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629750,
+    "fullName": "Javonte Green",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 201145,
+    "fullName": "Jeff Green",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630182,
+    "fullName": "Josh Green",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629656,
+    "fullName": "Quentin Grimes",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631243,
+    "fullName": "Mouhamed Gueye",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629060,
+    "fullName": "Rui Hachimura",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630169,
+    "fullName": "Tyrese Haliburton",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641790,
+    "fullName": "PJ Hall",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203501,
+    "fullName": "Tim Hardaway Jr.",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 201935,
+    "fullName": "James Harden",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630702,
+    "fullName": "Jaden Hardy",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641989,
+    "fullName": "Elijah Harkless",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642844,
+    "fullName": "Dylan Harper",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631199,
+    "fullName": "Ron Harper Jr.",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203914,
+    "fullName": "Gary Harris",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 202699,
+    "fullName": "Tobias Harris",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628404,
+    "fullName": "Josh Hart",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628392,
+    "fullName": "Isaiah Hartenstein",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630573,
+    "fullName": "Sam Hauser",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641722,
+    "fullName": "Jordan Hawkins",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629637,
+    "fullName": "Jaxson Hayes",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630165,
+    "fullName": "Killian Hayes",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628502,
+    "fullName": "Nigel Hayes-Davis",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1630703,
+    "fullName": "Scoot Henderson",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641707,
+    "fullName": "Taylor Hendricks",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642935,
+    "fullName": "Chucky Hepburn",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629639,
+    "fullName": "Tyler Herro",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627741,
+    "fullName": "Buddy Hield",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629312,
+    "fullName": "Haywood Highsmith",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642396,
+    "fullName": "Blake Hinson",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628988,
+    "fullName": "Aaron Holiday",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 201950,
+    "fullName": "Jrue Holiday",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641842,
+    "fullName": "Ronald Holland II",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641747,
+    "fullName": "DaRon Holmes II",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631096,
+    "fullName": "Chet Holmgren",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 201143,
+    "fullName": "Al Horford",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631216,
+    "fullName": "Caleb Houstan",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641724,
+    "fullName": "Jett Howard",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628989,
+    "fullName": "Kevin Huerter",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630643,
+    "fullName": "Jay Huff",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630574,
+    "fullName": "Ariel Hukporti",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629631,
+    "fullName": "De'Andre Hunter",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1643047,
+    "fullName": "CJ Huntley",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630538,
+    "fullName": "Bones Hyland",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642345,
+    "fullName": "Oso Ighodaro",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 204060,
+    "fullName": "Joe Ingles",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627742,
+    "fullName": "Brandon Ingram",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631127,
+    "fullName": "Harrison Ingram",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 202681,
+    "fullName": "Kyrie Irving",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628371,
+    "fullName": "Jonathan Isaac",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631093,
+    "fullName": "Jaden Ivey",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641713,
+    "fullName": "GG Jackson",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630543,
+    "fullName": "Isaiah Jackson",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631245,
+    "fullName": "Quenton Jackson",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641748,
+    "fullName": "Andre Jackson Jr.",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628991,
+    "fullName": "Jaren Jackson Jr.",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631218,
+    "fullName": "Trayce Jackson-Davis",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642857,
+    "fullName": "Kasparas Jakučionis",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642355,
+    "fullName": "Bronny James",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 2544,
+    "fullName": "LeBron James",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642883,
+    "fullName": "Sion James",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631170,
+    "fullName": "Jaime Jaquez Jr.",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630610,
+    "fullName": "DeJon Jarreau",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629610,
+    "fullName": "DaQuan Jeffries",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641998,
+    "fullName": "Trey Jemison III",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642450,
+    "fullName": "Daniss Jenkins",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629660,
+    "fullName": "Ty Jerome",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630198,
+    "fullName": "Isaiah Joe",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642358,
+    "fullName": "AJ Johnson",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629661,
+    "fullName": "Cameron Johnson",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1643052,
+    "fullName": "Chaney Johnson",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630552,
+    "fullName": "Jalen Johnson",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629640,
+    "fullName": "Keldon Johnson",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642352,
+    "fullName": "Keshad Johnson",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642848,
+    "fullName": "Tre Johnson",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203999,
+    "fullName": "Nikola Jokić",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641732,
+    "fullName": "Colby Jones",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1642938,
+    "fullName": "Curtis Jones",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641794,
+    "fullName": "Dillon Jones",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630529,
+    "fullName": "Herbert Jones",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642403,
+    "fullName": "Isaac Jones",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642880,
+    "fullName": "Kam Jones",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642461,
+    "fullName": "Spencer Jones",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630200,
+    "fullName": "Tre Jones",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1626145,
+    "fullName": "Tyus Jones",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642357,
+    "fullName": "David Jones Garcia",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627884,
+    "fullName": "Derrick Jones Jr.",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 201599,
+    "fullName": "DeAndre Jordan",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631107,
+    "fullName": "Nikola Jović",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630548,
+    "fullName": "Johnny Juzang",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1641750,
+    "fullName": "Ryan Kalkbrenner",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642530,
+    "fullName": "Yuki Kawamura",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631211,
+    "fullName": "Trevor Keels",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642939,
+    "fullName": "Miles Kelly",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1628379,
+    "fullName": "Luke Kennard",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1643257,
+    "fullName": "Jayson Kent",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631117,
+    "fullName": "Walker Kessler",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630557,
+    "fullName": "Corey Kispert",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628467,
+    "fullName": "Maxi Kleber",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641752,
+    "fullName": "Bobi Klintman",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642261,
+    "fullName": "Dalton Knecht",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642851,
+    "fullName": "Kon Knueppel",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642278,
+    "fullName": "Tyler Kolek",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631132,
+    "fullName": "Christian Koloko",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629723,
+    "fullName": "John Konchar",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628436,
+    "fullName": "Luke Kornet",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630249,
+    "fullName": "Vít Krejčí",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630228,
+    "fullName": "Jonathan Kuminga",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628398,
+    "fullName": "Kyle Kuzma",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631222,
+    "fullName": "Jake LaRavia",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203897,
+    "fullName": "Zach LaVine",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627746,
+    "fullName": "Skal Labissiere",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1629111,
+    "fullName": "Jock Landale",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642404,
+    "fullName": "Chaz Lanier",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641796,
+    "fullName": "Pelle Larsson",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630639,
+    "fullName": "A.J. Lawson",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627747,
+    "fullName": "Caris LeVert",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 202695,
+    "fullName": "Kawhi Leonard",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642502,
+    "fullName": "Malevy Leons",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630604,
+    "fullName": "E.J. Liddell",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203081,
+    "fullName": "Damian Lillard",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641726,
+    "fullName": "Dereck Lively II",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630587,
+    "fullName": "Isaiah Livers",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641753,
+    "fullName": "Chris Livingston",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1626172,
+    "fullName": "Kevon Looney",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 201572,
+    "fullName": "Brook Lopez",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631126,
+    "fullName": "Caleb Love",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 201567,
+    "fullName": "Kevin Love",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1643133,
+    "fullName": "Lawson Lovering",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 200768,
+    "fullName": "Kyle Lowry",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642863,
+    "fullName": "Khaman Maluach",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630572,
+    "fullName": "Sandro Mamukelashvili",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629611,
+    "fullName": "Terance Mann",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630544,
+    "fullName": "Tre Mann",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628374,
+    "fullName": "Lauri Markkanen",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630230,
+    "fullName": "Naji Marshall",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642918,
+    "fullName": "Alijah Martin",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628997,
+    "fullName": "Caleb Martin",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628998,
+    "fullName": "Cody Martin",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1631213,
+    "fullName": "Tyrese Martin",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642942,
+    "fullName": "Jahmai Mashack",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629726,
+    "fullName": "Garrison Mathews",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1631097,
+    "fullName": "Bennedict Mathurin",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631255,
+    "fullName": "Karlo Matković",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630178,
+    "fullName": "Tyrese Maxey",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1643024,
+    "fullName": "Chris Mañon",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1643016,
+    "fullName": "Bez Mbeng",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630540,
+    "fullName": "Miles McBride",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642272,
+    "fullName": "Jared McCain",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630644,
+    "fullName": "Mac McClung",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203468,
+    "fullName": "CJ McCollum",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 204456,
+    "fullName": "T.J. McConnell",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641755,
+    "fullName": "Kevin McCullar Jr.",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630183,
+    "fullName": "Jaden McDaniels",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203926,
+    "fullName": "Doug McDermott",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631121,
+    "fullName": "Bryce McGowens",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629162,
+    "fullName": "Jordan McLaughlin",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642862,
+    "fullName": "Liam McNeeley",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629001,
+    "fullName": "De'Anthony Melton",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630241,
+    "fullName": "Sam Merrill",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203114,
+    "fullName": "Khris Middleton",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641706,
+    "fullName": "Brandon Miller",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641801,
+    "fullName": "Emanuel Miller",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641757,
+    "fullName": "Jordan Miller",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631159,
+    "fullName": "Leonard Miller",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642434,
+    "fullName": "Riley Minix",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631169,
+    "fullName": "Josh Minott",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642274,
+    "fullName": "Yves Missi",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642349,
+    "fullName": "Ajay Mitchell",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630558,
+    "fullName": "Davion Mitchell",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628378,
+    "fullName": "Donovan Mitchell",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630596,
+    "fullName": "Evan Mobley",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642367,
+    "fullName": "Jonathan Mogbo",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628370,
+    "fullName": "Malik Monk",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630541,
+    "fullName": "Moses Moody",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631111,
+    "fullName": "Wendell Moore Jr.",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631457,
+    "fullName": "Alex Morales",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629630,
+    "fullName": "Ja Morant",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628420,
+    "fullName": "Monte Morris",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1630530,
+    "fullName": "Trey Murphy III",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627749,
+    "fullName": "Dejounte Murray",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627750,
+    "fullName": "Jamal Murray",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631099,
+    "fullName": "Keegan Murray",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631200,
+    "fullName": "Kris Murray",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642867,
+    "fullName": "Collin Murray-Boyles",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629004,
+    "fullName": "Svi Mykhailiuk",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631250,
+    "fullName": "Pete Nance",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1626204,
+    "fullName": "Larry Nance Jr.",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641761,
+    "fullName": "Grant Nelson",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1629614,
+    "fullName": "Andrew Nembhard",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642948,
+    "fullName": "Ryan Nembhard",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630174,
+    "fullName": "Aaron Nesmith",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642854,
+    "fullName": "Asa Newell",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641803,
+    "fullName": "Tristen Newton",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642949,
+    "fullName": "Yanic Konan Niederhäuser",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630192,
+    "fullName": "Zeke Nnaji",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203994,
+    "fullName": "Jusuf Nurkić",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1626220,
+    "fullName": "Royce O'Neale",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642490,
+    "fullName": "Josh Oduro",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629006,
+    "fullName": "Josh Okogie",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630168,
+    "fullName": "Onyeka Okongwu",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630171,
+    "fullName": "Isaac Okoro",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642950,
+    "fullName": "Lachlan Olbrich",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203482,
+    "fullName": "Kelly Olynyk",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641807,
+    "fullName": "Norchad Omier",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1626162,
+    "fullName": "Kelly Oubre Jr.",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 101108,
+    "fullName": "Chris Paul",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1626166,
+    "fullName": "Cameron Payne",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627780,
+    "fullName": "Gary Payton II",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642877,
+    "fullName": "Micah Peavy",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642951,
+    "fullName": "Sean Pedulla",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642869,
+    "fullName": "Noah Penda",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1643007,
+    "fullName": "Taelon Peter",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641809,
+    "fullName": "Drew Peterson",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1641763,
+    "fullName": "Julian Phillips",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629618,
+    "fullName": "Jalen Pickett",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630590,
+    "fullName": "Scotty Pippen Jr.",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631342,
+    "fullName": "Daeqwon Plowden",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203486,
+    "fullName": "Mason Plumlee",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641764,
+    "fullName": "Brandin Podziemski",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627751,
+    "fullName": "Jakob Poeltl",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629673,
+    "fullName": "Jordan Poole",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641854,
+    "fullName": "Craig Porter Jr.",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629645,
+    "fullName": "Kevin Porter Jr.",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629008,
+    "fullName": "Michael Porter Jr.",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1626171,
+    "fullName": "Bobby Portis",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 204001,
+    "fullName": "Kristaps Porziņģis",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642366,
+    "fullName": "Quinten Post",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630695,
+    "fullName": "Micah Potter",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642967,
+    "fullName": "John Poulakidas",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642962,
+    "fullName": "Drake Powell",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203939,
+    "fullName": "Dwight Powell",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1626181,
+    "fullName": "Norman Powell",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627752,
+    "fullName": "Taurean Prince",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630202,
+    "fullName": "Payton Pritchard",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642878,
+    "fullName": "Tyrese Proctor",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641765,
+    "fullName": "Olivier-Maxence Prosper",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642389,
+    "fullName": "Zyon Pullin",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642852,
+    "fullName": "Derik Queen",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629674,
+    "fullName": "Neemias Queta",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630193,
+    "fullName": "Immanuel Quickley",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203944,
+    "fullName": "Julius Randle",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642875,
+    "fullName": "Maxime Raynaud",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641871,
+    "fullName": "Duop Reath",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1630559,
+    "fullName": "Austin Reaves",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630194,
+    "fullName": "Paul Reed",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642882,
+    "fullName": "Julian Reese",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641810,
+    "fullName": "Antonio Reeves",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629675,
+    "fullName": "Naz Reid",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642954,
+    "fullName": "Will Richard",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630208,
+    "fullName": "Nick Richards",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642859,
+    "fullName": "Jase Richardson",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642955,
+    "fullName": "Kadary Richmond",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1642860,
+    "fullName": "Will Riley",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642258,
+    "fullName": "Zaccharie Risacher",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629130,
+    "fullName": "Duncan Robinson",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629011,
+    "fullName": "Mitchell Robinson",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631115,
+    "fullName": "Orlando Robinson",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1630526,
+    "fullName": "Jeremiah Robinson-Earl",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1631223,
+    "fullName": "David Roddy",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631157,
+    "fullName": "Ryan Rollins",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1626179,
+    "fullName": "Terry Rozier",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641712,
+    "fullName": "Rayan Rupert",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1626156,
+    "fullName": "D'Angelo Russell",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642504,
+    "fullName": "Cormac Ryan",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627734,
+    "fullName": "Domantas Sabonis",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642275,
+    "fullName": "Tidjane Salaün",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642282,
+    "fullName": "Hunter Sallis",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1642920,
+    "fullName": "Kobe Sanders",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642362,
+    "fullName": "Payton Sandfort",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630611,
+    "fullName": "Gui Santos",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642879,
+    "fullName": "Ben Saraf",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203967,
+    "fullName": "Dario Saric",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1642259,
+    "fullName": "Alex Sarr",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630846,
+    "fullName": "Olivier Sarr",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631204,
+    "fullName": "Marcus Sasser",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631248,
+    "fullName": "Baylor Scheierman",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203471,
+    "fullName": "Dennis Schröder",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641813,
+    "fullName": "Mark Sears",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1630578,
+    "fullName": "Alperen Sengun",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641729,
+    "fullName": "Brice Sensabaugh",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629012,
+    "fullName": "Collin Sexton",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629013,
+    "fullName": "Landry Shamet",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630545,
+    "fullName": "Terrence Shannon Jr.",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630549,
+    "fullName": "Day'Ron Sharpe",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631101,
+    "fullName": "Shaedon Sharpe",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642347,
+    "fullName": "Jamal Shead",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641767,
+    "fullName": "Ben Sheppard",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642263,
+    "fullName": "Reed Sheppard",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642917,
+    "fullName": "Max Shulga",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627783,
+    "fullName": "Pascal Siakam",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629014,
+    "fullName": "Anfernee Simons",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642354,
+    "fullName": "KJ Simpson",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630579,
+    "fullName": "Jericho Sims",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641771,
+    "fullName": "Jalen Slawson",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642914,
+    "fullName": "Javon Small",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203935,
+    "fullName": "Marcus Smart",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630696,
+    "fullName": "Dru Smith",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630188,
+    "fullName": "Jalen Smith",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641869,
+    "fullName": "Malachi Smith",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642449,
+    "fullName": "Tolu Smith",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641890,
+    "fullName": "Tyler Smith",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631095,
+    "fullName": "Jabari Smith Jr.",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641733,
+    "fullName": "Nick Smith Jr.",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631110,
+    "fullName": "Jeremy Sochan",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642850,
+    "fullName": "Thomas Sorber",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642285,
+    "fullName": "Cam Spencer",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630311,
+    "fullName": "Pat Spencer",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641815,
+    "fullName": "Isaiah Stevens",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630191,
+    "fullName": "Isaiah Stewart",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631124,
+    "fullName": "Julian Strawther",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629622,
+    "fullName": "Max Strus",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630591,
+    "fullName": "Jalen Suggs",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630256,
+    "fullName": "Jae'Sean Tate",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628369,
+    "fullName": "Jayson Tatum",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1643141,
+    "fullName": "Jahmyl Telfort",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 202066,
+    "fullName": "Garrett Temple",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631207,
+    "fullName": "Dalen Terry",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642876,
+    "fullName": "Adou Thiero",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630560,
+    "fullName": "Cam Thomas",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1641708,
+    "fullName": "Amen Thompson",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641709,
+    "fullName": "Ausar Thompson",
+    "teamId": 1610612765,
+    "teamName": "Pistons",
+    "teamAbbreviation": "DET",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630679,
+    "fullName": "Ethan Thompson",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 202691,
+    "fullName": "Klay Thompson",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629680,
+    "fullName": "Matisse Thybulle",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630214,
+    "fullName": "Xavier Tillman",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631166,
+    "fullName": "Drew Timme",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641772,
+    "fullName": "Nae'Qwan Tomlin",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642910,
+    "fullName": "John Tonje",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642260,
+    "fullName": "Nikola Topić",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631210,
+    "fullName": "Jacob Toppin",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1630167,
+    "fullName": "Obi Toppin",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1626157,
+    "fullName": "Karl-Anthony Towns",
+    "teamId": 1610612752,
+    "teamName": "Knicks",
+    "teamAbbreviation": "NYK",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642849,
+    "fullName": "Nolan Traore",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631247,
+    "fullName": "Luke Travers",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1629018,
+    "fullName": "Gary Trent Jr.",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631131,
+    "fullName": "Oscar Tshiebwe",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1626167,
+    "fullName": "Myles Turner",
+    "teamId": 1610612749,
+    "teamName": "Bucks",
+    "teamAbbreviation": "MIL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641816,
+    "fullName": "Hunter Tyson",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1642281,
+    "fullName": "Jaylon Tyson",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630649,
+    "fullName": "Stanley Umude",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 202685,
+    "fullName": "Jonas Valančiūnas",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627832,
+    "fullName": "Fred VanVleet",
+    "teamId": 1610612745,
+    "teamName": "Rockets",
+    "teamAbbreviation": "HOU",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629020,
+    "fullName": "Jarred Vanderbilt",
+    "teamId": 1610612747,
+    "teamName": "Lakers",
+    "teamAbbreviation": "LAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630170,
+    "fullName": "Devin Vassell",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629216,
+    "fullName": "Gabe Vincent",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641774,
+    "fullName": "Tristan Vukcevic",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 202696,
+    "fullName": "Nikola Vučević",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629731,
+    "fullName": "Dean Wade",
+    "teamId": 1610612739,
+    "teamName": "Cavaliers",
+    "teamAbbreviation": "CLE",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630532,
+    "fullName": "Franz Wagner",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629021,
+    "fullName": "Moritz Wagner",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631133,
+    "fullName": "Jabari Walker",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641716,
+    "fullName": "Jarace Walker",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641717,
+    "fullName": "Cason Wallace",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630811,
+    "fullName": "Keaton Wallace",
+    "teamId": 1610612737,
+    "teamName": "Hawks",
+    "teamAbbreviation": "ATL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641775,
+    "fullName": "Jordan Walsh",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642266,
+    "fullName": "Ja'Kobe Walter",
+    "teamId": 1610612761,
+    "teamName": "Raptors",
+    "teamAbbreviation": "TOR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642276,
+    "fullName": "Kel'el Ware",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629023,
+    "fullName": "P.J. Washington",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631102,
+    "fullName": "TyTy Washington Jr.",
+    "teamId": 1610612746,
+    "teamName": "Clippers",
+    "teamAbbreviation": "LAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630322,
+    "fullName": "Lindy Waters III",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630570,
+    "fullName": "Trendon Watford",
+    "teamId": 1610612755,
+    "teamName": "76ers",
+    "teamAbbreviation": "PHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642364,
+    "fullName": "Jamir Watkins",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631212,
+    "fullName": "Peyton Watson",
+    "teamId": 1610612743,
+    "teamName": "Nuggets",
+    "teamAbbreviation": "DEN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642377,
+    "fullName": "Jaylen Wells",
+    "teamId": 1610612763,
+    "teamName": "Grizzlies",
+    "teamAbbreviation": "MEM",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641705,
+    "fullName": "Victor Wembanyama",
+    "teamId": 1610612759,
+    "teamName": "Spurs",
+    "teamAbbreviation": "SAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631104,
+    "fullName": "Blake Wesley",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 201566,
+    "fullName": "Russell Westbrook",
+    "teamId": 1610612758,
+    "teamName": "Kings",
+    "teamAbbreviation": "SAC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629632,
+    "fullName": "Coby White",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1628401,
+    "fullName": "Derrick White",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641715,
+    "fullName": "Cam Whitmore",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630598,
+    "fullName": "Aaron Wiggins",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 203952,
+    "fullName": "Andrew Wiggins",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631214,
+    "fullName": "Alondes Williams",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1642873,
+    "fullName": "Amari Williams",
+    "teamId": 1610612738,
+    "teamName": "Celtics",
+    "teamAbbreviation": "BOS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630314,
+    "fullName": "Brandon Williams",
+    "teamId": 1610612742,
+    "teamName": "Mavericks",
+    "teamAbbreviation": "DAL",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642262,
+    "fullName": "Cody Williams",
+    "teamId": 1610612762,
+    "teamName": "Jazz",
+    "teamAbbreviation": "UTA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629684,
+    "fullName": "Grant Williams",
+    "teamId": 1610612766,
+    "teamName": "Hornets",
+    "teamAbbreviation": "CHA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631114,
+    "fullName": "Jalen Williams",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631119,
+    "fullName": "Jaylin Williams",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629026,
+    "fullName": "Kenrich Williams",
+    "teamId": 1610612760,
+    "teamName": "Thunder",
+    "teamAbbreviation": "OKC",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631109,
+    "fullName": "Mark Williams",
+    "teamId": 1610612756,
+    "teamName": "Suns",
+    "teamAbbreviation": "PHX",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631466,
+    "fullName": "Nate Williams",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630172,
+    "fullName": "Patrick Williams",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630533,
+    "fullName": "Ziaire Williams",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629057,
+    "fullName": "Robert Williams III",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1631246,
+    "fullName": "Vince Williams Jr.",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1629627,
+    "fullName": "Zion Williamson",
+    "teamId": 1610612740,
+    "teamName": "Pelicans",
+    "teamAbbreviation": "NOP",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630592,
+    "fullName": "Jalen Wilson",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630164,
+    "fullName": "James Wiseman",
+    "teamId": 0,
+    "teamName": "",
+    "teamAbbreviation": "",
+    "rosterStatus": 0
+  },
+  {
+    "playerId": 1642874,
+    "fullName": "Danny Wolf",
+    "teamId": 1610612751,
+    "teamName": "Nets",
+    "teamAbbreviation": "BKN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627824,
+    "fullName": "Guerschon Yabusele",
+    "teamId": 1610612741,
+    "teamName": "Bulls",
+    "teamAbbreviation": "CHI",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642905,
+    "fullName": "Yang Hansen",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642443,
+    "fullName": "Jahmir Young",
+    "teamId": 1610612748,
+    "teamName": "Heat",
+    "teamAbbreviation": "MIA",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1629027,
+    "fullName": "Trae Young",
+    "teamId": 1610612764,
+    "teamName": "Wizards",
+    "teamAbbreviation": "WAS",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642959,
+    "fullName": "Chris Youngblood",
+    "teamId": 1610612757,
+    "teamName": "Trail Blazers",
+    "teamAbbreviation": "POR",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1630209,
+    "fullName": "Omer Yurtseven",
+    "teamId": 1610612744,
+    "teamName": "Warriors",
+    "teamAbbreviation": "GSW",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1642911,
+    "fullName": "Rocco Zikarsky",
+    "teamId": 1610612750,
+    "teamName": "Timberwolves",
+    "teamAbbreviation": "MIN",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1627826,
+    "fullName": "Ivica Zubac",
+    "teamId": 1610612754,
+    "teamName": "Pacers",
+    "teamAbbreviation": "IND",
+    "rosterStatus": 1
+  },
+  {
+    "playerId": 1641783,
+    "fullName": "Tristan da Silva",
+    "teamId": 1610612753,
+    "teamName": "Magic",
+    "teamAbbreviation": "ORL",
     "rosterStatus": 1
   }
 ]
