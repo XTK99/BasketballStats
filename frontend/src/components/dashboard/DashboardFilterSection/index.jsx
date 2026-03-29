@@ -1,6 +1,6 @@
-import FiltersBar from "../FiltersBar";
-import ThresholdFilter from "../ThresholdFilter";
-import ActiveFilters from "../ActiveFilters";
+import FiltersBar from "../../FiltersBar";
+import ThresholdFilter from "../../ThresholdFilter";
+import ActiveFilters from "../../ActiveFilters";
 import "./DashboardFilterSection.css";
 
 function DashboardFilterSection({

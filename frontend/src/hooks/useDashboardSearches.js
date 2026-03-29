@@ -166,13 +166,18 @@ export function useDashboardSearches({
           return playerData.games;
         }
 
-        const teamSearchValue = String(
-          derivedTeamIdOrAbbr || derivedTeamName || "",
+        // Use the readable team name for UI display.
+        // Only fall back to ID/abbr if no readable name exists.
+        const teamDisplayValue = String(
+          derivedTeamName || derivedTeamIdOrAbbr || "",
         ).trim();
 
+        // Use the same readable value for searching when possible.
+        const teamSearchValue = teamDisplayValue;
+
         skipNextTeamAutoSearchRef.current = true;
-        setTeamQuery(String(derivedTeamName || teamSearchValue || ""));
-        setTeamTitle(derivedTeamName || "Team");
+        setTeamQuery(teamDisplayValue);
+        setTeamTitle(teamDisplayValue || "Team");
 
         const rawTeamData = await fetchTeamDashboardData(
           teamSearchValue,
@@ -182,15 +187,13 @@ export function useDashboardSearches({
 
         const teamData = normalizeDashboardPayload(
           rawTeamData,
-          derivedTeamName || teamSearchValue || "Team",
+          teamDisplayValue || "Team",
         );
 
         console.log("related team dashboard response:", teamData);
 
         setTeamGames(teamData.games);
-        setTeamTitle(
-          teamData.title || derivedTeamName || teamSearchValue || "Team",
-        );
+        setTeamTitle(teamData.title || teamDisplayValue || "Team");
         setTeamError("");
       } catch (relatedTeamError) {
         console.error("Related team fetch failed:", relatedTeamError);

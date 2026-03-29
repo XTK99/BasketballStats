@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { testHistoricalKalshiPrice } from "../utils/testHistoricalKalshiPrice";
+import { testHistoricalKalshiPrice } from "../../utils/testHistoricalKalshiPrice";
 import {
   formatContractPrice,
   formatPercentFromPrice,
-} from "../utils/kalshiPricing";
+} from "../../utils/kalshiPricing";
 
 function HistoricalKalshiTestCard() {
   const [ticker, setTicker] = useState("");

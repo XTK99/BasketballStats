@@ -62,20 +62,20 @@ function isLoss(game) {
 function applyGameFilters(games, filters = {}) {
   return games.filter((game) => {
     const {
-      locations = { home: true, away: true },
-      results = { wins: true, losses: true },
+      locations = ["home", "away"],
+      results = ["win", "loss"],
       opponent = "",
-      thresholdFilters = [],
+      thresholds = [],
     } = filters;
 
-    const homeEnabled = locations.home;
-    const awayEnabled = locations.away;
+    const homeEnabled = locations.includes("home");
+    const awayEnabled = locations.includes("away");
 
     if (game.isHome === true && !homeEnabled) return false;
     if (game.isHome === false && !awayEnabled) return false;
 
-    const winsEnabled = results.wins;
-    const lossesEnabled = results.losses;
+    const winsEnabled = results.includes("win");
+    const lossesEnabled = results.includes("loss");
 
     if (!winsEnabled && isWin(game)) return false;
     if (!lossesEnabled && isLoss(game)) return false;
@@ -86,8 +86,8 @@ function applyGameFilters(games, filters = {}) {
       if (gameOpponent !== wantedOpponent) return false;
     }
 
-    if (Array.isArray(thresholdFilters) && thresholdFilters.length > 0) {
-      for (const threshold of thresholdFilters) {
+    if (Array.isArray(thresholds) && thresholds.length > 0) {
+      for (const threshold of thresholds) {
         const statValue = getGameStatValue(game, threshold.stat);
         const passed = matchesOperator(
           statValue,
@@ -101,7 +101,6 @@ function applyGameFilters(games, filters = {}) {
     return true;
   });
 }
-
 function buildChartData(games, selectedStat, includeMissedGames = false) {
   return games.map((game, index) => {
     const played = game.played !== false;

@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import {
   LineChart,
   Line,
@@ -79,8 +80,8 @@ function getChartStatValue(game, stat) {
     turnovers: ["turnovers", "TOV", "tov"],
     FGM: ["fgm", "FGM"],
     FGA: ["fga", "FGA"],
-    "3PM": ["fg3m", "FG3M", "3PM", "threePm"],
-    "3PA": ["fg3a", "FG3A", "3PA", "threePa"],
+    "3PM": ["fg3m", "FG3M", "3PM", "threePm", "threesMade"],
+    "3PA": ["fg3a", "FG3A", "3PA", "threePa", "threesAttempted"],
     FTM: ["ftm", "FTM"],
     FTA: ["fta", "FTA"],
     "FG%": ["fgPct", "fg_pct", "FG_PCT", "fgPercentage", "fieldGoalPct"],
@@ -306,34 +307,38 @@ function StatChart({
   onSelectGame,
   selectedGameId,
 }) {
-  const chartData = [...games].reverse().map((game) => {
-    const played = game.played !== false;
+  const [customLineInput, setCustomLineInput] = useState("");
 
-    return {
-      gameId: game.gameId || game.GAME_ID || "",
-      originalGame: game,
-      xLabel: formatGameDate(game.gameDate),
-      fullDate: game.gameDate || "",
-      statValue: played ? (getChartStatValue(game, selectedStat) ?? 0) : 0,
-      matchup: game.matchup || game.MATCHUP || "",
-      played,
-      seasonGameNumber: game.seasonGameNumber || null,
-      wl: game.wl || game.WL || "",
-      teamScore: getFirstNumber(game, [
-        "teamScore",
-        "teamPoints",
-        "pts",
-        "PTS",
-        "points",
-      ]),
-      opponentScore: getFirstNumber(game, [
-        "opponentScore",
-        "oppPoints",
-        "opponentPoints",
-        "oppPts",
-      ]),
-    };
-  });
+  const chartData = useMemo(() => {
+    return [...games].reverse().map((game) => {
+      const played = game.played !== false;
+
+      return {
+        gameId: game.gameId || game.GAME_ID || "",
+        originalGame: game,
+        xLabel: formatGameDate(game.gameDate),
+        fullDate: game.gameDate || "",
+        statValue: played ? (getChartStatValue(game, selectedStat) ?? 0) : 0,
+        matchup: game.matchup || game.MATCHUP || "",
+        played,
+        seasonGameNumber: game.seasonGameNumber || null,
+        wl: game.wl || game.WL || "",
+        teamScore: getFirstNumber(game, [
+          "teamScore",
+          "teamPoints",
+          "pts",
+          "PTS",
+          "points",
+        ]),
+        opponentScore: getFirstNumber(game, [
+          "opponentScore",
+          "oppPoints",
+          "opponentPoints",
+          "oppPts",
+        ]),
+      };
+    });
+  }, [games, selectedStat]);
 
   const showPropLine =
     selectedStat === hitRateStat &&
@@ -341,6 +346,13 @@ function StatChart({
     !Number.isNaN(Number(hitRateLine));
 
   const numericHitRateLine = Number(hitRateLine);
+
+  const trimmedCustomLineInput = String(customLineInput).trim();
+  const hasCustomLineInput = trimmedCustomLineInput !== "";
+  const numericCustomLine = Number(trimmedCustomLineInput);
+
+  const showCustomLine =
+    hasCustomLineInput && Number.isFinite(numericCustomLine);
 
   return (
     <div>
@@ -351,6 +363,59 @@ function StatChart({
           </h3>
           <p className="chart-subtitle">Season game-by-game performance</p>
         </div>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "end",
+          gap: 10,
+          marginBottom: 14,
+          flexWrap: "wrap",
+        }}
+      >
+        <label
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 6,
+            color: "#cbd5e1",
+            fontSize: 13,
+            fontWeight: 600,
+          }}
+        >
+          Custom line
+          <input
+            type="number"
+            value={customLineInput}
+            onChange={(e) => setCustomLineInput(e.target.value)}
+            placeholder={`Enter ${formatStatLabel(selectedStat)} line`}
+            style={{
+              width: 140,
+              padding: "8px 10px",
+              borderRadius: 10,
+              border: "1px solid rgba(148, 163, 184, 0.25)",
+              background: "rgba(15, 23, 42, 0.9)",
+              color: "#f8fafc",
+              outline: "none",
+            }}
+          />
+        </label>
+
+        <button
+          type="button"
+          onClick={() => setCustomLineInput("")}
+          style={{
+            padding: "8px 12px",
+            borderRadius: 10,
+            border: "1px solid rgba(148, 163, 184, 0.25)",
+            background: "rgba(30, 41, 59, 0.9)",
+            color: "#e2e8f0",
+            cursor: "pointer",
+          }}
+        >
+          Clear
+        </button>
       </div>
 
       <ResponsiveContainer width="100%" height={340}>
@@ -374,6 +439,21 @@ function StatChart({
                 value: `Line ${numericHitRateLine}`,
                 position: "insideTopRight",
                 fill: "#f59e0b",
+                fontSize: 12,
+              }}
+            />
+          )}
+
+          {showCustomLine && (
+            <ReferenceLine
+              y={numericCustomLine}
+              stroke="#ef4444"
+              strokeWidth={2}
+              strokeDasharray="8 4"
+              label={{
+                value: `Custom ${numericCustomLine}`,
+                position: "insideTopLeft",
+                fill: "#ef4444",
                 fontSize: 12,
               }}
             />

@@ -1,14 +1,14 @@
-import DashboardHeaderCard from "./DashboardHeaderCard";
-import DashboardFilterSection from "./DashboardFilterSection";
-import SearchBar from "../SearchBar";
-import SummaryCards from "../SummaryCards";
-import PropEdgeCard from "../PropEdgeCard";
-import SplitsPanel from "../SplitsPanel";
-import StatSelector from "../StatSelector";
-import StatChart from "../StatChart";
-import HitRateBoard from "../HitRateBoard";
-import GameLogTable from "../GameLogTable";
-import BoxScorePanel from "../BoxScorePanel";
+import DashboardHeaderCard from "../DashboardHeaderCard";
+import DashboardFilterSection from "../DashboardFilterSection";
+import SearchBar from "../../SearchBar";
+import SummaryCards from "../../SummaryCards";
+import PropEdgeCard from "../../PropEdgeCard";
+import SplitsPanel from "../../SplitsPanel";
+import StatSelector from "../../StatSelector";
+import StatChart from "../../StatChart";
+import HitRateBoard from "../../HitRateBoard";
+import GameLogTable from "../../GameLogTable";
+import BoxScorePanel from "../../BoxScorePanel";
 import "./TeamDashboardView.css";
 
 function toSafeNumber(value, fallback = 0) {

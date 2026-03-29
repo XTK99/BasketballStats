@@ -81,7 +81,7 @@ function PropEdgeCard({
             {title} • Over{" "}
             {Number.isFinite(Number(selectedLine))
               ? selectedLine
-              : insights.line}{" "}
+              : insights.line}{" "}gg
             {statLabel}
           </p>
         </div>

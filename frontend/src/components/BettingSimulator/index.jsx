@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { simulatePredictionMarkets } from "../utils/simulatePredictionMarkets";
-import { getKalshiMarketBundle, getAllKalshiEvents } from "../api/kalshiApi";
-import { enrichGameWithHistoricalPrice } from "../utils/enrichGameWithHistoricalPrice";
+import { simulatePredictionMarkets } from "../../utils/simulatePredictionMarkets";
+import { getKalshiMarketBundle, getAllKalshiEvents } from "../../api/kalshiApi";
+import { enrichGameWithHistoricalPrice } from "../../utils/enrichGameWithHistoricalPrice";
 import {
   getBestYesBid,
   getBestNoBid,
@@ -11,9 +11,9 @@ import {
   getEntryYesPrice,
   formatContractPrice,
   formatPercentFromPrice,
-} from "../utils/kalshiPricing";
-import { findKalshiMarketForGame } from "../utils/findKalshiMarketForGame";
-import { findKalshiEventForGame } from "../utils/findKalshiEventForGame";
+} from "../../utils/kalshiPricing";
+import { findKalshiMarketForGame } from "../../utils/findKalshiMarketForGame";
+import { findKalshiEventForGame } from "../../utils/findKalshiEventForGame";
 
 const statOptions = [
   { label: "Points", value: "points" },

@@ -1,8 +1,14 @@
-import DashboardHeaderCard from "./DashboardHeaderCard";
-import DashboardFilterSection from "./DashboardFilterSection";
-import SearchBar from "../SearchBar";
-import SummaryCards from "../SummaryCards";
-import BoxScorePanel from "../BoxScorePanel";
+import DashboardHeaderCard from "../DashboardHeaderCard";
+import DashboardFilterSection from "../DashboardFilterSection";
+import SearchBar from "../../SearchBar";
+import SummaryCards from "../../SummaryCards";
+import PropEdgeCard from "../../PropEdgeCard";
+import SplitsPanel from "../../SplitsPanel";
+import StatSelector from "../../StatSelector";
+import StatChart from "../../StatChart";
+import HitRateBoard from "../../HitRateBoard";
+import GameLogTable from "../../GameLogTable";
+import BoxScorePanel from "../../BoxScorePanel";
 import "./PlayerDashboardView.css";
 
 function toSafeNumber(value, fallback = 0) {
@@ -50,8 +56,13 @@ function PlayerDashboardView({ dashboard, controls, boxScoreState }) {
 
   const games = dashboard?.games ?? [];
   const filteredGames = dashboard?.filteredGames ?? [];
+  const chartData = dashboard?.chartData ?? [];
+  const splits = dashboard?.splits ?? {};
+  const hitRateBoard = dashboard?.hitRateBoard ?? [];
   const summary = dashboard?.summary ?? {};
   const averages = dashboard?.averages ?? summary?.averages ?? {};
+  const selectedLine = dashboard?.selectedLine ?? null;
+  const propInsights = dashboard?.propInsights ?? null;
 
   const loadedGames = toSafeNumber(summary.loadedGames, games.length);
   const filteredCount = toSafeNumber(
@@ -178,67 +189,47 @@ function PlayerDashboardView({ dashboard, controls, boxScoreState }) {
             </div>
           </section>
 
+          <PropEdgeCard
+            title={title}
+            selectedStat={selectedStat}
+            selectedLine={selectedLine}
+            insights={propInsights}
+          />
+
+          <SplitsPanel
+            splits={splits}
+            games={filteredGames}
+            selectedStat={selectedStat}
+          />
+
           <section className="panel-card">
-            <div className="panel-title" style={{ marginBottom: "12px" }}>
-              Games
-            </div>
+            <StatSelector
+              selectedStat={selectedStat}
+              setSelectedStat={setSelectedStat}
+            />
 
-            {filteredGames.length === 0 ? (
-              <p className="status-message">No games to display.</p>
-            ) : (
-              <div style={{ overflowX: "auto" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                  <thead>
-                    <tr>
-                      <th style={thStyle}>Date</th>
-                      <th style={thStyle}>Matchup</th>
-                      <th style={thStyle}>Result</th>
-                      <th style={thStyle}>PTS</th>
-                      <th style={thStyle}>REB</th>
-                      <th style={thStyle}>AST</th>
-                      <th style={thStyle}>MIN</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredGames.slice(0, 25).map((game) => {
-                      const isSelected = selectedGameId === game.gameId;
-
-                      return (
-                        <tr
-                          key={game.gameId}
-                          onClick={() => onSelectGame?.(game)}
-                          style={{
-                            cursor: "pointer",
-                            background: isSelected
-                              ? "rgba(59, 130, 246, 0.12)"
-                              : "transparent",
-                          }}
-                        >
-                          <td style={tdStyle}>{game.gameDate || "—"}</td>
-                          <td style={tdStyle}>{game.matchup || "—"}</td>
-                          <td style={tdStyle}>
-                            {game.result || game.wl || "—"}
-                          </td>
-                          <td style={tdStyle}>
-                            {toSafeNumber(game.points, 0)}
-                          </td>
-                          <td style={tdStyle}>
-                            {toSafeNumber(game.rebounds, 0)}
-                          </td>
-                          <td style={tdStyle}>
-                            {toSafeNumber(game.assists, 0)}
-                          </td>
-                          <td style={tdStyle}>
-                            {toSafeNumber(game.minutes, 0)}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            )}
+            <StatChart
+              data={chartData}
+              games={filteredGames}
+              selectedStat={selectedStat}
+              mode="player"
+              onSelectGame={onSelectGame}
+              selectedGameId={selectedGameId}
+            />
           </section>
+
+          <HitRateBoard
+            data={hitRateBoard}
+            games={filteredGames}
+            selectedStat={selectedStat}
+            mode="player"
+          />
+
+          <GameLogTable
+            games={filteredGames}
+            onSelectGame={onSelectGame}
+            selectedGameId={selectedGameId}
+          />
 
           <section ref={boxScoreRef} className="section-stack">
             {(selectedGame || boxScoreLoading || boxScoreError) && (
@@ -284,16 +275,5 @@ function PlayerDashboardView({ dashboard, controls, boxScoreState }) {
     </div>
   );
 }
-
-const thStyle = {
-  textAlign: "left",
-  padding: "10px",
-  borderBottom: "1px solid rgba(255,255,255,0.12)",
-};
-
-const tdStyle = {
-  padding: "10px",
-  borderBottom: "1px solid rgba(255,255,255,0.08)",
-};
 
 export default PlayerDashboardView;
