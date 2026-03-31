@@ -1,6 +1,16 @@
 const axios = require("axios");
 const pool = require("../db/db");
 
+const NBA_HEADERS = {
+  "User-Agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+  Referer: "https://www.nba.com/",
+  Origin: "https://www.nba.com",
+  Accept: "application/json, text/plain, */*",
+  "Accept-Language": "en-US,en;q=0.9",
+  Connection: "keep-alive",
+};
+
 function buildFullName(obj) {
   return (
     obj.DISPLAY_FIRST_LAST ||
@@ -19,15 +29,7 @@ async function fetchCurrentPlayers(season = "2025-26") {
       LeagueID: "00",
       Season: season,
     },
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
-      Referer: "https://www.nba.com/",
-      Origin: "https://www.nba.com",
-      Accept: "application/json, text/plain, */*",
-      "Accept-Language": "en-US,en;q=0.9",
-      Connection: "keep-alive",
-    },
+    headers: NBA_HEADERS,
     timeout: 20000,
   });
 
@@ -43,7 +45,6 @@ async function fetchCurrentPlayers(season = "2025-26") {
   return rows
     .map((row) => {
       const obj = {};
-
       headers.forEach((header, index) => {
         obj[header] = row[index];
       });
@@ -53,11 +54,11 @@ async function fetchCurrentPlayers(season = "2025-26") {
       const lastName = String(obj.LAST_NAME || "").trim();
 
       return {
-        player_id: obj.PERSON_ID,
+        player_id: Number(obj.PERSON_ID),
         full_name: fullName,
         first_name: firstName,
         last_name: lastName,
-        team_id: obj.TEAM_ID || null,
+        team_id: obj.TEAM_ID ? Number(obj.TEAM_ID) : null,
         team_abbreviation: obj.TEAM_ABBREVIATION || null,
         team_name: obj.TEAM_NAME || null,
         roster_status: obj.ROSTERSTATUS ?? null,

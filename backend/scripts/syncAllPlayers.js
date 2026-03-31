@@ -1,57 +1,47 @@
-const axios = require("axios");
-const { syncPlayer, pool } = require("./syncPlayerLogs");
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
 
-async function fetchCurrentPlayers(season = "2025-26") {
-  const response = await axios.get(
-    "https://stats.nba.com/stats/commonallplayers",
-    {
-      params: {
-        IsOnlyCurrentSeason: 1,
-        LeagueID: "00",
-        Season: season,
-      },
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
-        Referer: "https://www.nba.com/",
-        Origin: "https://www.nba.com",
-        Accept: "application/json, text/plain, */*",
-        "Accept-Language": "en-US,en;q=0.9",
-        Connection: "keep-alive",
-      },
-      timeout: 30000,
-    },
+const { Pool } = require("pg");
+const { syncPlayer } = require("./syncPlayerLogs");
+
+const pool = new Pool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: Number(process.env.DB_PORT || 5432),
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchPlayersFromDB(season = "2025-26") {
+  const result = await pool.query(
+    `
+    SELECT player_id, full_name
+    FROM players
+    WHERE season = $1
+      AND COALESCE(roster_status, 0) = 1
+    ORDER BY full_name ASC
+    `,
+    [season],
   );
 
-  const resultSet = response.data?.resultSets?.[0];
-  if (!resultSet) {
-    throw new Error("No result set returned from commonallplayers.");
-  }
-
-  const headers = resultSet.headers || [];
-  const rows = resultSet.rowSet || [];
-
-  const players = rows.map((row) =>
-    Object.fromEntries(headers.map((header, index) => [header, row[index]])),
-  );
-
-  return players
-    .filter((player) => {
-      const playerId = player.PERSON_ID ?? player.Person_ID;
-      const rosterStatus = player.ROSTERSTATUS ?? player.RosterStatus;
-      return playerId && Number(rosterStatus) === 1;
-    })
-    .map((player) => ({
-      id: Number(player.PERSON_ID ?? player.Person_ID),
-      name: player.DISPLAY_FIRST_LAST ?? player.Display_First_Last ?? "Unknown",
-    }));
+  return result.rows.map((row) => ({
+    id: Number(row.player_id),
+    name: row.full_name || "Unknown",
+  }));
 }
 
 async function run() {
-  const season = "2025-26";
-  const players = await fetchCurrentPlayers(season);
+  const season = process.argv[2] || "2025-26";
+  const players = await fetchPlayersFromDB(season);
 
-  console.log(`Found ${players.length} current players`);
+  console.log(`Found ${players.length} players in DB for ${season}`);
 
   let successCount = 0;
   let failCount = 0;
@@ -61,6 +51,8 @@ async function run() {
       console.log(`Syncing ${player.name} (${player.id})...`);
       await syncPlayer(player.id, season);
       successCount += 1;
+
+      await sleep(500);
     } catch (error) {
       failCount += 1;
       console.error(`Failed for ${player.name} (${player.id}):`, error.message);

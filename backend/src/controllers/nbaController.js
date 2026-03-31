@@ -33,8 +33,9 @@ async function getPlayerGames(req, res) {
       return res.status(400).json({ error: "Player is required" });
     }
 
+    console.log("before findPlayerByNameInDB");
     const matchedPlayer = await findPlayerByNameInDB(playerName, season);
-
+    console.log("after findPlayerByNameInDB");
     console.log("matchedPlayer:", matchedPlayer);
 
     if (!matchedPlayer) {
@@ -51,7 +52,9 @@ async function getPlayerGames(req, res) {
       });
     }
 
+    console.log("before getPlayerGamesFromDBByPlayerId");
     const games = await getPlayerGamesFromDBByPlayerId(playerId, season);
+    console.log("after getPlayerGamesFromDBByPlayerId", games?.length);
     const limitedGames = last > 0 ? games.slice(0, last) : games;
 
     return res.json({
