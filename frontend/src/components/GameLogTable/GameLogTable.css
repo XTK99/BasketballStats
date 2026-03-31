@@ -129,3 +129,10 @@
 .collapse-button:hover {
   background: rgba(255, 255, 255, 0.1);
 }
+.game-row-missed {
+  opacity: 0.72;
+}
+
+.muted-cell {
+  color: #94a3b8;
+}

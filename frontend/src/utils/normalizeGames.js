@@ -178,15 +178,32 @@ export function normalizeGame(game) {
     "",
   );
 
-  const teamName = getValue(game, ["teamName", "TEAM_NAME", "team_name"], "");
+  const teamName = getValue(
+    game,
+    ["teamName", "TEAM_NAME", "team_name", "TEAM_CITY_NAME", "fullTeamName"],
+    "",
+  );
+
+  const gameId = getValue(
+    game,
+    ["gameId", "GAME_ID", "Game_ID", "game_id"],
+    "",
+  );
+
+  const gameDate = getValue(
+    game,
+    ["gameDate", "GAME_DATE", "date", "game_date"],
+    "",
+  );
+
+  const explicitPlayed = game?.played;
+  const minutes = getNumberValue(game, ["minutes", "MIN", "min"], 0);
+  const played =
+    typeof explicitPlayed === "boolean" ? explicitPlayed : minutes > 0;
 
   return {
-    gameId: getValue(game, ["gameId", "GAME_ID", "Game_ID", "game_id"], ""),
-    gameDate: getValue(
-      game,
-      ["gameDate", "GAME_DATE", "date", "game_date"],
-      "",
-    ),
+    gameId,
+    gameDate,
     gameStartTs: finalGameStartTs,
 
     matchup,
@@ -201,8 +218,10 @@ export function normalizeGame(game) {
     team: teamAbbreviation,
     teamAbbreviation,
 
-    minutes: getNumberValue(game, ["minutes", "MIN", "min"], 0),
-    points: getNumberValue(game, ["points", "PTS", "pts"], 0),
+    played,
+
+    minutes,
+    points: getNumberValue(game, ["points", "PTS", "pts", "TEAM_PTS"], 0),
     rebounds: getNumberValue(game, ["rebounds", "REB", "reb"], 0),
     assists: getNumberValue(game, ["assists", "AST", "ast"], 0),
     steals: getNumberValue(game, ["steals", "STL", "stl"], 0),
@@ -211,7 +230,7 @@ export function normalizeGame(game) {
 
     teamScore: getNumberValue(
       game,
-      ["teamScore", "TEAM_SCORE", "score", "teamPts"],
+      ["teamScore", "TEAM_SCORE", "score", "teamPts", "PTS"],
       0,
     ),
 

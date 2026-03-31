@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
+import "./StatChart.css";
 
 const TEAM_COLORS = {
   ATL: "#E03A3E",
@@ -50,6 +51,10 @@ function getTeamColor(teamAbbreviation) {
 function getReadableTeamColor(teamAbbreviation) {
   const color = getTeamColor(teamAbbreviation);
 
+  if (!color.startsWith("#") || color.length !== 7) {
+    return color;
+  }
+
   const r = parseInt(color.slice(1, 3), 16);
   const g = parseInt(color.slice(3, 5), 16);
   const b = parseInt(color.slice(5, 7), 16);
@@ -57,7 +62,10 @@ function getReadableTeamColor(teamAbbreviation) {
   const brightness = (r * 299 + g * 587 + b * 114) / 1000;
 
   if (brightness < 120) {
-    return `rgb(${Math.min(r + 80, 255)}, ${Math.min(g + 80, 255)}, ${Math.min(b + 80, 255)})`;
+    return `rgb(${Math.min(r + 80, 255)}, ${Math.min(
+      g + 80,
+      255,
+    )}, ${Math.min(b + 80, 255)})`;
   }
 
   return color;
@@ -118,7 +126,7 @@ function getChartStatValue(game, stat) {
   const possibleKeys = statKeyMap[stat] || [stat];
 
   for (const key of possibleKeys) {
-    const rawValue = game[key];
+    const rawValue = game?.[key];
 
     if (rawValue !== undefined && rawValue !== null && rawValue !== "") {
       const numericValue = Number(rawValue);
@@ -158,24 +166,28 @@ function formatStatLabel(stat) {
   return labels[stat] || stat;
 }
 
-function getFirstNumber(game, keys) {
-  for (const key of keys) {
-    const value = game[key];
-    if (value !== undefined && value !== null && value !== "") {
-      const numericValue = Number(value);
-      if (!Number.isNaN(numericValue)) return numericValue;
-    }
-  }
-  return null;
-}
-
 function formatGameDate(dateString) {
   if (!dateString) return "";
 
   const parsedDate = new Date(dateString);
 
   if (Number.isNaN(parsedDate.getTime())) {
-    return dateString;
+    return String(dateString);
+  }
+
+  return parsedDate.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+}
+
+function formatFullGameDate(dateString) {
+  if (!dateString) return "";
+
+  const parsedDate = new Date(dateString);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return String(dateString);
   }
 
   return parsedDate.toLocaleDateString("en-US", {
@@ -214,61 +226,85 @@ function parseMatchupTeams(matchup = "") {
 function formatTooltipValue(stat, value) {
   if (value == null) return "0";
 
-  if (["FG%", "3P%", "FT%"].includes(stat)) {
-    return `${value.toFixed(1)}%`;
+  if (
+    [
+      "FG%",
+      "3P%",
+      "FT%",
+      "fieldGoalPct",
+      "threePointPct",
+      "freeThrowPct",
+    ].includes(stat)
+  ) {
+    return `${Number(value).toFixed(1)}%`;
   }
 
-  return value;
+  return Number(value).toFixed(1);
+}
+
+function getSortableTimestamp(dateString, fallbackIndex = 0) {
+  if (!dateString) return fallbackIndex;
+
+  const parsed = new Date(dateString).getTime();
+  if (Number.isNaN(parsed)) return fallbackIndex;
+
+  return parsed;
+}
+
+function sortChartPointsChronologically(points) {
+  return [...points].sort((a, b) => {
+    const aTime = getSortableTimestamp(a.fullDate, 0);
+    const bTime = getSortableTimestamp(b.fullDate, 0);
+    return aTime - bTime;
+  });
 }
 
 function CustomTooltip({ active, payload, selectedStat }) {
   if (!active || !payload || !payload.length) return null;
 
-  const point = payload[0].payload;
+  const point = payload[0]?.payload;
+  if (!point) return null;
+
   const { awayTeam, homeTeam, separator } = parseMatchupTeams(point.matchup);
 
   const resultLabel =
     point.wl === "W" ? "Win" : point.wl === "L" ? "Loss" : "Result unknown";
 
   return (
-    <div
-      style={{
-        background: "rgba(15, 23, 42, 0.96)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        borderRadius: "12px",
-        color: "#fff",
-        padding: "10px 12px",
-        boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
-        minWidth: "220px",
-      }}
-    >
-      <div style={{ marginBottom: 6, color: "#e2e8f0", fontSize: 13 }}>
-        {formatGameDate(point.fullDate)}
+    <div className="stat-chart-tooltip">
+      <div className="stat-chart-tooltip-date">
+        {formatFullGameDate(point.fullDate)}
       </div>
 
-      <div style={{ marginBottom: 6, fontSize: 14, fontWeight: 600 }}>
+      <div className="stat-chart-tooltip-matchup">
         <span style={{ color: getReadableTeamColor(awayTeam) }}>
           {awayTeam}
         </span>
-        {separator && <span style={{ color: "#cbd5e1" }}> {separator} </span>}
+        {separator && (
+          <span className="stat-chart-tooltip-separator"> {separator} </span>
+        )}
         <span style={{ color: getReadableTeamColor(homeTeam) }}>
           {homeTeam}
         </span>
-        <span style={{ color: getResultColor(point.wl) }}>
+        <span
+          className="stat-chart-tooltip-result"
+          style={{ color: getResultColor(point.wl) }}
+        >
           {" "}
           • {resultLabel}
         </span>
       </div>
 
       {point.played === false ? (
-        <div style={{ color: "#f8fafc", fontSize: 14 }}>
+        <div className="stat-chart-tooltip-stat">
           {formatStatLabel(selectedStat)}:{" "}
-          <span style={{ fontWeight: 600 }}>0</span> (Did not play)
+          <span className="stat-chart-tooltip-stat-value">0</span> (Did not
+          play)
         </div>
       ) : (
-        <div style={{ color: "#60a5fa", fontSize: 14 }}>
+        <div className="stat-chart-tooltip-stat">
           {formatStatLabel(selectedStat)}:{" "}
-          <span style={{ color: "#f8fafc", fontWeight: 600 }}>
+          <span className="stat-chart-tooltip-stat-value">
             {formatTooltipValue(selectedStat, point.statValue)}
           </span>
         </div>
@@ -277,9 +313,7 @@ function CustomTooltip({ active, payload, selectedStat }) {
   );
 }
 
-function CustomDot(props) {
-  const { cx, cy, payload, onSelectGame, selectedGameId } = props;
-
+function CustomDot({ cx, cy, payload, onSelectGame, selectedGameId }) {
   if (cx == null || cy == null || !payload) return null;
 
   const isSelected = payload.gameId === selectedGameId;
@@ -289,63 +323,64 @@ function CustomDot(props) {
       cx={cx}
       cy={cy}
       r={isSelected ? 6 : 4}
-      fill="#60a5fa"
-      stroke={isSelected ? "#ffffff" : "none"}
-      strokeWidth={isSelected ? 2 : 0}
-      style={{ cursor: "pointer" }}
+      className={
+        isSelected ? "stat-chart-dot stat-chart-dot-selected" : "stat-chart-dot"
+      }
       onClick={() => onSelectGame?.(payload.originalGame)}
     />
   );
 }
 
 function StatChart({
-  games,
-  selectedStat,
+  data = null,
+  games = [],
+  selectedStat = "points",
   hitRateStat,
   hitRateLine,
-  mode,
   onSelectGame,
   selectedGameId,
 }) {
   const [customLineInput, setCustomLineInput] = useState("");
 
+  const safeGames = Array.isArray(games) ? games : [];
+  const safeData = Array.isArray(data) ? data : null;
+
   const chartData = useMemo(() => {
-    return [...games].reverse().map((game) => {
-      const played = game.played !== false;
+    const mappedPoints = safeData
+      ? safeData.map((point, index) => ({
+          gameId: point.gameId || "",
+          originalGame: point.rawGame || null,
+          xLabel: formatGameDate(point.gameDate),
+          fullDate: point.gameDate || "",
+          statValue: Number(point.value ?? 0),
+          matchup: point.matchup || "",
+          played: point.played !== false,
+          wl:
+            point.rawGame?.wl ||
+            point.rawGame?.WL ||
+            (point.win === true ? "W" : point.win === false ? "L" : ""),
+          _index: index,
+        }))
+      : safeGames.map((game, index) => {
+          const played = game?.played !== false;
 
-      return {
-        gameId: game.gameId || game.GAME_ID || "",
-        originalGame: game,
-        xLabel: formatGameDate(game.gameDate),
-        fullDate: game.gameDate || "",
-        statValue: played ? (getChartStatValue(game, selectedStat) ?? 0) : 0,
-        matchup: game.matchup || game.MATCHUP || "",
-        played,
-        seasonGameNumber: game.seasonGameNumber || null,
-        wl: game.wl || game.WL || "",
-        teamScore: getFirstNumber(game, [
-          "teamScore",
-          "teamPoints",
-          "pts",
-          "PTS",
-          "points",
-        ]),
-        opponentScore: getFirstNumber(game, [
-          "opponentScore",
-          "oppPoints",
-          "opponentPoints",
-          "oppPts",
-        ]),
-      };
-    });
-  }, [games, selectedStat]);
+          return {
+            gameId: game?.gameId || game?.GAME_ID || "",
+            originalGame: game,
+            xLabel: formatGameDate(game?.gameDate),
+            fullDate: game?.gameDate || "",
+            statValue: played
+              ? (getChartStatValue(game, selectedStat) ?? 0)
+              : 0,
+            matchup: game?.matchup || game?.MATCHUP || "",
+            played,
+            wl: game?.wl || game?.WL || "",
+            _index: index,
+          };
+        });
 
-  const showPropLine =
-    selectedStat === hitRateStat &&
-    hitRateLine !== "" &&
-    !Number.isNaN(Number(hitRateLine));
-
-  const numericHitRateLine = Number(hitRateLine);
+    return sortChartPointsChronologically(mappedPoints);
+  }, [safeData, safeGames, selectedStat]);
 
   const trimmedCustomLineInput = String(customLineInput).trim();
   const hasCustomLineInput = trimmedCustomLineInput !== "";
@@ -354,134 +389,110 @@ function StatChart({
   const showCustomLine =
     hasCustomLineInput && Number.isFinite(numericCustomLine);
 
+  const numericHitRateLine = Number(hitRateLine);
+  const showPropLine =
+    selectedStat === hitRateStat &&
+    hitRateLine !== "" &&
+    Number.isFinite(numericHitRateLine);
+
   return (
-    <div>
-      <div className="chart-header">
+    <div className="stat-chart">
+      <div className="stat-chart-header">
         <div>
-          <h3 className="panel-title" style={{ marginBottom: 4 }}>
+          <h3 className="panel-title stat-chart-title">
             {formatStatLabel(selectedStat)} Trend
           </h3>
-          <p className="chart-subtitle">Season game-by-game performance</p>
+          <p className="stat-chart-subtitle">Season game-by-game performance</p>
         </div>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          alignItems: "end",
-          gap: 10,
-          marginBottom: 14,
-          flexWrap: "wrap",
-        }}
-      >
-        <label
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 6,
-            color: "#cbd5e1",
-            fontSize: 13,
-            fontWeight: 600,
-          }}
-        >
-          Custom line
+      <div className="stat-chart-controls">
+        <label className="stat-chart-input-group">
+          <span className="stat-chart-input-label">Custom line</span>
           <input
+            className="stat-chart-input"
             type="number"
             value={customLineInput}
             onChange={(e) => setCustomLineInput(e.target.value)}
             placeholder={`Enter ${formatStatLabel(selectedStat)} line`}
-            style={{
-              width: 140,
-              padding: "8px 10px",
-              borderRadius: 10,
-              border: "1px solid rgba(148, 163, 184, 0.25)",
-              background: "rgba(15, 23, 42, 0.9)",
-              color: "#f8fafc",
-              outline: "none",
-            }}
           />
         </label>
 
         <button
           type="button"
+          className="stat-chart-clear-button"
           onClick={() => setCustomLineInput("")}
-          style={{
-            padding: "8px 12px",
-            borderRadius: 10,
-            border: "1px solid rgba(148, 163, 184, 0.25)",
-            background: "rgba(30, 41, 59, 0.9)",
-            color: "#e2e8f0",
-            cursor: "pointer",
-          }}
         >
           Clear
         </button>
       </div>
 
-      <ResponsiveContainer width="100%" height={340}>
-        <LineChart data={chartData}>
-          <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
-          <XAxis
-            dataKey="xLabel"
-            stroke="#94a3b8"
-            tick={{ fill: "#94a3b8", fontSize: 12 }}
-            minTickGap={24}
-          />
-          <YAxis stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} />
-          <Tooltip content={<CustomTooltip selectedStat={selectedStat} />} />
-
-          {showPropLine && (
-            <ReferenceLine
-              y={numericHitRateLine}
-              stroke="#f59e0b"
-              strokeDasharray="6 6"
-              label={{
-                value: `Line ${numericHitRateLine}`,
-                position: "insideTopRight",
-                fill: "#f59e0b",
-                fontSize: 12,
-              }}
+      <div className="stat-chart-canvas">
+        <ResponsiveContainer width="100%" height={340}>
+          <LineChart data={chartData}>
+            <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
+            <XAxis
+              dataKey="xLabel"
+              stroke="#94a3b8"
+              tick={{ fill: "#94a3b8", fontSize: 12 }}
+              minTickGap={24}
             />
-          )}
+            <YAxis stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} />
+            <Tooltip content={<CustomTooltip selectedStat={selectedStat} />} />
 
-          {showCustomLine && (
-            <ReferenceLine
-              y={numericCustomLine}
-              stroke="#ef4444"
-              strokeWidth={2}
-              strokeDasharray="8 4"
-              label={{
-                value: `Custom ${numericCustomLine}`,
-                position: "insideTopLeft",
-                fill: "#ef4444",
-                fontSize: 12,
-              }}
-            />
-          )}
-
-          <Line
-            type="monotone"
-            dataKey="statValue"
-            stroke="#60a5fa"
-            strokeWidth={3}
-            connectNulls={false}
-            dot={(dotProps) => (
-              <CustomDot
-                {...dotProps}
-                onSelectGame={onSelectGame}
-                selectedGameId={selectedGameId}
+            {showPropLine && (
+              <ReferenceLine
+                y={numericHitRateLine}
+                stroke="#f59e0b"
+                strokeDasharray="6 6"
+                label={{
+                  value: `Line ${numericHitRateLine}`,
+                  position: "insideTopRight",
+                  fill: "#f59e0b",
+                  fontSize: 12,
+                }}
               />
             )}
-            activeDot={(dotProps) => (
-              <CustomDot
-                {...dotProps}
-                onSelectGame={onSelectGame}
-                selectedGameId={selectedGameId}
+
+            {showCustomLine && (
+              <ReferenceLine
+                y={numericCustomLine}
+                stroke="#ef4444"
+                strokeWidth={2}
+                strokeDasharray="8 4"
+                label={{
+                  value: `Custom ${numericCustomLine}`,
+                  position: "insideTopLeft",
+                  fill: "#ef4444",
+                  fontSize: 12,
+                }}
               />
             )}
-          />
-        </LineChart>
-      </ResponsiveContainer>
+
+            <Line
+              type="monotone"
+              dataKey="statValue"
+              stroke="#60a5fa"
+              strokeWidth={3}
+              connectNulls={false}
+              dot={(dotProps) => (
+                <CustomDot
+                  {...dotProps}
+                  onSelectGame={onSelectGame}
+                  selectedGameId={selectedGameId}
+                />
+              )}
+              activeDot={(dotProps) => (
+                <CustomDot
+                  {...dotProps}
+                  onSelectGame={onSelectGame}
+                  selectedGameId={selectedGameId}
+                />
+              )}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }

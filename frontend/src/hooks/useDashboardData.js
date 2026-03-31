@@ -101,6 +101,7 @@ function applyGameFilters(games, filters = {}) {
     return true;
   });
 }
+
 function buildChartData(games, selectedStat, includeMissedGames = false) {
   return games.map((game, index) => {
     const played = game.played !== false;
@@ -178,11 +179,13 @@ function buildAverages(games) {
   };
 }
 
-function buildSummary(games, filteredGames, selectedStat) {
-  const playedGames = games.filter((game) => game.played !== false);
-  const filteredPlayedGames = filteredGames.filter(
-    (game) => game.played !== false,
-  );
+function buildSummary(
+  allTimelineGames,
+  filteredTimelineGames,
+  filteredPlayedGames,
+  selectedStat,
+) {
+  const playedGames = allTimelineGames.filter((game) => game.played !== false);
 
   const averageSelectedStat =
     filteredPlayedGames.length > 0
@@ -195,16 +198,19 @@ function buildSummary(games, filteredGames, selectedStat) {
       : "0.0";
 
   return {
-    loadedGames: games.length,
-    filteredCount: filteredGames.length,
+    loadedGames: allTimelineGames.length,
+    filteredCount: filteredTimelineGames.length,
     playedCount: playedGames.length,
     filteredPlayedCount: filteredPlayedGames.length,
     filteredPercent:
-      games.length > 0
-        ? ((filteredGames.length / games.length) * 100).toFixed(1)
+      allTimelineGames.length > 0
+        ? (
+            (filteredTimelineGames.length / allTimelineGames.length) *
+            100
+          ).toFixed(1)
         : "0.0",
     averageSelectedStat,
-    averages: buildAverages(filteredGames),
+    averages: buildAverages(filteredPlayedGames),
   };
 }
 
@@ -221,10 +227,12 @@ function buildSplits(games, selectedStat) {
     return (total / played.length).toFixed(1);
   }
 
-  const homeGames = games.filter((game) => game.isHome === true);
-  const awayGames = games.filter((game) => game.isHome === false);
-  const wins = games.filter((game) => isWin(game));
-  const losses = games.filter((game) => isLoss(game));
+  const playedGames = games.filter((game) => game.played !== false);
+
+  const homeGames = playedGames.filter((game) => game.isHome === true);
+  const awayGames = playedGames.filter((game) => game.isHome === false);
+  const wins = playedGames.filter((game) => isWin(game));
+  const losses = playedGames.filter((game) => isLoss(game));
 
   return {
     home: {
@@ -273,49 +281,80 @@ export function useDashboardData({
     return normalizedTeamGames;
   }, [mode, normalizedPlayerGames, normalizedTeamGames]);
 
-  const filteredGames = useMemo(() => {
+  const playedGames = useMemo(() => {
+    return seasonTimelineGames.filter((game) => game.played !== false);
+  }, [seasonTimelineGames]);
+
+  const filteredTimelineGames = useMemo(() => {
     return applyGameFilters(seasonTimelineGames, filters);
   }, [seasonTimelineGames, filters]);
 
+  const filteredPlayedGames = useMemo(() => {
+    return applyGameFilters(playedGames, filters);
+  }, [playedGames, filters]);
+
   const chartData = useMemo(() => {
     const sourceGames = includeMissedGames
-      ? seasonTimelineGames
-      : seasonTimelineGames.filter((game) => game.played !== false);
+      ? filteredTimelineGames
+      : filteredPlayedGames;
 
     return buildChartData(sourceGames, selectedStat, includeMissedGames);
-  }, [seasonTimelineGames, selectedStat, includeMissedGames]);
+  }, [
+    filteredTimelineGames,
+    filteredPlayedGames,
+    selectedStat,
+    includeMissedGames,
+  ]);
 
   const summary = useMemo(() => {
-    return buildSummary(seasonTimelineGames, filteredGames, selectedStat);
-  }, [seasonTimelineGames, filteredGames, selectedStat]);
+    return buildSummary(
+      seasonTimelineGames,
+      filteredTimelineGames,
+      filteredPlayedGames,
+      selectedStat,
+    );
+  }, [
+    seasonTimelineGames,
+    filteredTimelineGames,
+    filteredPlayedGames,
+    selectedStat,
+  ]);
 
   const splits = useMemo(() => {
-    return buildSplits(filteredGames, selectedStat);
-  }, [filteredGames, selectedStat]);
+    return buildSplits(filteredPlayedGames, selectedStat);
+  }, [filteredPlayedGames, selectedStat]);
+
+  const nonThresholdFilters = useMemo(() => {
+    return {
+      ...filters,
+      thresholds: [],
+    };
+  }, [filters]);
+
+  const hitRateSourceGames = useMemo(() => {
+    return applyGameFilters(playedGames, nonThresholdFilters);
+  }, [playedGames, nonThresholdFilters]);
 
   const hitRateBoard = useMemo(() => {
     try {
-      const playedFilteredGames = filteredGames.filter(
-        (game) => game.played !== false,
-      );
-      const thresholds = generateThresholds(selectedStat);
+      const thresholds = generateThresholds(selectedStat, mode);
 
-      return calculateHitRateBoard({
-        games: playedFilteredGames,
-        stat: selectedStat,
+      return calculateHitRateBoard(
+        hitRateSourceGames,
+        selectedStat,
         thresholds,
-      });
+      );
     } catch (error) {
       console.error("calculateHitRateBoard failed:", error);
       return [];
     }
-  }, [filteredGames, selectedStat]);
+  }, [hitRateSourceGames, selectedStat]);
 
   const averages = summary.averages;
 
   return {
-    games: seasonTimelineGames,
-    filteredGames,
+    playedGames,
+    filteredPlayedGames,
     chartData,
     summary,
     averages,
@@ -323,10 +362,15 @@ export function useDashboardData({
     hitRateBoard,
     selectedLine: null,
     propInsights: null,
+
     raw: {
       normalizedPlayerGames,
       normalizedTeamGames,
       seasonTimelineGames,
+      playedGames,
+      filteredTimelineGames,
+      filteredPlayedGames,
+      hitRateSourceGames,
     },
   };
 }

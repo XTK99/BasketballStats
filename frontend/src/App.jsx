@@ -339,24 +339,38 @@ function App() {
             onDeletePage={deletePage}
           />
 
-          <DashboardCarousel
-            activeDashboardView={activeDashboardView}
-            setActiveDashboardView={setActiveDashboardView}
-            playerView={
-              <PlayerDashboardView
-                dashboard={playerDashboard}
-                controls={playerControls}
-                boxScoreState={sharedBoxScoreState}
-              />
-            }
-            teamView={
-              <TeamDashboardView
-                dashboard={teamDashboard}
-                controls={teamControls}
-                boxScoreState={sharedBoxScoreState}
-              />
-            }
-          />
+          <div className="dashboard-wrapper">
+            {/* LEFT SWIPE ZONE */}
+            <div
+              className="swipe-zone left"
+              onClick={() => setActiveDashboardView("player")}
+            />
+
+            {/* RIGHT SWIPE ZONE */}
+            <div
+              className="swipe-zone right"
+              onClick={() => setActiveDashboardView("team")}
+            />
+
+            <DashboardCarousel
+              activeDashboardView={activeDashboardView}
+              setActiveDashboardView={setActiveDashboardView}
+              playerView={
+                <PlayerDashboardView
+                  dashboard={playerDashboard}
+                  controls={playerControls}
+                  boxScoreState={sharedBoxScoreState}
+                />
+              }
+              teamView={
+                <TeamDashboardView
+                  dashboard={teamDashboard}
+                  controls={teamControls}
+                  boxScoreState={sharedBoxScoreState}
+                />
+              }
+            />
+          </div>
         </>
       )}
 

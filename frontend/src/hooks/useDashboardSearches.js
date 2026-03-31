@@ -31,6 +31,40 @@ function normalizeDashboardPayload(data, fallbackTitle = "Dashboard") {
   };
 }
 
+function isNumericOnly(value) {
+  return /^\d+$/.test(String(value || "").trim());
+}
+
+function getSafeDisplayTitle(titleCandidate, fallbackTitle = "Dashboard") {
+  const fallback = String(fallbackTitle || "").trim() || "Dashboard";
+
+  if (typeof titleCandidate !== "string") {
+    return fallback;
+  }
+
+  const trimmed = titleCandidate.trim();
+
+  if (!trimmed) {
+    return fallback;
+  }
+
+  if (isNumericOnly(trimmed)) {
+    return fallback;
+  }
+
+  return trimmed;
+}
+
+function getSafeTeamDisplayValue(primaryValue, fallbackValue = "Team") {
+  const primary = String(primaryValue || "").trim();
+  const fallback = String(fallbackValue || "").trim() || "Team";
+
+  if (!primary) return fallback;
+  if (isNumericOnly(primary)) return fallback;
+
+  return primary;
+}
+
 export function useDashboardSearches({
   season,
   last,
@@ -95,8 +129,10 @@ export function useDashboardSearches({
 
       console.log("loadTeamDashboard response:", data);
 
+      const safeTeamTitle = getSafeDisplayTitle(data.title, trimmedQuery);
+
       setTeamGames(data.games);
-      setTeamTitle(data.title || trimmedQuery);
+      setTeamTitle(safeTeamTitle);
 
       return data.games;
     } catch (error) {
@@ -143,13 +179,14 @@ export function useDashboardSearches({
       console.log("player dashboard response:", playerData);
 
       setPlayerGames(playerData.games);
-      setPlayerTitle(playerData.title || trimmedQuery);
+      setPlayerTitle(getSafeDisplayTitle(playerData.title, trimmedQuery));
 
       try {
         const derivedTeamIdOrAbbr = deriveTeamIdentifier(
           playerData.response,
           playerData.games,
         );
+
         const derivedTeamName = deriveTeamDisplayName(
           playerData.response,
           playerData.games,
@@ -166,18 +203,16 @@ export function useDashboardSearches({
           return playerData.games;
         }
 
-        // Use the readable team name for UI display.
-        // Only fall back to ID/abbr if no readable name exists.
-        const teamDisplayValue = String(
-          derivedTeamName || derivedTeamIdOrAbbr || "",
-        ).trim();
+        const teamDisplayValue = getSafeTeamDisplayValue(
+          derivedTeamName,
+          derivedTeamIdOrAbbr || "Team",
+        );
 
-        // Use the same readable value for searching when possible.
         const teamSearchValue = teamDisplayValue;
 
         skipNextTeamAutoSearchRef.current = true;
         setTeamQuery(teamDisplayValue);
-        setTeamTitle(teamDisplayValue || "Team");
+        setTeamTitle(teamDisplayValue);
 
         const rawTeamData = await fetchTeamDashboardData(
           teamSearchValue,
@@ -187,13 +222,13 @@ export function useDashboardSearches({
 
         const teamData = normalizeDashboardPayload(
           rawTeamData,
-          teamDisplayValue || "Team",
+          teamDisplayValue,
         );
 
         console.log("related team dashboard response:", teamData);
 
         setTeamGames(teamData.games);
-        setTeamTitle(teamData.title || teamDisplayValue || "Team");
+        setTeamTitle(getSafeDisplayTitle(teamData.title, teamDisplayValue));
         setTeamError("");
       } catch (relatedTeamError) {
         console.error("Related team fetch failed:", relatedTeamError);

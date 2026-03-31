@@ -1,13 +1,33 @@
 import "./GameLogTable.css";
 
-function formatPct(value) {
+function formatPct(value, played = true) {
+  if (!played) return "—";
+
   const num = Number(value);
-  if (Number.isNaN(num)) return "0.0";
+  if (!Number.isFinite(num)) return "0.0";
+
   return num <= 1 ? (num * 100).toFixed(1) : num.toFixed(1);
 }
 
-function GameLogTable({ games, onSelectGame, selectedGameId }) {
-  if (!games || games.length === 0) return null;
+function formatStat(value, played = true) {
+  if (!played) return "—";
+
+  if (value === null || value === undefined || value === "") {
+    return "0";
+  }
+
+  return value;
+}
+
+function formatResult(game) {
+  if (game?.wl) return game.wl;
+  if (game?.result === "win") return "W";
+  if (game?.result === "loss") return "L";
+  return "";
+}
+
+function GameLogTable({ games = [], onSelectGame, selectedGameId }) {
+  if (!Array.isArray(games) || games.length === 0) return null;
 
   function handleSelect(game) {
     onSelectGame?.(game);
@@ -17,9 +37,9 @@ function GameLogTable({ games, onSelectGame, selectedGameId }) {
     <section className="panel-card">
       <div className="table-header">
         <div>
-          <h3 className="panel-title">Game Log</h3>
+          <h3 className="panel-title">Match History</h3>
           <p className="table-subtitle">
-            Click a matchup to load the box score
+            {games.length} games • Click a matchup to load the box score
           </p>
         </div>
       </div>
@@ -31,6 +51,7 @@ function GameLogTable({ games, onSelectGame, selectedGameId }) {
               <th>DATE</th>
               <th>MATCHUP</th>
               <th>RESULT</th>
+
               <th>MIN</th>
               <th>PTS</th>
               <th>REB</th>
@@ -53,14 +74,21 @@ function GameLogTable({ games, onSelectGame, selectedGameId }) {
           <tbody>
             {games.map((game, index) => {
               const isSelected = selectedGameId === game.gameId;
+              const played = game?.played !== false;
+              const result = formatResult(game);
 
               return (
                 <tr
-                  key={game.gameId || index}
-                  className={isSelected ? "game-row-selected" : ""}
+                  key={game.gameId || `${game.gameDate}-${index}`}
+                  className={[
+                    isSelected ? "game-row-selected" : "",
+                    !played ? "game-row-missed" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
                   onClick={() => handleSelect(game)}
                 >
-                  <td>{game.gameDate}</td>
+                  <td>{game.gameDate || "—"}</td>
 
                   <td>
                     <button
@@ -71,38 +99,40 @@ function GameLogTable({ games, onSelectGame, selectedGameId }) {
                         handleSelect(game);
                       }}
                     >
-                      {game.matchup}
+                      {game.matchup || "—"}
                     </button>
                   </td>
 
                   <td>
-                    {game.wl ? (
+                    {result ? (
                       <span
                         className={`result-pill ${
-                          game.wl === "W" ? "result-win" : "result-loss"
+                          result === "W" ? "result-win" : "result-loss"
                         }`}
                       >
-                        {game.wl}
+                        {result}
                       </span>
-                    ) : null}
+                    ) : (
+                      <span className="muted-cell">{played ? "—" : "DNP"}</span>
+                    )}
                   </td>
 
-                  <td>{game.minutes}</td>
-                  <td>{game.points}</td>
-                  <td>{game.rebounds}</td>
-                  <td>{game.assists}</td>
-                  <td>{game.steals}</td>
-                  <td>{game.blocks}</td>
-                  <td>{game.turnovers}</td>
-                  <td>{game.fgm}</td>
-                  <td>{game.fga}</td>
-                  <td>{formatPct(game.fgPct)}</td>
-                  <td>{game.fg3m}</td>
-                  <td>{game.fg3a}</td>
-                  <td>{formatPct(game.fg3Pct)}</td>
-                  <td>{game.ftm}</td>
-                  <td>{game.fta}</td>
-                  <td>{formatPct(game.ftPct)}</td>
+                  <td>{formatStat(game.minutes, played)}</td>
+                  <td>{formatStat(game.points, played)}</td>
+                  <td>{formatStat(game.rebounds, played)}</td>
+                  <td>{formatStat(game.assists, played)}</td>
+                  <td>{formatStat(game.steals, played)}</td>
+                  <td>{formatStat(game.blocks, played)}</td>
+                  <td>{formatStat(game.turnovers, played)}</td>
+                  <td>{formatStat(game.fgm, played)}</td>
+                  <td>{formatStat(game.fga, played)}</td>
+                  <td>{formatPct(game.fgPct, played)}</td>
+                  <td>{formatStat(game.fg3m, played)}</td>
+                  <td>{formatStat(game.fg3a, played)}</td>
+                  <td>{formatPct(game.fg3Pct, played)}</td>
+                  <td>{formatStat(game.ftm, played)}</td>
+                  <td>{formatStat(game.fta, played)}</td>
+                  <td>{formatPct(game.ftPct, played)}</td>
                 </tr>
               );
             })}

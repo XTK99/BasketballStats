@@ -56,11 +56,15 @@ function PlayerDashboardView({ dashboard, controls, boxScoreState }) {
 
   const games = dashboard?.games ?? [];
   const filteredGames = dashboard?.filteredGames ?? [];
+  const filteredPlayedGames =
+    dashboard?.filteredPlayedGames ??
+    filteredGames.filter((game) => game?.played !== false);
+
   const chartData = dashboard?.chartData ?? [];
   const splits = dashboard?.splits ?? {};
-  const hitRateBoard = dashboard?.hitRateBoard ?? [];
   const summary = dashboard?.summary ?? {};
-  const averages = dashboard?.averages ?? summary?.averages ?? {};
+  const averages = summary?.averages ?? {};
+  const hitRateBoard = dashboard?.hitRateBoard ?? [];
   const selectedLine = dashboard?.selectedLine ?? null;
   const propInsights = dashboard?.propInsights ?? null;
 
@@ -70,7 +74,10 @@ function PlayerDashboardView({ dashboard, controls, boxScoreState }) {
     filteredGames.length,
   );
   const playedGamesCount = toSafeNumber(summary.playedCount, 0);
-  const filteredPlayedGamesCount = toSafeNumber(summary.filteredPlayedCount, 0);
+  const filteredPlayedGamesCount = toSafeNumber(
+    summary.filteredPlayedCount,
+    filteredPlayedGames.length,
+  );
   const filteredPercent = summary.filteredPercent ?? "0.0";
 
   const seasonMissedCount = Math.max(0, loadedGames - playedGamesCount);
@@ -197,8 +204,7 @@ function PlayerDashboardView({ dashboard, controls, boxScoreState }) {
           />
 
           <SplitsPanel
-            splits={splits}
-            games={filteredGames}
+            games={filteredPlayedGames}
             selectedStat={selectedStat}
           />
 
@@ -210,7 +216,11 @@ function PlayerDashboardView({ dashboard, controls, boxScoreState }) {
 
             <StatChart
               data={chartData}
-              games={filteredGames}
+              games={
+                includeMissedGames
+                  ? (dashboard?.filteredGames ?? [])
+                  : (dashboard?.filteredPlayedGames ?? [])
+              }
               selectedStat={selectedStat}
               mode="player"
               onSelectGame={onSelectGame}
@@ -219,16 +229,9 @@ function PlayerDashboardView({ dashboard, controls, boxScoreState }) {
           </section>
 
           <HitRateBoard
-            data={hitRateBoard}
-            games={filteredGames}
+            board={hitRateBoard}
             selectedStat={selectedStat}
             mode="player"
-          />
-
-          <GameLogTable
-            games={filteredGames}
-            onSelectGame={onSelectGame}
-            selectedGameId={selectedGameId}
           />
 
           <section ref={boxScoreRef} className="section-stack">
@@ -272,6 +275,12 @@ function PlayerDashboardView({ dashboard, controls, boxScoreState }) {
           )}
         </>
       )}
+
+      <GameLogTable
+        games={filteredPlayedGames}
+        onSelectGame={onSelectGame}
+        selectedGameId={selectedGameId}
+      />
     </div>
   );
 }

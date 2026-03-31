@@ -52,33 +52,33 @@ function TeamDashboardView({ dashboard, controls, boxScoreState }) {
     onSelectTeamFromBoxScore,
   } = boxScoreState;
 
-  // ✅ NEW DASHBOARD SHAPE
   const games = dashboard?.games ?? [];
   const filteredGames = dashboard?.filteredGames ?? [];
+  const filteredPlayedGames =
+    dashboard?.filteredPlayedGames ??
+    filteredGames.filter((game) => game?.played !== false);
+
   const chartData = dashboard?.chartData ?? [];
-  const splits = dashboard?.splits ?? {};
-  const hitRateBoard = dashboard?.hitRateBoard ?? [];
   const summary = dashboard?.summary ?? {};
+  const averages = summary?.averages ?? {};
+  const hitRateBoard = dashboard?.hitRateBoard ?? [];
+  const selectedLine = dashboard?.selectedLine ?? null;
+  const propInsights = dashboard?.propInsights ?? null;
 
   const loadedGames = toSafeNumber(summary.loadedGames, games.length);
   const filteredCount = toSafeNumber(
     summary.filteredCount,
     filteredGames.length,
   );
+  const playedGamesCount = toSafeNumber(
+    summary.playedCount,
+    filteredPlayedGames.length,
+  );
+  const filteredPlayedGamesCount = toSafeNumber(
+    summary.filteredPlayedCount,
+    filteredPlayedGames.length,
+  );
   const filteredPercent = summary.filteredPercent ?? "0.0";
-  const averageSelectedStat = summary.averageSelectedStat ?? "0.0";
-
-  // keep compatibility for old components
-  const averages = dashboard?.averages ?? {
-    [selectedStat]: averageSelectedStat,
-    averageSelectedStat,
-    loadedGames,
-    filteredCount,
-    filteredPercent,
-  };
-
-  const selectedLine = dashboard?.selectedLine ?? null;
-  const propInsights = dashboard?.propInsights ?? null;
 
   return (
     <div className="section-stack">
@@ -116,6 +116,52 @@ function TeamDashboardView({ dashboard, controls, boxScoreState }) {
             onSelectStat={setSelectedStat}
           />
 
+          <section className="panel-card">
+            <div className="panel-title" style={{ marginBottom: "12px" }}>
+              Dashboard Snapshot
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+                gap: "12px",
+              }}
+            >
+              <div className="summary-card">
+                <div className="summary-label">Loaded Games</div>
+                <div className="summary-value">{loadedGames}</div>
+              </div>
+
+              <div className="summary-card">
+                <div className="summary-label">Filtered Games</div>
+                <div className="summary-value">{filteredCount}</div>
+              </div>
+
+              <div className="summary-card">
+                <div className="summary-label">Played Games</div>
+                <div className="summary-value">{playedGamesCount}</div>
+              </div>
+
+              <div className="summary-card">
+                <div className="summary-label">Filtered Played</div>
+                <div className="summary-value">{filteredPlayedGamesCount}</div>
+              </div>
+
+              <div className="summary-card">
+                <div className="summary-label">Filtered %</div>
+                <div className="summary-value">{filteredPercent}%</div>
+              </div>
+
+              <div className="summary-card">
+                <div className="summary-label">Selected Stat</div>
+                <div className="summary-value" style={{ fontSize: "1rem" }}>
+                  {selectedStat}
+                </div>
+              </div>
+            </div>
+          </section>
+
           <PropEdgeCard
             title={title}
             selectedStat={selectedStat}
@@ -124,8 +170,7 @@ function TeamDashboardView({ dashboard, controls, boxScoreState }) {
           />
 
           <SplitsPanel
-            splits={splits}
-            games={filteredGames}
+            games={filteredPlayedGames}
             selectedStat={selectedStat}
           />
 
@@ -146,8 +191,7 @@ function TeamDashboardView({ dashboard, controls, boxScoreState }) {
           </section>
 
           <HitRateBoard
-            data={hitRateBoard}
-            games={filteredGames}
+            board={hitRateBoard}
             selectedStat={selectedStat}
             mode="team"
           />
@@ -193,7 +237,7 @@ function TeamDashboardView({ dashboard, controls, boxScoreState }) {
           )}
 
           <GameLogTable
-            games={filteredGames}
+            games={filteredPlayedGames}
             onSelectGame={onSelectGame}
             selectedGameId={selectedGameId}
           />

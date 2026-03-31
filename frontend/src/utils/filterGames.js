@@ -48,14 +48,22 @@ export function filterGames(games = [], filters = {}) {
     : [];
 
   return games.filter((game) => {
-    const gameLocation = String(game.location || "").toLowerCase();
-    const gameResult = String(game.result || "").toLowerCase();
+    const isHome = game.isHome === true;
+    const isAway = game.isHome === false;
+
+    const rawResult = String(game.result || game.wl || "").toLowerCase();
+    const normalizedResult =
+      rawResult === "w" ? "win" : rawResult === "l" ? "loss" : rawResult;
+
     const gameOpponent = String(game.opponent || "").toLowerCase();
 
     const matchesLocation =
-      locations.length === 0 || locations.includes(gameLocation);
+      locations.length === 0 ||
+      (locations.includes("home") && isHome) ||
+      (locations.includes("away") && isAway);
 
-    const matchesResult = results.length === 0 || results.includes(gameResult);
+    const matchesResult =
+      results.length === 0 || results.includes(normalizedResult);
 
     const matchesOpponent =
       !opponentFilter || gameOpponent.includes(opponentFilter);

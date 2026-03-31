@@ -35,12 +35,19 @@ export function mergePlayerGamesWithTeamGames(
       ftPct: matchingPlayerGame ? matchingPlayerGame.ftPct : 0,
 
       wl: matchingPlayerGame ? matchingPlayerGame.wl : teamGame.wl || "",
-      teamScore: matchingPlayerGame
-        ? matchingPlayerGame.teamScore
-        : (teamGame.teamScore ?? null),
-      opponentScore: matchingPlayerGame
-        ? matchingPlayerGame.opponentScore
-        : (teamGame.opponentScore ?? null),
+      teamScore:
+        matchingPlayerGame &&
+        Number.isFinite(Number(matchingPlayerGame.teamScore)) &&
+        Number(matchingPlayerGame.teamScore) !== 0
+          ? Number(matchingPlayerGame.teamScore)
+          : (teamGame.teamScore ?? null),
+
+      opponentScore:
+        matchingPlayerGame &&
+        Number.isFinite(Number(matchingPlayerGame.opponentScore)) &&
+        Number(matchingPlayerGame.opponentScore) !== 0
+          ? Number(matchingPlayerGame.opponentScore)
+          : (teamGame.opponentScore ?? null),
     };
   });
 }
