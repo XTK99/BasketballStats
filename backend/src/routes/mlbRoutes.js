@@ -9,10 +9,8 @@ router.get("/health", (req, res) => {
   res.json({ ok: true, service: "mlb" });
 });
 
-// Route to sync MLB teams
 router.get("/sync-teams", mlbController.syncTeams);
-
-// Route to sync MLB divisions
 router.get("/sync-divisions", mlbController.syncDivisions);
+router.get("/sync-leagues", mlbController.syncLeagues);
 
 module.exports = router;
