@@ -15,4 +15,12 @@ router.get("/sync-leagues", mlbController.syncLeagues);
 router.get("/sync-venues", mlbController.syncVenues);
 router.get("/sync-sports", mlbController.syncSports);
 
+// Bulk read routes
+router.get("/teams", mlbController.getTeams);
+router.get("/divisions", mlbController.getDivisions);
+router.get("/leagues", mlbController.getLeagues);
+router.get("/venues", mlbController.getVenues);
+router.get("/sports", mlbController.getSports);
+router.get("/players", mlbController.getPlayers);
+
 module.exports = router;
