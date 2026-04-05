@@ -9,6 +9,10 @@ router.get("/health", (req, res) => {
   res.json({ ok: true, service: "mlb" });
 });
 
+router.get("/sync-player/:id", (req, res, next) => {
+  req.query.id = req.params.id;
+  mlbController.syncPlayer(req, res, next);
+});
 router.get("/sync-teams", mlbController.syncTeams);
 router.get("/sync-divisions", mlbController.syncDivisions);
 router.get("/sync-leagues", mlbController.syncLeagues);
