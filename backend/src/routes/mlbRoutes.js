@@ -10,6 +10,9 @@ router.get("/health", (req, res) => {
 });
 
 // Route to sync MLB teams
-// router.get("/sync-teams", mlbController.syncTeams);
+router.get("/sync-teams", mlbController.syncTeams);
+
+// Route to sync MLB divisions
+router.get("/sync-divisions", mlbController.syncDivisions);
 
 module.exports = router;
