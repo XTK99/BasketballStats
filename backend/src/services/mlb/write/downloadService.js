@@ -1,12 +1,12 @@
 // MLB API Endpoints
-const { insertTeams } = require("./writeToDb/teamDb.js");
+const { saveTeams } = require("./writeToDb/teamDb.js");
 const { fetchTeams } = require("./fetchMlbApi/teamApi.js");
 const { fetchDivisions } = require("./fetchMlbApi/divisionApi.js");
 const { saveDivisions } = require("./writeToDb/divisionDb.js");
 
 const downloadService = {
   fetchTeams,
-  insertTeams,
+  saveTeams,
   fetchDivisions,
   saveDivisions,
 };

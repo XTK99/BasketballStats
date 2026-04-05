@@ -5,7 +5,7 @@ const pool = require("../../../../../db/db.js");
  * @param {Array<Object>} teams
  * @returns {Promise<void>}
  */
-async function insertTeams(teams) {
+async function saveTeams(teams) {
   if (!teams.length) return;
   const columns = [
     "id",
@@ -58,4 +58,4 @@ async function insertTeams(teams) {
   await pool.query(query, values);
 }
 
-module.exports = { insertTeams };
+module.exports = { saveTeams };

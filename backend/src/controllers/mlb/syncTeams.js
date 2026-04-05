@@ -12,7 +12,7 @@ const {
 async function syncTeams(req, res) {
   try {
     const teams = await downloadService.fetchTeams();
-    await downloadService.insertTeams(teams);
+    await downloadService.saveTeams(teams);
     res.status(200).json({
       message: "MLB teams synced successfully",
       count: teams.length,
