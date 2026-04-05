@@ -5,7 +5,7 @@ const axios = require("axios");
  * Fetches MLB teams from the API and parses them into the Team model shape.
  * @returns {Promise<Array<Object>>} Array of team objects
  */
-async function fetchAndParseTeams() {
+async function fetchTeams() {
   const response = await axios.get(MLB_TEAMS_ENDPOINT);
   const teams = response.data?.teams || [];
   return teams.map((team) => ({
@@ -28,4 +28,4 @@ async function fetchAndParseTeams() {
   }));
 }
 
-module.exports = { fetchAndParseTeams };
+module.exports = { fetchTeams };

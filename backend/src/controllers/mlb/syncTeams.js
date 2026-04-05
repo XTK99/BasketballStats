@@ -11,7 +11,7 @@ const {
  */
 async function syncTeams(req, res) {
   try {
-    const teams = await downloadService.fetchAndParseTeams();
+    const teams = await downloadService.fetchTeams();
     await downloadService.insertTeams(teams);
     res.status(200).json({
       message: "MLB teams synced successfully",
