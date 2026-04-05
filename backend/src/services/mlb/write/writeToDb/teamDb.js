@@ -24,6 +24,20 @@ async function saveTeams(teams) {
     "season",
     "team_code",
     "file_code",
+    // New columns
+    "all_star_status",
+    "link",
+    "venue_name",
+    "venue_link",
+    "league_name",
+    "league_link",
+    "division_name",
+    "division_link",
+    "sport_id",
+    "sport_name",
+    "sport_link",
+    "parent_org_name",
+    "parent_org_id",
   ];
   const values = [];
   const placeholders = teams.map((team, i) => {
@@ -45,6 +59,20 @@ async function saveTeams(teams) {
       team.season,
       team.team_code,
       team.file_code,
+      // New columns
+      team.all_star_status,
+      team.link,
+      team.venue_name,
+      team.venue_link,
+      team.league_name,
+      team.league_link,
+      team.division_name,
+      team.division_link,
+      team.sport_id,
+      team.sport_name,
+      team.sport_link,
+      team.parent_org_name,
+      team.parent_org_id,
     );
     return `(${columns.map((_, j) => `$${base + j + 1}`).join(", ")})`;
   });

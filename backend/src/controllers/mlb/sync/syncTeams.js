@@ -2,7 +2,7 @@
 // Controller for syncing MLB teams
 const {
   downloadService,
-} = require("../../services/mlb/write/downloadService.js");
+} = require("../../../services/mlb/write/downloadService.js");
 
 /**
  * Fetches MLB teams from the API and stores them in the database.

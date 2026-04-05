@@ -3,7 +3,7 @@
 
 const {
   downloadService,
-} = require("../../services/mlb/write/downloadService.js");
+} = require("../../../services/mlb/write/downloadService.js");
 
 async function syncLeagues(req, res) {
   try {

@@ -1,10 +1,8 @@
-const {
-  getLeagues,
-} = require("../../../../../services/mlb/read/bulk/getLeagues.js");
+const { readService } = require("../../../../services/mlb/read/readService.js");
 
 async function getLeagues(req, res) {
   try {
-    const leagues = await getLeagues();
+    const leagues = await readService.getLeagues();
     res.status(200).json(leagues);
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -6,39 +6,57 @@
 
 class Team {
   constructor({
+    allStarStatus,
     id,
     name,
-    team_name,
-    abbreviation,
-    location_name,
-    short_name,
-    franchise_name,
-    club_name,
-    first_year_of_play,
-    active,
-    league_id,
-    division_id,
-    venue_id,
+    link,
     season,
-    team_code,
-    file_code,
+    venue,
+    teamCode,
+    fileCode,
+    abbreviation,
+    teamName,
+    locationName,
+    firstYearOfPlay,
+    league,
+    division,
+    sport,
+    shortName,
+    parentOrgName,
+    parentOrgId,
+    franchiseName,
+    clubName,
+    active,
   }) {
+    this.all_star_status = allStarStatus;
     this.id = id;
     this.name = name;
-    this.team_name = team_name;
-    this.abbreviation = abbreviation;
-    this.location_name = location_name;
-    this.short_name = short_name;
-    this.franchise_name = franchise_name;
-    this.club_name = club_name;
-    this.first_year_of_play = first_year_of_play;
-    this.active = !!active;
-    this.league_id = league_id;
-    this.division_id = division_id;
-    this.venue_id = venue_id;
+    this.link = link;
     this.season = season;
-    this.team_code = team_code;
-    this.file_code = file_code;
+    this.venue_id = venue?.id;
+    this.venue_name = venue?.name;
+    this.venue_link = venue?.link;
+    this.team_code = teamCode;
+    this.file_code = fileCode;
+    this.abbreviation = abbreviation;
+    this.team_name = teamName;
+    this.location_name = locationName;
+    this.first_year_of_play = firstYearOfPlay;
+    this.league_id = league?.id;
+    this.league_name = league?.name;
+    this.league_link = league?.link;
+    this.division_id = division?.id;
+    this.division_name = division?.name;
+    this.division_link = division?.link;
+    this.sport_id = sport?.id;
+    this.sport_name = sport?.name;
+    this.sport_link = sport?.link;
+    this.short_name = shortName;
+    this.parent_org_name = parentOrgName;
+    this.parent_org_id = parentOrgId;
+    this.franchise_name = franchiseName;
+    this.club_name = clubName;
+    this.active = !!active;
   }
 }
 

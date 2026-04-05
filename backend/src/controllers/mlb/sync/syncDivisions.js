@@ -2,7 +2,7 @@
 // Controller for syncing MLB divisions
 const {
   downloadService,
-} = require("../../services/mlb/write/downloadService.js");
+} = require("../../../services/mlb/write/downloadService.js");
 
 /**
  * Fetches MLB divisions from the API and stores them in the database.
