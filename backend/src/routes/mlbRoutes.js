@@ -12,5 +12,6 @@ router.get("/health", (req, res) => {
 router.get("/sync-teams", mlbController.syncTeams);
 router.get("/sync-divisions", mlbController.syncDivisions);
 router.get("/sync-leagues", mlbController.syncLeagues);
+router.get("/sync-venues", mlbController.syncVenues);
 
 module.exports = router;

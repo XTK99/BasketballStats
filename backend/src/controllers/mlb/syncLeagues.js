@@ -5,14 +5,16 @@ const {
   downloadService,
 } = require("../../services/mlb/write/downloadService.js");
 
-async function syncLeagues() {
+async function syncLeagues(req, res) {
   try {
     const leagues = await downloadService.fetchLeagues();
     await downloadService.saveLeagues(leagues);
-    console.log("Leagues synced successfully.");
+    res.status(200).json({
+      message: "MLB leagues synced successfully",
+      count: leagues.length,
+    });
   } catch (error) {
-    console.error("Error syncing leagues:", error);
-    throw error;
+    res.status(500).json({ error: error.message });
   }
 }
 
