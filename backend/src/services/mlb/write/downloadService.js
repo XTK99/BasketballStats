@@ -7,6 +7,8 @@ const { fetchLeagues } = require("./fetchMlbApi/leagueApi.js");
 const { saveLeagues } = require("./writeToDb/leagueDb.js");
 const { fetchVenues } = require("./fetchMlbApi/venueApi.js");
 const { saveVenues } = require("./writeToDb/venueDb.js");
+const { fetchSports } = require("./fetchMlbApi/sportsApi.js");
+const { saveSports } = require("./writeToDb/sportsDb.js");
 
 const downloadService = {
   fetchTeams,
@@ -17,6 +19,8 @@ const downloadService = {
   saveLeagues,
   fetchVenues,
   saveVenues,
+  fetchSports,
+  saveSports,
 };
 module.exports = { downloadService };
 // In downloadService, read this endpoint: https://statsapi.mlb.com/api/v1/teams?sportId=1, parse the data into

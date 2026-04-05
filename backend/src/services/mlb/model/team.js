@@ -21,7 +21,7 @@ class Team {
     venue_id,
     season,
     team_code,
-    file_code
+    file_code,
   }) {
     this.id = id;
     this.name = name;
