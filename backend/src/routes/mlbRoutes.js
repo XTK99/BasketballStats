@@ -18,6 +18,7 @@ router.get("/sync-divisions", mlbController.syncDivisions);
 router.get("/sync-leagues", mlbController.syncLeagues);
 router.get("/sync-venues", mlbController.syncVenues);
 router.get("/sync-sports", mlbController.syncSports);
+router.get("/sync-games", mlbController.syncGames);
 
 // Bulk read routes
 router.get("/teams", mlbController.getTeams);
