@@ -14,7 +14,7 @@ function sleep(ms) {
 async function fetchAllGames() {
   const sportIds = Object.values(SPORT_TYPES);
   const startYear = 1975;
-  const endYear = 2026;
+  const endYear = new Date().getFullYear(); // Use current year
   const allGames = [];
   let delay = 500; // Start with 0.5 seconds
 
