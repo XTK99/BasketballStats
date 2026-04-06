@@ -9,7 +9,7 @@ router.get("/health", (req, res) => {
   res.json({ ok: true, service: "mlb" });
 });
 
-router.get("/sync-player/:id", (req, res, next) => {
+router.get("/add-player/:id", (req, res, next) => {
   req.query.id = req.params.id;
   mlbController.syncPlayer(req, res, next);
 });
@@ -18,7 +18,10 @@ router.get("/sync-divisions", mlbController.syncDivisions);
 router.get("/sync-leagues", mlbController.syncLeagues);
 router.get("/sync-venues", mlbController.syncVenues);
 router.get("/sync-sports", mlbController.syncSports);
-router.get("/sync-games", mlbController.syncGames);
+
+// Sync all games for the current season
+router.get("/sync-games", mlbController.syncGamesThisSeason);
+router.get("/sync-games/all", mlbController.downloadAllGamesAllSeasons);
 
 // Bulk read routes
 router.get("/teams", mlbController.getTeams);
