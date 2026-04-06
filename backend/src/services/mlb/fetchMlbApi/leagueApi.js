@@ -3,7 +3,7 @@
 
 const axios = require("axios");
 // TODO: Replace with the actual endpoint for leagues
-const { MLB_LEAGUES_ENDPOINT } = require("../../mlbEndpoints");
+const { MLB_LEAGUES_ENDPOINT } = require("../mlbEndpoints");
 
 async function fetchLeagues() {
   const response = await axios.get(MLB_LEAGUES_ENDPOINT);

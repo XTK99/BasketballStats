@@ -2,8 +2,7 @@
 // Fetches MLB venues from the MLB API
 
 const axios = require("axios");
-// TODO: Replace with the actual endpoint for venues if different
-const MLB_VENUES_ENDPOINT = "https://statsapi.mlb.com/api/v1/venues";
+const { MLB_VENUES_ENDPOINT } = require("../mlbEndpoints");
 
 async function fetchVenues() {
   const response = await axios.get(MLB_VENUES_ENDPOINT);

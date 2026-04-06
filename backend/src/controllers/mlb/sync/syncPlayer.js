@@ -3,10 +3,8 @@
 
 const {
   fetchPlayer,
-} = require("../../../services/mlb/write/fetchMlbApi/playerApi.js");
-const {
   savePlayer,
-} = require("../../../services/mlb/write/writeToDb/playerDb.js");
+} = require("../../../services/mlb/write/downloadService.js");
 
 /**
  * Express handler: Sync a single MLB player by id from req.params.id

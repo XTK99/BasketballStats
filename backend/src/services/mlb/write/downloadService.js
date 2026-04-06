@@ -1,13 +1,13 @@
 // MLB API Endpoints
 const { saveTeams } = require("./writeToDb/teamDb.js");
-const { fetchTeams } = require("./fetchMlbApi/teamApi.js");
-const { fetchDivisions } = require("./fetchMlbApi/divisionApi.js");
+const { fetchTeams } = require("../fetchMlbApi/teamApi.js");
+const { fetchDivisions } = require("../fetchMlbApi/divisionApi.js");
 const { saveDivisions } = require("./writeToDb/divisionDb.js");
-const { fetchLeagues } = require("./fetchMlbApi/leagueApi.js");
+const { fetchLeagues } = require("../fetchMlbApi/leagueApi.js");
 const { saveLeagues } = require("./writeToDb/leagueDb.js");
-const { fetchVenues } = require("./fetchMlbApi/venueApi.js");
+const { fetchVenues } = require("../fetchMlbApi/venueApi.js");
 const { saveVenues } = require("./writeToDb/venueDb.js");
-const { fetchSports } = require("./fetchMlbApi/sportsApi.js");
+const { fetchSports } = require("../fetchMlbApi/sportsApi.js");
 const { saveSports } = require("./writeToDb/sportsDb.js");
 
 const downloadService = {

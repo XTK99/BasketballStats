@@ -1,4 +1,4 @@
-const { MLB_TEAMS_ENDPOINT } = require("../../mlbEndpoints.js");
+const { MLB_TEAMS_ENDPOINT } = require("../mlbEndpoints.js");
 const axios = require("axios");
 
 /**

@@ -2,7 +2,7 @@
 // Fetches MLB players from the MLB API
 
 const axios = require("axios");
-const { MLB_PLAYERS_ENDPOINT } = require("../../mlbEndpoints.js");
+const { MLB_PLAYERS_ENDPOINT } = require("../mlbEndpoints.js");
 
 async function fetchPlayers(params = "") {
   // params can be a query string like '?teamId=147'

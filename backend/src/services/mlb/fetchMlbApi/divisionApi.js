@@ -2,7 +2,7 @@
 // Fetches MLB divisions from the MLB API
 
 const axios = require("axios");
-const { MLB_DIVISIONS_ENDPOINT } = require("../../mlbEndpoints");
+const { MLB_DIVISIONS_ENDPOINT } = require("../mlbEndpoints");
 
 async function fetchDivisions() {
   const response = await axios.get(MLB_DIVISIONS_ENDPOINT);
