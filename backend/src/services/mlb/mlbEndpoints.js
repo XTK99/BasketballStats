@@ -8,6 +8,7 @@ const MLB_VENUES_ENDPOINT = "https://statsapi.mlb.com/api/v1/venues";
 const MLB_SPORTS_ENDPOINT = "https://statsapi.mlb.com/api/v1/sports";
 const MLB_PLAYERS_ENDPOINT = "https://statsapi.mlb.com/api/v1/people";
 const MLB_SCHEDULE_ENDPOINT = "https://statsapi.mlb.com/api/v1/schedule";
+const MLB_GAME_ENDPOINT = "https://statsapi.mlb.com/api/v1/game";
 module.exports = {
   MLB_TEAMS_ENDPOINT,
   MLB_DIVISIONS_ENDPOINT,
@@ -16,4 +17,5 @@ module.exports = {
   MLB_SPORTS_ENDPOINT,
   MLB_PLAYERS_ENDPOINT,
   MLB_SCHEDULE_ENDPOINT,
+  MLB_GAME_ENDPOINT,
 };

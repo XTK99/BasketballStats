@@ -7,7 +7,10 @@ const { syncVenues } = require("./mlb/sync/syncVenues.js");
 const { syncSports } = require("./mlb/sync/syncSports.js");
 const { syncPlayer } = require("./mlb/sync/syncPlayer.js");
 const { syncPlayers } = require("./mlb/sync/syncPlayers.js");
-const { downloadAllGamesAllSeasons } = require("./mlb/sync/syncGames.js");
+const {
+  downloadAllGamesAllSeasons,
+  syncTeamStatsForGame,
+} = require("./mlb/sync/syncGames/syncGames.js");
 const {
   syncGamesThisSeason,
 } = require("./mlb/sync/syncGames/syncGamesThisSeason.js");
@@ -18,6 +21,7 @@ const { getLeagues } = require("./mlb/read/bulk/getLeagues.js");
 const { getVenues } = require("./mlb/read/bulk/getVenues.js");
 const { getSports } = require("./mlb/read/bulk/getSports.js");
 const { getPlayers } = require("./mlb/read/bulk/getPlayers.js");
+const { getGames } = require("./mlb/read/bulk/getGames.js");
 
 const mlbController = {
   syncTeams,
@@ -27,7 +31,9 @@ const mlbController = {
   syncSports,
   syncPlayer,
   syncPlayers,
+
   downloadAllGamesAllSeasons,
+  syncTeamStatsForGame,
   syncGamesThisSeason,
 
   getTeams,
@@ -36,6 +42,7 @@ const mlbController = {
   getVenues,
   getSports,
   getPlayers,
+  getGames,
 };
 
 module.exports = { mlbController };

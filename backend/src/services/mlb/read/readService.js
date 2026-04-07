@@ -7,6 +7,8 @@ const { getLeagues } = require("./bulk/getLeagues.js");
 const { getVenues } = require("./bulk/getVenues.js");
 const { getSports } = require("./bulk/getSports.js");
 const { getPlayers } = require("./bulk/getPlayers.js");
+const { getGames } = require("./bulk/getGames.js");
+const { getGameIds } = require("./bulk/getGameIds.js");
 
 const readService = {
   getTeams,
@@ -15,6 +17,8 @@ const readService = {
   getVenues,
   getSports,
   getPlayers,
+  getGames,
+  getGameIds,
 };
 
 module.exports = { readService };
