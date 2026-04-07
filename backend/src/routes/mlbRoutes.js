@@ -31,7 +31,8 @@ router.get("/leagues", mlbController.getLeagues);
 router.get("/venues", mlbController.getVenues);
 router.get("/sports", mlbController.getSports);
 
-router.get("/games", mlbController.getGames);
+// router.get("/games", mlbController.getGames); // dont use this endpoint. takes way too long
+router.get("/game-ids", mlbController.getGameIds);
 router.get("/players", mlbController.getPlayers);
 
 module.exports = router;

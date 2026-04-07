@@ -22,6 +22,7 @@ const { getVenues } = require("./mlb/read/bulk/getVenues.js");
 const { getSports } = require("./mlb/read/bulk/getSports.js");
 const { getPlayers } = require("./mlb/read/bulk/getPlayers.js");
 const { getGames } = require("./mlb/read/bulk/getGames.js");
+const { getGameIds } = require("./mlb/read/bulk/getGameIds.js");
 
 const mlbController = {
   syncTeams,
@@ -43,6 +44,7 @@ const mlbController = {
   getSports,
   getPlayers,
   getGames,
+  getGameIds,
 };
 
 module.exports = { mlbController };
