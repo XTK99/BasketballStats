@@ -9,6 +9,9 @@ const { MLB_GAME_ENDPOINT } = require("../../mlbEndpoints");
 async function fetchInfoFromBoxscore(gamePk) {
   if (!gamePk) throw new Error("gamePk is required");
   const url = `${MLB_GAME_ENDPOINT}/${gamePk}/boxscore`;
+  console.log(
+    `[fetchInfoFromBoxscore] Fetching boxscore info for gamePk: ${gamePk} from URL: ${url}`,
+  );
   const response = await axios.get(url);
   return response.data;
 }

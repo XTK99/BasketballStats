@@ -18,6 +18,7 @@ router.get("/sync-divisions", mlbController.syncDivisions);
 router.get("/sync-leagues", mlbController.syncLeagues);
 router.get("/sync-venues", mlbController.syncVenues);
 router.get("/sync-sports", mlbController.syncSports);
+router.get("/sync-team-stats/all", mlbController.syncTeamStatsForAllGames);
 router.get("/sync-team-stats/:gameId", mlbController.syncTeamStatsForGame);
 
 // Sync all games for the current season

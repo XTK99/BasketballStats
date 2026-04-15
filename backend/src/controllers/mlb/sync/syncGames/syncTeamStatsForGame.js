@@ -10,6 +10,7 @@ const { mapTeamStats } = require("../../../../utils/mlb/mapTeamStats.js");
  * Express route: GET /sync-team-stats/:gameId
  */
 async function syncTeamStatsForGame(req, res) {
+  console.log("[syncTeamStatsForGame] Starting sync for game");
   try {
     // Accept both gameId and gameId for compatibility
     const gameId =

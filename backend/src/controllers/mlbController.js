@@ -7,13 +7,13 @@ const { syncVenues } = require("./mlb/sync/syncVenues.js");
 const { syncSports } = require("./mlb/sync/syncSports.js");
 const { syncPlayer } = require("./mlb/sync/syncPlayer.js");
 const { syncPlayers } = require("./mlb/sync/syncPlayers.js");
+
 const {
   downloadAllGamesAllSeasons,
   syncTeamStatsForGame,
-} = require("./mlb/sync/syncGames/syncGames.js");
-const {
+  syncTeamStatsForAllGames,
   syncGamesThisSeason,
-} = require("./mlb/sync/syncGames/syncGamesThisSeason.js");
+} = require("./mlb/sync/syncGames/syncGames.js");
 
 const { getTeams } = require("./mlb/read/bulk/getTeams.js");
 const { getDivisions } = require("./mlb/read/bulk/getDivisions.js");
@@ -36,6 +36,7 @@ const mlbController = {
   downloadAllGamesAllSeasons,
   syncTeamStatsForGame,
   syncGamesThisSeason,
+  syncTeamStatsForAllGames,
 
   getTeams,
   getDivisions,
