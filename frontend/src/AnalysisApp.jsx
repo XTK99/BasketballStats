@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import "./AnalysisApp.css";
 import LineChart from "./components/analysis/LineChart.jsx";
 import LineChartConfig from "./components/analysis/configs/LineChartConfig.js";
+import Modal from "./components/modal/Modal.jsx";
 
 function AnalysisApp() {
   // Example data for the line chart
@@ -26,9 +28,30 @@ function AnalysisApp() {
     lineColor: "blue",
   });
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div>
+      <button
+        style={{
+          padding: "10px 22px",
+          background: "#2563eb",
+          color: "#fff",
+          border: "none",
+          borderRadius: "8px",
+          fontSize: "1rem",
+          cursor: "pointer",
+          marginBottom: "18px",
+        }}
+        onClick={() => setIsModalOpen(true)}
+      >
+        Chart Styles
+      </button>
       <LineChart config={chartConfig} />
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <h2>Modal Title</h2>
+        <p>This is the modal content. Click outside or the × to close.</p>
+      </Modal>
     </div>
   );
 }

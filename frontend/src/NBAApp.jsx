@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import "./App.css";
+import "./NBAApp.css";
 
 import { usePlayerDashboard } from "./hooks/usePlayerDashboard";
 import { useTeamDashboard } from "./hooks/useTeamDashboard";
