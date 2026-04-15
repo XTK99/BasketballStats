@@ -1,5 +1,6 @@
 import React from "react";
 import LineChart from "./components/analysis/LineChart.jsx";
+import LineChartConfig from "./components/analysis/configs/LineChartConfig.js";
 
 function AnalysisApp() {
   // Example data for the line chart
@@ -13,9 +14,21 @@ function AnalysisApp() {
     { x: 6, y: 10 },
   ];
 
+  const chartConfig = new LineChartConfig({
+    data: sampleData,
+    width: 500,
+    height: 300,
+    title: "Sample Line Chart",
+    xLabel: "X Axis",
+    yLabel: "Y Axis",
+    showPoints: true,
+    pointColor: "red",
+    lineColor: "blue",
+  });
+
   return (
     <div>
-      <LineChart data={sampleData} />
+      <LineChart config={chartConfig} />
     </div>
   );
 }
