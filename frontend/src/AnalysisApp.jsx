@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "./AnalysisApp.css";
-import LineChart from "./components/analysis/LineChart.jsx";
+import LineChart from "./components/analysis/LineChart/LineChart.jsx";
 import LineChartConfig from "./components/analysis/configs/LineChartConfig.js";
+import ScatterChart from "./components/analysis/ScatterChart/ScatterChart.jsx";
+import ScatterChartConfig from "./components/analysis/configs/ScatterChartConfig.js";
 import Modal from "./components/modal/Modal.jsx";
 import DynamicForm from "./components/dynamicForm/DynamicForm.jsx";
 import DynamicGrid from "./components/dynamicGrid/DynamicGrid.jsx";
@@ -24,7 +26,7 @@ function AnalysisApp() {
       data: sampleData,
       width: 500,
       height: 300,
-      title: "Sample Line Chart",
+      title: "Games",
       xLabel: "X Axis",
       yLabel: "Y Axis",
       showPoints: true,
@@ -35,6 +37,48 @@ function AnalysisApp() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Handler to update fieldConfig values in lineChartConfig
+  const handleFieldConfigChange = (fieldName, newValue) => {
+    setLineChartConfig((prevConfig) => {
+      // Create a shallow copy of the config and fieldConfig
+      const updatedConfig = Object.create(Object.getPrototypeOf(prevConfig));
+      Object.assign(updatedConfig, prevConfig);
+      updatedConfig.fieldConfig = { ...prevConfig.fieldConfig };
+      // Update the value for the changed field
+      updatedConfig.fieldConfig[fieldName] = {
+        ...updatedConfig.fieldConfig[fieldName],
+        value: newValue,
+      };
+      return updatedConfig;
+    });
+  };
+
+  // Sample data for scatter chart
+  const scatterData = [
+    { x: 1, y: 2 },
+    { x: 2, y: 3 },
+    { x: 3, y: 5 },
+    { x: 4, y: 4 },
+    { x: 5, y: 7 },
+    { x: 6, y: 6 },
+    { x: 7, y: 8 },
+    { x: 7, y: 3 },
+  ];
+
+  const [scatterChartConfig] = useState(
+    new ScatterChartConfig({
+      data: scatterData,
+      width: 500,
+      height: 300,
+      margin: { top: 40, right: 20, bottom: 30, left: 40 },
+      pointSize: 8,
+      pointColor: "green",
+      title: "Scatter Chart",
+      xLabel: "X Value",
+      yLabel: "Y Value",
+    }),
+  );
 
   return (
     <div>
@@ -54,14 +98,18 @@ function AnalysisApp() {
         {isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
       </button>
       <SidebarMenu
-        open={true}
+        open={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
         position="right"
       >
-        <DynamicForm config={lineChartConfig} />
+        <DynamicForm
+          config={lineChartConfig}
+          onChange={handleFieldConfigChange}
+        />
       </SidebarMenu>
       <DynamicGrid cellSize={80}></DynamicGrid>
       <LineChart config={lineChartConfig} />
+      <ScatterChart config={scatterChartConfig} />
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}></Modal>
     </div>
   );

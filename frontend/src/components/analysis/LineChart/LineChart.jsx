@@ -10,8 +10,9 @@ function LineChart({ config }) {
   const fc = config?.fieldConfig || {};
   const width = fc.width?.value ?? 400;
   const height = fc.height?.value ?? 200;
+  // Increase top margin to make space for title
   const margin = fc.margin?.value ?? {
-    top: 20,
+    top: 40,
     right: 20,
     bottom: 30,
     left: 40,
@@ -122,9 +123,10 @@ function LineChart({ config }) {
       svg
         .append("text")
         .attr("x", width / 2)
-        .attr("y", margin.top / 2)
+        .attr("y", margin.top / 1.5) // Move title further down from the top
         .attr("text-anchor", "middle")
         .attr("font-size", 16)
+        .attr("dominant-baseline", "middle")
         .text(title);
     }
 
