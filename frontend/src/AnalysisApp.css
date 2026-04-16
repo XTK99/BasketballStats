@@ -10,27 +10,12 @@ body,
 }
 
 .analysis-app-root {
-  max-width: 900px;
+  max-width: 700px;
   margin: 40px auto;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
   padding: 32px 24px;
-}
-
-.analysis-app-grid {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 32px;
-  align-items: start;
-}
-
-.analysis-app-form {
-  /* Form section styles */
-}
-
-.analysis-app-chart {
-  /* Chart section styles */
 }
 
 h1,
@@ -79,11 +64,7 @@ h3 {
 }
 
 /* Responsive */
-@media (max-width: 900px) {
-  .analysis-app-grid {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
+@media (max-width: 600px) {
   .analysis-app-root {
     padding: 12px 2px;
   }

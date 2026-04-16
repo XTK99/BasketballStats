@@ -5,6 +5,7 @@ import LineChartConfig from "./components/analysis/configs/LineChartConfig.js";
 import Modal from "./components/modal/Modal.jsx";
 import DynamicForm from "./components/dynamicForm/DynamicForm.jsx";
 import DynamicGrid from "./components/dynamicGrid/DynamicGrid.jsx";
+import SidebarMenu from "./components/sidebarMenu/SidebarMenu.jsx";
 
 function AnalysisApp() {
   // Example data for the line chart
@@ -31,96 +32,34 @@ function AnalysisApp() {
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <div>
+      <button
+        style={{
+          margin: "16px 0",
+          padding: "8px 18px",
+          background: "#2563eb",
+          color: "#fff",
+          border: "none",
+          borderRadius: "6px",
+          fontSize: "1rem",
+          cursor: "pointer",
+        }}
+        onClick={() => setIsSidebarOpen((open) => !open)}
+      >
+        {isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
+      </button>
+      <SidebarMenu
+        open={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        position="right"
+      >
+        <p>Sidebar content goes here</p>
+      </SidebarMenu>
       <DynamicForm />
-      <DynamicGrid cellSize={80}>
-        <div
-          style={{
-            background: "#f87171",
-            height: 80,
-            borderRadius: 8,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#fff",
-            fontWeight: 600,
-          }}
-        >
-          Red
-        </div>
-        <div
-          style={{
-            background: "#34d399",
-            height: 80,
-            borderRadius: 8,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#fff",
-            fontWeight: 600,
-          }}
-        >
-          Green
-        </div>
-        <div
-          style={{
-            background: "#60a5fa",
-            height: 80,
-            borderRadius: 8,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#fff",
-            fontWeight: 600,
-          }}
-        >
-          Blue
-        </div>
-        <div
-          style={{
-            background: "#fbbf24",
-            height: 80,
-            borderRadius: 8,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#fff",
-            fontWeight: 600,
-          }}
-        >
-          Yellow
-        </div>
-        <div
-          style={{
-            background: "#a78bfa",
-            height: 80,
-            borderRadius: 8,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#fff",
-            fontWeight: 600,
-          }}
-        >
-          Purple
-        </div>
-        <div
-          style={{
-            background: "#f472b6",
-            height: 80,
-            borderRadius: 8,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#fff",
-            fontWeight: 600,
-          }}
-        >
-          Pink
-        </div>
-      </DynamicGrid>
+      <DynamicGrid cellSize={80}></DynamicGrid>
       <LineChart config={chartConfig} />
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}></Modal>
     </div>
