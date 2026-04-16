@@ -48,10 +48,7 @@ function AnalysisApp() {
         Chart Styles
       </button>
       <LineChart config={chartConfig} />
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <h2>Modal Title</h2>
-        <p>This is the modal content. Click outside or the × to close.</p>
-      </Modal>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}></Modal>
     </div>
   );
 }

@@ -1,6 +1,10 @@
 // LineChartConfig.js
 // Configuration class for D3 LineChart component
 
+import { DEFAULT_CURVE_TYPE, DEFAULT_SCALE_TYPE } from "./constants";
+import { DEFAULT_POINT_SHAPE } from "./constants/pointShape";
+
+// TODO: labelify all the types of this chart config
 class LineChartConfig {
   constructor({
     data = [],
@@ -9,15 +13,15 @@ class LineChartConfig {
     margin = { top: 20, right: 20, bottom: 30, left: 40 },
     xLabel = "",
     yLabel = "",
-    xScaleType = "linear", // or 'time', 'log', etc.
-    yScaleType = "linear",
+    xScaleType = DEFAULT_SCALE_TYPE,
+    yScaleType = DEFAULT_SCALE_TYPE,
     lineColor = "steelblue",
     backgroundColor = "#fff",
     gridColor = "#eee",
     axisColor = "#333",
     lineWidth = 2,
     lineDash = "", // e.g., '4 2' for dashed
-    curveType = "linear", // or 'basis', 'cardinal', etc.
+    curveType = DEFAULT_CURVE_TYPE,
     tooltip = true,
     tooltipFormat = null,
     gridLines = true,
@@ -28,7 +32,7 @@ class LineChartConfig {
     animationEasing = "easeCubic",
     responsive = false,
     showPoints = false,
-    pointShape = "circle",
+    pointShape = DEFAULT_POINT_SHAPE,
     pointSize = 4,
     pointColor = "steelblue",
     title = "",
