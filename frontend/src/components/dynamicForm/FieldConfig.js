@@ -7,7 +7,7 @@ class FieldConfig {
    * @param {string} [config.label] - Field label
    * @param {string} [config.type] - Input type (text, number, select, checkbox, etc.)
    * @param {Array} [config.options] - Options for select/radio fields
-   * @param {any} [config.defaultValue] - Default value
+   * @param {any} [config.defaultValue] - Default value (deprecated)
    * @param {boolean} [config.required] - Is field required?
    * @param {string} [config.placeholder] - Input placeholder
    * @param {any} [config.value] - Current value for the field
@@ -20,7 +20,7 @@ class FieldConfig {
     label = "",
     type = "text",
     options = [],
-    defaultValue = "",
+    // defaultValue is deprecated and ignored
     required = false,
     placeholder = "",
     value = undefined,
@@ -32,7 +32,7 @@ class FieldConfig {
     this.label = label;
     this.type = type;
     this.options = options;
-    this.defaultValue = defaultValue;
+    // this.defaultValue = defaultValue;
     this.required = required;
     this.placeholder = placeholder;
     this.value = value;
