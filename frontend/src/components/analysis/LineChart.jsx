@@ -1,31 +1,33 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
-import LineChartConfig from "./configs/LineChartConfig.js";
 
 // Now expects a single prop: config (instance of LineChartConfig)
 function LineChart({ config }) {
   const svgRef = useRef();
 
-  // Destructure config with defaults
-  const {
-    data = [],
-    width = 400,
-    height = 200,
-    margin = { top: 20, right: 20, bottom: 30, left: 40 },
-    lineColor = "steelblue",
-    lineWidth = 2,
-    lineDash = "",
-    xScaleType = "linear",
-    yScaleType = "linear",
-    gridLines = true,
-    showPoints = false,
-    pointSize = 4,
-    pointColor = "steelblue",
-    title = "",
-    xLabel = "",
-    yLabel = "",
-    // ...other config options as needed
-  } = config || {};
+  // Destructure config.fieldConfig with defaults
+  const data = config?.data || [];
+  const fc = config?.fieldConfig || {};
+  const width = fc.width?.value ?? 400;
+  const height = fc.height?.value ?? 200;
+  const margin = fc.margin?.value ?? {
+    top: 20,
+    right: 20,
+    bottom: 30,
+    left: 40,
+  };
+  const lineColor = fc.lineColor?.value ?? "steelblue";
+  const lineWidth = fc.lineWidth?.value ?? 2;
+  const lineDash = fc.lineDash?.value ?? "";
+  const xScaleType = fc.xScaleType?.value ?? "linear";
+  const yScaleType = fc.yScaleType?.value ?? "linear";
+  const gridLines = fc.gridLines?.value ?? true;
+  const showPoints = fc.showPoints?.value ?? false;
+  const pointSize = fc.pointSize?.value ?? 4;
+  const pointColor = fc.pointColor?.value ?? "steelblue";
+  const title = fc.title?.value ?? "";
+  const xLabel = fc.xLabel?.value ?? "";
+  const yLabel = fc.yLabel?.value ?? "";
 
   useEffect(() => {
     if (!data || data.length === 0) return;

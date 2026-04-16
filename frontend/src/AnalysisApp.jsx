@@ -19,17 +19,19 @@ function AnalysisApp() {
     { x: 6, y: 10 },
   ];
 
-  const chartConfig = new LineChartConfig({
-    data: sampleData,
-    width: 500,
-    height: 300,
-    title: "Sample Line Chart",
-    xLabel: "X Axis",
-    yLabel: "Y Axis",
-    showPoints: true,
-    pointColor: "red",
-    lineColor: "blue",
-  });
+  const [lineChartConfig, setLineChartConfig] = useState(
+    new LineChartConfig({
+      data: sampleData,
+      width: 500,
+      height: 300,
+      title: "Sample Line Chart",
+      xLabel: "X Axis",
+      yLabel: "Y Axis",
+      showPoints: true,
+      pointColor: "red",
+      lineColor: "blue",
+    }),
+  );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -52,15 +54,14 @@ function AnalysisApp() {
         {isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
       </button>
       <SidebarMenu
-        open={isSidebarOpen}
+        open={true}
         onClose={() => setIsSidebarOpen(false)}
         position="right"
       >
-        <p>Sidebar content goes here</p>
+        <DynamicForm config={lineChartConfig} />
       </SidebarMenu>
-      <DynamicForm />
       <DynamicGrid cellSize={80}></DynamicGrid>
-      <LineChart config={chartConfig} />
+      <LineChart config={lineChartConfig} />
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}></Modal>
     </div>
   );
