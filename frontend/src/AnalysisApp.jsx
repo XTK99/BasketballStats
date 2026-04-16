@@ -35,7 +35,92 @@ function AnalysisApp() {
   return (
     <div>
       <DynamicForm />
-      <DynamicGrid />
+      <DynamicGrid cellSize={80}>
+        <div
+          style={{
+            background: "#f87171",
+            height: 80,
+            borderRadius: 8,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#fff",
+            fontWeight: 600,
+          }}
+        >
+          Red
+        </div>
+        <div
+          style={{
+            background: "#34d399",
+            height: 80,
+            borderRadius: 8,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#fff",
+            fontWeight: 600,
+          }}
+        >
+          Green
+        </div>
+        <div
+          style={{
+            background: "#60a5fa",
+            height: 80,
+            borderRadius: 8,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#fff",
+            fontWeight: 600,
+          }}
+        >
+          Blue
+        </div>
+        <div
+          style={{
+            background: "#fbbf24",
+            height: 80,
+            borderRadius: 8,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#fff",
+            fontWeight: 600,
+          }}
+        >
+          Yellow
+        </div>
+        <div
+          style={{
+            background: "#a78bfa",
+            height: 80,
+            borderRadius: 8,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#fff",
+            fontWeight: 600,
+          }}
+        >
+          Purple
+        </div>
+        <div
+          style={{
+            background: "#f472b6",
+            height: 80,
+            borderRadius: 8,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#fff",
+            fontWeight: 600,
+          }}
+        >
+          Pink
+        </div>
+      </DynamicGrid>
       <LineChart config={chartConfig} />
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}></Modal>
     </div>
