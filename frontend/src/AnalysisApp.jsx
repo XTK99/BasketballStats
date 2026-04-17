@@ -8,6 +8,7 @@ import Modal from "./components/modal/Modal.jsx";
 import DynamicForm from "./components/dynamicForm/DynamicForm.jsx";
 import DynamicGrid from "./components/dynamicGrid/DynamicGrid.jsx";
 import SidebarMenu from "./components/sidebarMenu/SidebarMenu.jsx";
+import Table from "./components/table/Table.jsx";
 
 function AnalysisApp() {
   // Example data for the line chart
@@ -80,8 +81,14 @@ function AnalysisApp() {
     }),
   );
 
+  // Handler for table cell clicks
+  const onCellClickHandler = (payload) => {
+    alert(JSON.stringify(payload, null, 2));
+    // Or use console.log(payload);
+  };
+
   return (
-    <div>
+    <div className="analysis-app-root">
       <button
         style={{
           margin: "16px 0",
@@ -110,6 +117,10 @@ function AnalysisApp() {
       <DynamicGrid cellSize={80}></DynamicGrid>
       <LineChart config={lineChartConfig} />
       <ScatterChart config={scatterChartConfig} />
+      <div style={{ margin: "32px 0" }}>
+        <h3>Line Chart Data Table</h3>
+        <Table data={sampleData} onCellClick={onCellClickHandler} />
+      </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}></Modal>
     </div>
   );
