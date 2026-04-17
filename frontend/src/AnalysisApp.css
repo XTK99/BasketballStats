@@ -1,0 +1,74 @@
+/* Light Theme for AnalysisApp */
+
+body,
+.analysis-app-root {
+  background: #f8fafc;
+  color: #222;
+  font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.analysis-app-root {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+  padding: 32px 24px;
+}
+
+h1,
+h2,
+h3 {
+  color: #1a202c;
+  margin-top: 0;
+}
+
+/* Chart container */
+.line-chart-container {
+  background: #f1f5f9;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+/* Chart title */
+.line-chart-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2563eb;
+  margin-bottom: 18px;
+}
+
+/* Axis labels */
+.line-chart-x-label,
+.line-chart-y-label {
+  color: #64748b;
+  font-size: 1rem;
+}
+
+/* Chart points */
+.line-chart-point {
+  stroke: #ef4444;
+  fill: #fff;
+  stroke-width: 2px;
+}
+
+/* Chart line */
+.line-chart-line {
+  stroke: #2563eb;
+  stroke-width: 3px;
+  fill: none;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .analysis-app-root {
+    padding: 12px 2px;
+  }
+  .line-chart-container {
+    padding: 10px;
+  }
+}
