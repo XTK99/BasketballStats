@@ -6,6 +6,7 @@ export default function Table({ data = [], onCellClick }) {
   if (!data.length) return null;
 
   const headers = Object.keys(data[0]);
+  const allHeaders = ["#", ...headers];
 
   // Sorting logic
   const sortedData = React.useMemo(() => {
@@ -41,10 +42,24 @@ export default function Table({ data = [], onCellClick }) {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: `repeat(${headers.length}, 1fr)`,
+          gridTemplateColumns: `60px repeat(${headers.length}, 1fr)`,
           borderBottom: "2px solid #e0e0e0",
         }}
       >
+        <div
+          style={{
+            padding: "10px 14px",
+            fontSize: 12,
+            fontWeight: 500,
+            color: "#888",
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+            userSelect: "none",
+            background: "#f1f5f9",
+          }}
+        >
+          #
+        </div>
         {headers.map((key) => (
           <div
             key={key}
@@ -74,10 +89,23 @@ export default function Table({ data = [], onCellClick }) {
           key={rowIndex}
           style={{
             display: "grid",
-            gridTemplateColumns: `repeat(${headers.length}, 1fr)`,
+            gridTemplateColumns: `60px repeat(${headers.length}, 1fr)`,
             borderBottom: "1px solid #f0f0f0",
           }}
         >
+          <div
+            style={{
+              padding: "10px 14px",
+              fontSize: 13,
+              color: "#64748b",
+              background: "#f8fafc",
+              textAlign: "right",
+              fontVariantNumeric: "tabular-nums",
+              userSelect: "none",
+            }}
+          >
+            {rowIndex + 1}
+          </div>
           {headers.map((key) => (
             <div
               key={key}

@@ -89,7 +89,7 @@ function AnalysisApp() {
 
   return (
     <div className="analysis-app-root">
-      <button
+      {/* <button
         style={{
           margin: "16px 0",
           padding: "8px 18px",
@@ -103,7 +103,7 @@ function AnalysisApp() {
         onClick={() => setIsSidebarOpen((open) => !open)}
       >
         {isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
-      </button>
+      </button> */}
       <SidebarMenu
         open={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
@@ -114,11 +114,10 @@ function AnalysisApp() {
           onChange={handleFieldConfigChange}
         />
       </SidebarMenu>
-      <DynamicGrid cellSize={80}></DynamicGrid>
+      {/* <DynamicGrid cellSize={80}></DynamicGrid>
       <LineChart config={lineChartConfig} />
-      <ScatterChart config={scatterChartConfig} />
+      <ScatterChart config={scatterChartConfig} /> */}
       <div style={{ margin: "32px 0" }}>
-        <h3>Line Chart Data Table</h3>
         <Table data={sampleData} onCellClick={onCellClickHandler} />
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}></Modal>
