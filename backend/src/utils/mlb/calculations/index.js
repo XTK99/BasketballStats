@@ -1,1 +1,0 @@
-export { linearRegression } from "./linearRegression";
