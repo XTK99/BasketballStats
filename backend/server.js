@@ -3,6 +3,7 @@ const cors = require("cors");
 
 const nbaRoutes = require("./src/routes/nbaRoutes");
 const kalshiRoutes = require("./src/routes/kalshiRoutes");
+const kalshiV2Routes = require("./src/routes/kalshiV2Routes");
 const mlbRoutes = require("./src/routes/mlbRoutes");
 
 const app = express();
@@ -21,9 +22,8 @@ app.get("/api/health", (req, res) => {
 
 app.use("/api/nba", nbaRoutes);
 app.use("/api/kalshi", kalshiRoutes);
-if (mlbRoutes) {
-  app.use("/api/mlb", mlbRoutes);
-}
+app.use("/api/kalshi/v2", kalshiV2Routes);
+app.use("/api/mlb", mlbRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
